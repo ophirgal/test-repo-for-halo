@@ -1,0 +1,15 @@
+{
+  "storyId": "3cf87402-24bc-477e-a953-92ffea92dd46",
+  "storyKey": "KAN-8",
+  "epicKey": "KAN-7",
+  "title": "Simple Hello World webpage",
+  "decisionId": "bb825fa1-1dbb-459b-8941-85b2c7a03504",
+  "actor": "Ally PO \u0026 DEV",
+  "approvedAt": "2026-10-05T16:51:21Z",
+  "recordedAt": "2026-10-05T16:51:21Z",
+  "artifactVersions": {
+    "design": 1,
+    "plan": 1,
+    "requirement": 1
+  }
+}
