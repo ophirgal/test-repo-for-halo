@@ -1,9 +1,7 @@
 app_name: test-repo-for-halo
 namespace: pdlc
 build:
-    env:
-      - name: BP_WEB_SERVER_ROOT
-        value: /workspace/source/docs
-code_type: react
+    env: []
+code_type: python
 sonar: false
 department: ai-factory
