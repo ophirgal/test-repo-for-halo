@@ -1,0 +1,7 @@
+app_name: test-repo-for-halo
+namespace: pdlc
+build:
+    env: []
+code_type: python
+sonar: false
+department: ai-factory

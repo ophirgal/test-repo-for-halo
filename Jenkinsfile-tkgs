@@ -1,0 +1,2 @@
+@Library('tkgs-jenkins-shared-lib') _
+startPipelineAks ()
