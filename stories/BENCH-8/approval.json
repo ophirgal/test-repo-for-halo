@@ -1,0 +1,15 @@
+{
+  "storyId": "31e32020-b280-4353-b764-07539fc9796c",
+  "storyKey": "BENCH-8",
+  "epicKey": "BENCH-7",
+  "title": "Add hello-world smoke-test script and README instructions",
+  "decisionId": "e1e6e300-d372-4a66-81df-5373aa644f28",
+  "actor": "Service",
+  "approvedAt": "2026-10-24T17:33:35Z",
+  "recordedAt": "2026-10-24T17:33:35Z",
+  "artifactVersions": {
+    "design": 1,
+    "plan": 1,
+    "requirement": 1
+  }
+}
