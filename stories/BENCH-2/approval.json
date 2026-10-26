@@ -1,0 +1,10 @@
+{
+  "storyId": "242d411d-a955-4e15-9909-c834763f92ff",
+  "storyKey": "BENCH-2",
+  "epicKey": "BENCH-1",
+  "title": "Last-login line on the user profile page",
+  "decisionId": "ac6d631e-ac1b-4737-925b-477596f9936b",
+  "actor": "Ally PO \u0026 DEV",
+  "approvedAt": "2026-10-26T10:53:57Z",
+  "planHeadSha": "9847a6d5b75f4b88f55fab6dc41b6e491a0b78e6"
+}
