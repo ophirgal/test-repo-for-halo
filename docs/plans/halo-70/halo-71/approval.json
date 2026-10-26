@@ -1,0 +1,10 @@
+{
+  "storyId": "0a0bc49d-00a4-43f4-9a00-a16c708f60de",
+  "storyKey": "HALO-71",
+  "epicKey": "HALO-70",
+  "title": "יצירת קובץ shalom.txt עם המילה \"שלום\"",
+  "decisionId": "f683af39-7a2a-4850-9611-f020a3f0fe73",
+  "actor": "Ophir Gal",
+  "approvedAt": "2026-10-26T09:41:50Z",
+  "planHeadSha": "5efd5ebdb5f1bc353eaa521439a6ef37c2146667"
+}
