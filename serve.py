@@ -21,15 +21,18 @@ production host.
 """
 
 import http.server
+import json
 import os
 import sys
 import urllib.parse
+from datetime import datetime, timezone
 from pathlib import Path
 
 DEFAULT_HOST = "127.0.0.1"
 DEFAULT_PORT = 8000
 
 INDEX = Path(__file__).resolve().parent / "docs" / "index.html"
+SIGNINS = Path(__file__).resolve().parent / "signins.json"
 
 
 class RootOnlyHandler(http.server.BaseHTTPRequestHandler):
@@ -42,28 +45,67 @@ class RootOnlyHandler(http.server.BaseHTTPRequestHandler):
 
     server_version = "HelloWorld/1.0"
 
-    def _is_root(self):
-        return urllib.parse.urlsplit(self.path).path == "/"
+    def _parsed_path(self):
+        return urllib.parse.urlsplit(self.path).path
 
-    def _send_index_headers(self, body):
+    def _send_html(self, body):
         self.send_response(200)
         self.send_header("Content-Type", "text/html; charset=utf-8")
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
 
+    def _record_signin(self):
+        try:
+            entries = json.loads(SIGNINS.read_text())
+        except (FileNotFoundError, json.JSONDecodeError, OSError):
+            entries = []
+        entries.append(datetime.now(timezone.utc).isoformat())
+        SIGNINS.write_text(json.dumps(entries))
+
+    def _read_signins(self):
+        try:
+            entries = json.loads(SIGNINS.read_text())
+        except (FileNotFoundError, json.JSONDecodeError, OSError):
+            entries = []
+        return entries
+
+    def _profile_body(self):
+        entries = self._read_signins()
+        if len(entries) >= 2:
+            last_login = entries[-2]
+        else:
+            last_login = "first sign-in"
+        return (
+            "<!DOCTYPE html>\n"
+            '<html lang="en">\n<head>\n<meta charset="utf-8">\n'
+            "<title>Profile</title>\n</head>\n<body>\n"
+            "<h1>Demo User</h1>\n"
+            f"<p>Last login: {last_login}</p>\n"
+            "</body>\n</html>\n"
+        ).encode("utf-8")
+
     def do_GET(self):
-        if not self._is_root():
+        path = self._parsed_path()
+        if path == "/":
+            body = INDEX.read_bytes()
+            self._record_signin()
+            self._send_html(body)
+            self.wfile.write(body)
+        elif path == "/profile":
+            body = self._profile_body()
+            self._send_html(body)
+            self.wfile.write(body)
+        else:
             self.send_error(404)
-            return
-        body = INDEX.read_bytes()
-        self._send_index_headers(body)
-        self.wfile.write(body)
 
     def do_HEAD(self):
-        if not self._is_root():
+        path = self._parsed_path()
+        if path == "/":
+            self._send_html(INDEX.read_bytes())
+        elif path == "/profile":
+            self._send_html(self._profile_body())
+        else:
             self.send_error(404)
-            return
-        self._send_index_headers(INDEX.read_bytes())
 
 
 def make_server(host=DEFAULT_HOST, port=DEFAULT_PORT, handler=RootOnlyHandler):
