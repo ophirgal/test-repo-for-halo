@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sign up — Halo newsletter</title><link rel="stylesheet" href="tokens.css"></head>
+<body>
+<header class="site-header"><div class="inner"><svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="11" fill="none" stroke="#2b4fd8" stroke-width="4"/></svg><span>Halo</span></div></header>
+<main class="page">
+<ol class="steps" aria-label="Progress"><li class="done">1. Welcome</li><li class="current" aria-current="step">2. Your email</li><li>3. Check your inbox</li></ol>
+<div class="card">
+<a class="link-back" href="welcome.html">← Back</a>
+<h1>Sign up for the newsletter</h1>
+<form action="confirmation.html" method="get" novalidate>
+<div class="field">
+<label class="lbl" for="email">Email address</label>
+<input class="input" id="email" name="email" type="email" autocomplete="email" inputmode="email" value="maya.levi@example.com">
+<div class="hint">We'll only use it to send the newsletter.</div>
+</div>
+<div class="field">
+<label class="check" for="consent">
+<input id="consent" name="consent" type="checkbox">
+<span>Send me the product newsletter. I can unsubscribe at any time.</span>
+</label>
+</div>
+<div class="actions"><a class="btn btn-block" href="confirmation.html">Subscribe</a></div>
+</form>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Prototype — Newsletter sign-up</title><link rel="stylesheet" href="tokens.css"></head>
+<body>
+<header class="site-header"><div class="inner"><svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="11" fill="none" stroke="#2b4fd8" stroke-width="4"/></svg><span>Halo</span></div></header>
+<main class="page">
+<div class="card">
+<h1>Newsletter sign-up: clickable prototype</h1>
+<p>This prototype walks the main path of the approved structure. A visitor reads what the newsletter is on <strong>Welcome</strong>, gives an email address and ticks the consent on the <strong>Sign-up form</strong>, and lands on <strong>Confirmation</strong>, which tells them to check their inbox. No account is needed. Every page is built for phone and desktop: resize the window to check that nothing scrolls sideways.</p>
+<p><a class="btn" href="welcome.html">Start the journey</a></p>
+<h2>Screens</h2>
+<ol>
+<li><a href="welcome.html">Welcome</a>: what the newsletter is, and <em>Sign up</em></li>
+<li><a href="sign-up-form.html">Sign-up form</a>: email address, consent, <em>Subscribe</em>, <em>Back</em></li>
+<li><a href="confirmation.html">Confirmation</a>: check your inbox, the address the mail went to, <em>Back to the site</em></li>
+</ol>
+<h2>Choices made in this prototype</h2>
+<ul>
+<li>Only the main path is drawn. The empty Welcome, the invalid-email, consent-missing, loading and submission-failed states are covered in the Design step.</li>
+<li>Without scripts, <em>Subscribe</em> is a link that goes straight to Confirmation, so you can type anything. The loading state between the two is not shown here.</li>
+<li>The consent checkbox is real and starts unticked. Tick it as a visitor would.</li>
+<li>A three-step indicator at the top of each screen shows where the visitor is.</li>
+<li><em>Back to the site</em> on Confirmation goes to this page, which stands in for the public site's home page (default from open branch 5).</li>
+</ul>
+</div>
+</main>
+</body></html>
