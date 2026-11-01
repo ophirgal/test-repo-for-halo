@@ -1,0 +1,14 @@
+{
+  "storyId": "0e4e726a-2437-48ae-be3b-c29fef754bb7",
+  "storyKey": "0e4e726a",
+  "title": "20261101-112227Z Newsletter sign-up page",
+  "approvals": [
+    {
+      "step": "structure",
+      "decisionId": "b7beb009-1d79-4b75-9f0b-2c2bc367d8aa",
+      "actor": "Ophir (Guest) (guest)",
+      "approvedAt": "2026-11-01T11:56:37.206779Z",
+      "headSha": "151e6fca030d5af6cdd3f9ca97ecf8c3dc3f72ba"
+    }
+  ]
+}
