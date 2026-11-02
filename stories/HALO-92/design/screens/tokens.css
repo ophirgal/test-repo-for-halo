@@ -1,0 +1,80 @@
+/* HALO-92 jungle page: design tokens and the page itself.
+   Same palette, type and decoration set as the approved prototype.
+   Desktop and mobile are separate modifier classes, not media queries. */
+:root{
+  /* Jungle palette */
+  --j-deep:#0F3D2E;       /* deep green: page background */
+  --j-deep-glow:#155239;  /* deep green, lighter: glow behind the heading */
+  --j-forest:#1B5E3A;     /* forest green: large leaves, back bushes, midribs */
+  --j-leaf:#3E8E41;       /* leaf green: mid leaves, vine leaves, front bushes */
+  --j-leaf-light:#6DBE45; /* leaf green, light: front leaves, vine leaves */
+  --j-earth:#6B4423;      /* earth brown: vine stems */
+  --j-earth-dark:#4A2F1A; /* earth brown, dark: ground strip */
+  --j-yellow:#F2C230;     /* yellow: heading, flowers */
+  --j-orange:#E8772E;     /* orange: berries, flowers */
+  /* Type */
+  --font:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --hello-weight:800; --hello-line:1.05; --hello-track:-.01em;
+  --hello-size-desktop:9cqw;   /* = 130px at 1440 */
+  --hello-size-mobile:19cqw;   /* = 71px at 375 */
+  /* Review chrome (outside the page) */
+  --c-bg:#f4f5f2; --c-surface:#fff; --c-text:#1d231f; --c-muted:#5b645e; --c-border:#d6dbd5; --c-link:#1B5E3A; --c-focus:#E8772E;
+  --fs-sm:.875rem; --fs-md:1rem; --fs-lg:1.25rem; --fs-xl:1.75rem;
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px; --sp-6:32px; --sp-7:48px;
+  --radius:10px;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:var(--font);font-size:var(--fs-md);line-height:1.5;color:var(--c-text);background:var(--c-bg);overflow-x:hidden}
+a{color:var(--c-link)}
+a:focus-visible{outline:3px solid var(--c-focus);outline-offset:2px}
+
+/* Review chrome */
+.review-bar{background:var(--c-surface);border-bottom:1px solid var(--c-border)}
+.review-bar .inner{max-width:1200px;margin:0 auto;padding:var(--sp-3) var(--sp-4);display:flex;flex-wrap:wrap;align-items:center;gap:var(--sp-2) var(--sp-5);font-size:var(--fs-sm)}
+.review-bar strong{font-size:var(--fs-md)}
+.pill{display:inline-block;padding:var(--sp-1) var(--sp-3);border:1px solid var(--c-border);border-radius:999px;text-decoration:none}
+.pill[aria-current="page"]{background:var(--j-deep);color:#fff;border-color:var(--j-deep)}
+.page{max-width:1200px;margin:0 auto;padding:var(--sp-5) var(--sp-4) var(--sp-7)}
+.page--narrow{max-width:420px}
+.card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--radius);padding:var(--sp-5)}
+.card h1{font-size:var(--fs-xl);margin-top:0}
+.card h2{font-size:var(--fs-lg);margin:0 0 var(--sp-3)}
+.caption{font-size:var(--fs-sm);color:var(--c-muted);margin:var(--sp-2) 0 var(--sp-4)}
+.notes{display:grid;gap:var(--sp-5);grid-template-columns:repeat(auto-fit,minmax(300px,1fr));margin-top:var(--sp-5)}
+.page--narrow .notes{grid-template-columns:1fr}
+table{border-collapse:collapse;width:100%;font-size:var(--fs-sm)}
+th,td{text-align:left;padding:var(--sp-2);border-bottom:1px solid var(--c-border);vertical-align:top}
+.sw{display:inline-block;width:18px;height:18px;border-radius:4px;border:1px solid rgba(0,0,0,.2);vertical-align:middle;margin-right:var(--sp-2)}
+code{font-size:.9em}
+.gallery{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4)}
+.gallery a.thumb{display:block;border:1px solid var(--c-border);border-radius:var(--radius);padding:var(--sp-3);text-decoration:none;color:inherit;background:var(--c-bg)}
+.gallery a.thumb:hover{border-color:var(--j-leaf)}
+.gallery .label{font-weight:600;display:block;margin-top:var(--sp-2)}
+
+/* ===== The jungle page ===== */
+.frame{position:relative;overflow:hidden;container-type:inline-size;
+  background:radial-gradient(ellipse 60% 55% at 50% 50%,var(--j-deep-glow) 0%,var(--j-deep) 100%)}
+.frame .stage{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.frame h1.hello{margin:0;color:var(--j-yellow);font-family:var(--font);font-weight:var(--hello-weight);letter-spacing:var(--hello-track);line-height:var(--hello-line);text-align:center;position:relative;z-index:2}
+.deco{position:absolute;z-index:1;pointer-events:none}
+
+/* Desktop layout (reference 1440 x 810, scales with width) */
+.frame--desktop{width:100%;aspect-ratio:16/9;border-radius:6px;box-shadow:0 4px 18px rgba(0,0,0,.18)}
+.frame--desktop .stage{padding:0 16cqw 12cqw}
+.frame--desktop h1.hello{font-size:var(--hello-size-desktop);white-space:nowrap}
+.frame--desktop .deco-tl{top:0;left:0;width:21cqw}
+.frame--desktop .deco-tr{top:0;right:0;width:21cqw;transform:scaleX(-1)}
+.frame--desktop .deco-vl{top:14cqw;left:1.5cqw;width:4cqw;height:calc(100% - 28cqw)}
+.frame--desktop .deco-vr{top:14cqw;right:1.5cqw;width:4cqw;height:calc(100% - 28cqw);transform:scaleX(-1)}
+.frame--desktop .deco-bush{left:0;right:0;bottom:0;width:100%;height:13cqw}
+
+/* Mobile layout (375 x 720) */
+.frame--mobile{width:375px;max-width:100%;height:720px;margin:0 auto;border-radius:18px;box-shadow:0 4px 18px rgba(0,0,0,.18)}
+.frame--mobile .stage{padding:0 16px 22cqw}
+.frame--mobile h1.hello{font-size:var(--hello-size-mobile)}
+.frame--mobile h1.hello span{display:block}
+.frame--mobile .deco-tl{top:0;left:0;width:34cqw}
+.frame--mobile .deco-tr{top:0;right:0;width:34cqw;transform:scaleX(-1)}
+.frame--mobile .deco-vl,.frame--mobile .deco-vr{display:none}
+.frame--mobile .deco-bush{left:0;right:0;bottom:0;width:100%;height:24cqw}
