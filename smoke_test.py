@@ -10,6 +10,7 @@ path, and ``/`` still answering 200 afterwards.
 Standard library only; no framework, no network access beyond localhost.
 """
 
+import json
 import re
 import sys
 import threading
@@ -17,7 +18,7 @@ import urllib.error
 import urllib.request
 
 import serve
-from serve import RootOnlyHandler, make_server
+from serve import RootOnlyHandler, SIGNINS, make_server
 
 NON_ROOT_PATHS = [
     "/index.html",
@@ -193,6 +194,95 @@ def run_checks(base):
         "'Hello World' in the body",
         body[:120],
     )
+
+    # --- Last-login feature checks (BENCH-2) ---
+
+    # Clean signins.json so profile checks start from a known state.
+    if SIGNINS.exists():
+        SIGNINS.unlink()
+
+    # Check 1: no sign-ins → first sign-in
+    status, _, body = get(base, "/profile")
+    checks.check("profile no-signins status", status == 200, "200", status)
+    checks.check(
+        "profile no-signins shows Demo User",
+        "Demo User" in body,
+        "'Demo User' in body",
+        body[:200],
+    )
+    checks.check(
+        "profile no-signins shows first sign-in",
+        "Last login: first sign-in" in body,
+        "'Last login: first sign-in'",
+        body[:200],
+    )
+
+    # Check 2: one sign-in → still first sign-in
+    status, _, _ = get(base, "/")
+    status, _, body = get(base, "/profile")
+    checks.check(
+        "profile single-signin shows first sign-in",
+        "Last login: first sign-in" in body,
+        "'Last login: first sign-in'",
+        body[:200],
+    )
+
+    # Check 3: returning visitor (two sign-ins) → shows timestamp
+    status, _, _ = get(base, "/")
+    status, _, body = get(base, "/profile")
+    checks.check("profile returning status", status == 200, "200", status)
+    checks.check(
+        "profile returning shows Demo User",
+        "Demo User" in body,
+        "'Demo User' in body",
+        body[:200],
+    )
+    checks.check(
+        "profile returning does NOT show first sign-in",
+        "first sign-in" not in body,
+        "'first sign-in' absent",
+        body[:200],
+    )
+    checks.check(
+        "profile returning shows Last login with timestamp",
+        "Last login: 20" in body,
+        "'Last login: 20...' (ISO 8601 timestamp)",
+        body[:200],
+    )
+
+    # Check 4: sign-in recording appends to file
+    data = json.loads(SIGNINS.read_text())
+    checks.check(
+        "signins.json is a list with 2 entries",
+        isinstance(data, list) and len(data) == 2,
+        "list of length 2",
+        f"type={type(data).__name__}, len={len(data) if isinstance(data, list) else 'N/A'}",
+    )
+
+    # Check 5: persistence — data survives handler re-reads
+    status, _, body = get(base, "/profile")
+    checks.check(
+        "profile still shows timestamp after re-read",
+        "Last login: 20" in body,
+        "'Last login: 20...'",
+        body[:200],
+    )
+
+    # Check 6: HEAD /profile returns 200
+    checks.check("HEAD /profile status", head(base, "/profile") == 200, "200", head(base, "/profile"))
+
+    # Check 7: backward compat — GET / still returns Hello World after profile checks
+    status, _, body = get(base, "/")
+    checks.check(
+        "GET / greeting after profile checks",
+        "Hello World" in body,
+        "'Hello World' in the body",
+        body[:120],
+    )
+
+    # Cleanup signins.json
+    if SIGNINS.exists():
+        SIGNINS.unlink()
 
     return checks
 
