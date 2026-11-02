@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prototype index · Neon Nights Weekly signup (HALO-87)</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  .idx { max-width: 760px; margin: 0 auto; padding: 32px 16px 48px; }
+  .idx h1 { font-family: var(--font-display); text-transform: uppercase; letter-spacing: .06em; color: #ffe6f4;
+    text-shadow: 0 0 4px #fff, 0 0 10px var(--pink), 0 0 22px var(--pink); font-size: clamp(28px, 7vw, 44px); margin: 0 0 16px; }
+  .idx h2 { color: var(--turquoise); font-size: 20px; margin: 32px 0 8px; }
+  .idx p, .idx li, .idx td, .idx th { font-size: 15px; }
+  .idx a { color: var(--turquoise); }
+  .idx ol.flow { padding-left: 22px; }
+  .idx ol.flow li { margin: 8px 0; }
+  .idx table { width: 100%; border-collapse: collapse; }
+  .idx th, .idx td { text-align: left; padding: 8px; border-bottom: 1px solid #3a2a66; vertical-align: top; }
+  .idx .swatch { display: inline-block; width: 14px; height: 14px; border-radius: 3px; vertical-align: -2px; margin-right: 6px; border: 1px solid #fff4; }
+  .idx .start { display: inline-flex; max-width: 320px; }
+</style>
+</head>
+<body>
+<main class="idx">
+  <h1>Neon Nights Weekly · signup prototype</h1>
+  <p>This is a clickable prototype of the main path through the single Neon Nights Weekly signup page, laid out as in the approved structure. A music fan lands on the neon page, types an address, ticks the consent box and presses Subscribe. The page shows the send in progress, then swaps the form for a &ldquo;check your inbox&rdquo; confirmation, all without leaving the page (R1). The reduced-motion variant of the first screen is included as well. Each page is responsive: narrow the window to 320 px to see the phone layout, where the illustration shrinks and moves below the form. A grey dashed bar marks prototype controls; it is not part of the design.</p>
+
+  <p><a class="btn start" href="signup-default.html">Start the journey &rarr;</a></p>
+
+  <h2>Screens on the main path</h2>
+  <ol class="flow">
+    <li><a href="signup-default.html">Signup — default</a>: the neon sign (slow flicker), the blurb, the email field, the unticked consent box with a privacy link, and Subscribe. Step 1–2.</li>
+    <li><a href="signup-default-reduced-motion.html">Signup — default, reduced motion</a>: the same screen with a fully static sign (AC 4).</li>
+    <li><a href="signup-submitting.html">Signup — submitting</a>: progress shown and a second press blocked (R6). From here you choose &ldquo;new address&rdquo; or &ldquo;already subscribed&rdquo;; both go to the same confirmation (R9). Step 4.</li>
+    <li><a href="signup-confirmation.html">Signup — confirmation</a>: replaces the form, shows <code>fan@example.com</code> and asks the visitor to check their inbox (R7). Step 5.</li>
+  </ol>
+  <p>Not in this step (drawn next, in Screens): <strong>invalid email</strong>, <strong>consent missing</strong>, <strong>both errors</strong> and <strong>send failed</strong>, each at 320 px and desktop.</p>
+
+  <h2>Interaction choices made for the prototype</h2>
+  <ul>
+    <li><strong>Validation on submit only.</strong> The structure&rsquo;s proposed default (open branch 1); the error screens come next.</li>
+    <li><strong>Privacy link</strong> opens an in-page placeholder note. In the built page it opens in a new tab and points to the approved address before go-live (open branch 3).</li>
+    <li><strong>Tab order</strong> is email &rarr; consent &rarr; Subscribe. Use &ldquo;Show Tab order&rdquo; in the grey bar to see the numbers (AC 6). The focus ring is turquoise, 3 px, offset.</li>
+    <li><strong>Confirmation is final.</strong> No &ldquo;change address&rdquo; link (open branch 4); focus moves to the message (open branch 2).</li>
+    <li><strong>No sound, no site navigation</strong> on any screen (R1, R15).</li>
+  </ul>
+
+  <h2>Colours and contrast (first pass)</h2>
+  <table>
+    <thead><tr><th>Pair</th><th>Use</th><th>Ratio</th></tr></thead>
+    <tbody>
+      <tr><td><span class="swatch" style="background:#f5f0ff"></span>#f5f0ff on #0d0221 / #1a0b3d</td><td>Body text, labels, consent text</td><td>17.9:1 / 16.2:1</td></tr>
+      <tr><td><span class="swatch" style="background:#cfc4ec"></span>#cfc4ec on #0d0221</td><td>Hints, footer</td><td>11.9:1</td></tr>
+      <tr><td><span class="swatch" style="background:#2de2e6"></span>#2de2e6 on #1a0b3d</td><td>Privacy link, focus ring, confirmation title</td><td>11.3:1</td></tr>
+      <tr><td><span class="swatch" style="background:#0d0221"></span>#0d0221 on #2de2e6</td><td>Subscribe button label</td><td>12.5:1</td></tr>
+      <tr><td><span class="swatch" style="background:#0d0221"></span>#0d0221 on #7fb9bb</td><td>Button label while submitting</td><td>9.1:1</td></tr>
+      <tr><td><span class="swatch" style="background:#b967ff"></span>#b967ff on #0d0221</td><td>Tagline (large uppercase), card border</td><td>6.1:1</td></tr>
+      <tr><td><span class="swatch" style="background:#ffb3d1"></span>#ffb3d1 on #1a0b3d</td><td>Error text (Screens step), always with an icon and words</td><td>10.9:1</td></tr>
+    </tbody>
+  </table>
+  <p>The neon heading uses a pale core (#ffe6f4, #e3feff) with a pink or turquoise glow, so the letters stay readable without relying on the glow. The full table, including the error states, ships with the Screens step (AC 3).</p>
+
+  <h2>Fonts and illustration (for approval)</h2>
+  <ul>
+    <li><strong>Fonts:</strong> system fonts only (Futura / Century Gothic / Trebuchet for the sign, the device&rsquo;s UI font for the body). Nothing is downloaded, so there is no licence to clear (AC 5).</li>
+    <li><strong>Illustration A</strong>, a big-hair figure in an oversized shoulder-pad jacket. Source: drawn for this prototype as inline vector art. Licence: original work. It depicts no artist, album cover or lyric. Status: <em>proposed, pending the product owner&rsquo;s approval</em>. If it is rejected it is removed, and the page stays whole with neon only (R11).</li>
+  </ul>
+</main>
+</body>
+</html>

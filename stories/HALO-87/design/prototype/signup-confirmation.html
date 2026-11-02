@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Signup — confirmation · Neon Nights Weekly (prototype)</title>
+<link rel="stylesheet" href="tokens.css">
+</head>
+<body class="" id="top">
+<nav class="proto-bar" aria-label="Prototype controls (not part of the design)">
+  <strong>Prototype · HALO-87</strong>
+  <span>Step 3 of 3 · Signup — confirmation</span>
+  <a href="signup-default.html">&larr; Start the journey again</a>
+  
+  <span class="spacer"></span>
+  <a href="#tab-order">Show Tab order</a>
+  <a href="#top">Hide</a>
+  <a href="index.html">Index</a>
+</nav>
+<span id="tab-order"></span>
+<main class="page">
+  <div>
+    <header class="sign">
+      <h1 class="flicker">Neon Nights<span class="tq">Weekly</span></h1>
+      <p class="tagline">Rock &amp; pop &middot; once a week</p>
+    </header>
+    
+    <section class="card confirm" aria-labelledby="confirm-title" tabindex="-1">
+      <svg width="56" height="56" viewBox="0 0 56 56" aria-hidden="true"><rect x="6" y="12" width="44" height="32" rx="4" fill="none" stroke="#ff3ea5" stroke-width="3"/><path d="M6 14 L28 32 L50 14" fill="none" stroke="#2de2e6" stroke-width="3"/></svg>
+      <h2 id="confirm-title">Almost there!</h2>
+      <p>We&rsquo;ve sent a confirmation link to<br><span class="addr">fan@example.com</span></p>
+      <p>Check your inbox and click the link to start getting Neon Nights Weekly. Can&rsquo;t see it? Look in your spam or promotions folder.</p>
+    </section>
+  </div>
+  <div class="art" aria-hidden="true">
+  <svg viewBox="0 0 240 300" role="presentation" focusable="false">
+    <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <!-- big hair: original cloud of curls -->
+      <path d="M60 120 C30 110 28 70 55 60 C50 30 85 15 105 30 C120 8 160 12 168 38 C200 32 218 66 198 86 C222 100 212 140 182 138" stroke="#b967ff" stroke-width="5"/>
+      <path d="M70 92 C78 70 100 62 120 68 M150 62 C168 70 176 88 172 104" stroke="#b967ff" stroke-width="3"/>
+      <!-- face -->
+      <ellipse cx="120" cy="120" rx="34" ry="42" stroke="#ff3ea5" stroke-width="4"/>
+      <path d="M104 112 h8 M128 112 h8 M110 138 q10 8 20 0" stroke="#ff3ea5" stroke-width="3"/>
+      <!-- oversized jacket with shoulder pads -->
+      <path d="M100 160 L30 188 L22 290 M140 160 L210 188 L218 290" stroke="#2de2e6" stroke-width="5"/>
+      <path d="M30 188 C40 176 60 172 78 176 M210 188 C200 176 180 172 162 176" stroke="#2de2e6" stroke-width="5"/>
+      <path d="M100 160 L120 210 L140 160 M120 210 L120 290" stroke="#2de2e6" stroke-width="3"/>
+      <!-- lightning bolt pin -->
+      <path d="M170 216 l-10 18 h10 l-8 18" stroke="#ff3ea5" stroke-width="3"/>
+    </g>
+  </svg>
+</div>
+</main>
+<aside class="proto-note" aria-label="Prototype note (not part of the design)">
+<strong>Confirmation (R7, R9):</strong> replaces the form on the same page. This same copy and look appear for a new address and for one that is already subscribed. Focus moves to this message (proposed default from the structure). In line with the structure, there is no in-page way back and no unsubscribe or list management; the &ldquo;start again&rdquo; link is prototype chrome only.
+<p>Outside this design: the confirmation email and its link (newsletter team, steps 6–7).</p>
+</aside>
+<footer class="legal">&copy; Neon Nights Weekly</footer>
+</body>
+</html>

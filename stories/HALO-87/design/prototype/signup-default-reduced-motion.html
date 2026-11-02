@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Signup — default, reduced motion · Neon Nights Weekly (prototype)</title>
+<link rel="stylesheet" href="tokens.css">
+</head>
+<body class="static" id="top">
+<nav class="proto-bar" aria-label="Prototype controls (not part of the design)">
+  <strong>Prototype · HALO-87</strong>
+  <span>Step 1 of 3 · Signup — default, reduced motion</span>
+  <a href="signup-default.html">&larr; Back to animated default</a>
+  
+  <span class="spacer"></span>
+  <a href="#tab-order">Show Tab order</a>
+  <a href="#top">Hide</a>
+  <a href="index.html">Index</a>
+</nav>
+<span id="tab-order"></span>
+<main class="page">
+  <div>
+    <header class="sign">
+      <h1 class="flicker">Neon Nights<span class="tq">Weekly</span></h1>
+      <p class="tagline">Rock &amp; pop &middot; once a week</p>
+    </header>
+    <p class="blurb">The music, the hits and the stories from rock and pop, in your inbox once a week. Free, no account needed.</p>
+    <section class="card" aria-label="Subscribe to Neon Nights Weekly">
+      <div class="field">
+        <label class="lbl" for="email"><span class="tab-badge">1</span>Email address</label>
+        <input id="email" type="email" autocomplete="email">
+        <p class="hint">We&rsquo;ll send a confirmation link to this address.</p>
+      </div>
+      <div class="field">
+        <div class="consent">
+          <span class="box"><span class="tab-badge">2</span><input id="consent" type="checkbox" aria-describedby="consent-text"></span>
+          <label class="text" id="consent-text" for="consent">
+            Yes, email me Neon Nights Weekly once a week. I can unsubscribe at any time with the link in every issue.
+            See our <a class="inline" href="#privacy-note">privacy policy</a>.
+          </label>
+        </div>
+        <div class="privacy-note" id="privacy-note" role="note">
+          <strong>Privacy policy:</strong> working placeholder. The approved policy address replaces this before go-live (PRD §5); in the built page the link opens in a new tab so the form stays as typed. <a class="inline" href="#top">Close</a>
+        </div>
+      </div>
+      <a class="btn" href="signup-submitting.html"><span class="tab-badge">3</span>Subscribe</a>
+      
+    </section>
+  </div>
+  <div class="art" aria-hidden="true">
+  <svg viewBox="0 0 240 300" role="presentation" focusable="false">
+    <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <!-- big hair: original cloud of curls -->
+      <path d="M60 120 C30 110 28 70 55 60 C50 30 85 15 105 30 C120 8 160 12 168 38 C200 32 218 66 198 86 C222 100 212 140 182 138" stroke="#b967ff" stroke-width="5"/>
+      <path d="M70 92 C78 70 100 62 120 68 M150 62 C168 70 176 88 172 104" stroke="#b967ff" stroke-width="3"/>
+      <!-- face -->
+      <ellipse cx="120" cy="120" rx="34" ry="42" stroke="#ff3ea5" stroke-width="4"/>
+      <path d="M104 112 h8 M128 112 h8 M110 138 q10 8 20 0" stroke="#ff3ea5" stroke-width="3"/>
+      <!-- oversized jacket with shoulder pads -->
+      <path d="M100 160 L30 188 L22 290 M140 160 L210 188 L218 290" stroke="#2de2e6" stroke-width="5"/>
+      <path d="M30 188 C40 176 60 172 78 176 M210 188 C200 176 180 172 162 176" stroke="#2de2e6" stroke-width="5"/>
+      <path d="M100 160 L120 210 L140 160 M120 210 L120 290" stroke="#2de2e6" stroke-width="3"/>
+      <!-- lightning bolt pin -->
+      <path d="M170 216 l-10 18 h10 l-8 18" stroke="#ff3ea5" stroke-width="3"/>
+    </g>
+  </svg>
+</div>
+</main>
+<aside class="proto-note" aria-label="Prototype note (not part of the design)">
+<strong>Reduced-motion variant (AC 4):</strong> identical to the default, but the neon sign is fully static, with no flicker and no animation anywhere. The built page switches to this automatically when the device asks for reduced motion; the visitor does nothing. <em>Subscribe</em> continues the same journey.
+</aside>
+<footer class="legal">&copy; Neon Nights Weekly</footer>
+</body>
+</html>
