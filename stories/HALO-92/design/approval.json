@@ -1,0 +1,15 @@
+{
+  "storyId": "158857c2-359b-4f82-b15a-00c8187fb53e",
+  "storyKey": "HALO-92",
+  "epicKey": "HALO-91",
+  "title": "עיצוב עמוד הג'ונגל (מגוון צבעים, עיטורי צמחייה ומיקומם במחשב ובטלפון נייד)",
+  "approvals": [
+    {
+      "step": "structure",
+      "decisionId": "32e3deaf-3993-4bd8-85cb-c0696ba897a5",
+      "actor": "Ophir (Guest) (guest)",
+      "approvedAt": "2026-11-02T09:29:02.357931Z",
+      "headSha": "5b927efc1398d2bcda9e1d2e2f3870f5a3bcb272"
+    }
+  ]
+}
