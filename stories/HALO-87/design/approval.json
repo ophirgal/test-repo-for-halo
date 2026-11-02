@@ -1,0 +1,15 @@
+{
+  "storyId": "df185223-d765-4f5e-b66a-bfb8566b70df",
+  "storyKey": "HALO-87",
+  "epicKey": "HALO-86",
+  "title": "עיצוב מסע ההרשמה בניאון של שנות ה-80 (מסכים ואב-טיפוס לכל מצבי הטופס)",
+  "approvals": [
+    {
+      "step": "structure",
+      "decisionId": "1ff9955f-c313-41e8-9e65-68013ee5afd2",
+      "actor": "Ophir (Guest) (guest)",
+      "approvedAt": "2026-11-02T15:14:49.037075Z",
+      "headSha": "a124e77ad9eb2555228878ca5bc11a4cd0eefb87"
+    }
+  ]
+}
