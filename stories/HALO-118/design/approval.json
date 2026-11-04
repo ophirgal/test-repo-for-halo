@@ -1,0 +1,15 @@
+{
+  "storyId": "5aa21113-fd5a-4079-9e01-87b6fc2f8c78",
+  "storyKey": "HALO-118",
+  "epicKey": "HALO-117",
+  "title": "עיצוב מסך המשחק המינימלי",
+  "approvals": [
+    {
+      "step": "structure",
+      "decisionId": "bafef6f1-d5e7-4d8a-98ab-9a97f10899d8",
+      "actor": "Ophir Gal",
+      "approvedAt": "2026-11-04T15:20:11.701246Z",
+      "headSha": "6496fe9f982727b8f881b6069f6e552c6d97777d"
+    }
+  ]
+}
