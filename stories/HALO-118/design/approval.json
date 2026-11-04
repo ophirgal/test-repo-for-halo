@@ -1,0 +1,29 @@
+{
+  "storyId": "5aa21113-fd5a-4079-9e01-87b6fc2f8c78",
+  "storyKey": "HALO-118",
+  "epicKey": "HALO-117",
+  "title": "עיצוב מסך המשחק המינימלי",
+  "approvals": [
+    {
+      "step": "structure",
+      "decisionId": "bafef6f1-d5e7-4d8a-98ab-9a97f10899d8",
+      "actor": "Ophir Gal",
+      "approvedAt": "2026-11-04T15:20:11.701246Z",
+      "headSha": "6496fe9f982727b8f881b6069f6e552c6d97777d"
+    },
+    {
+      "step": "prototype",
+      "decisionId": "b83fe985-3d7e-4d14-ba18-fc57a4360f93",
+      "actor": "Ophir Gal",
+      "approvedAt": "2026-11-04T15:27:43.099699Z",
+      "headSha": "42176605ee45ec0f503b77e0b338b78845ddce88"
+    },
+    {
+      "step": "screens",
+      "decisionId": "768d84eb-ea4f-4de4-b649-6c4763ce4183",
+      "actor": "Ophir Gal",
+      "approvedAt": "2026-11-04T15:30:56.819068Z",
+      "headSha": "2aecda5f48679322548eca0ab2e638191f1aa8da"
+    }
+  ]
+}

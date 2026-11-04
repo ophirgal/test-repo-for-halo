@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Snake prototype — HALO-118</title>
+<link rel="stylesheet" href="tokens.css"></head>
+<body><div class="index">
+<h1>Minimal Snake — clickable prototype</h1>
+<p>This prototype walks the main path of the approved structure for HALO-118. There is one page, the <b>Game page</b>, and the player passes through three of its states: <b>Ready → Playing → Game over → Ready</b>. The player uses only the keyboard. Each key press is simulated by a link in the yellow "Prototype controls" panel next to the game. That panel is not part of the game. The game itself has only a score line, a square 20 × 20 field and a message line. The Error state is not on the main path, so it is left for the screens step.</p>
+
+<h2>Screens</h2>
+<ul>
+  <li><a href="game-page.html">Game page</a>, with three states:
+    <ul>
+      <li><a href="game-page.html#ready">Ready</a>: page just opened, snake still, score 0</li>
+      <li><a href="game-page.html#playing">Playing</a>: snake moving, score 3</li>
+      <li><a href="game-page.html#game-over">Game over</a>: snake hit the wall, final score 5</li>
+    </ul>
+  </li>
+</ul>
+
+<h2>Choices taken from the structure's defaults</h2>
+<ul>
+  <li>After Game over, any key starts a new round in <b>Ready</b>. The next arrow or WASD key starts the movement.</li>
+  <li>The Game over message sits in the message line below the field. The frozen snake stays visible on the field.</li>
+  <li>While the snake is moving, the message line is empty, so only the score line, field, snake and food are shown (AC 2).</li>
+  <li>Palette: a white field with light grid lines, a green snake with a darker head, one red food cell and dark text. The page has no images, buttons or decoration (AC 2, AC 3).</li>
+</ul>
+
+<a class="start" href="game-page.html#ready">Start the journey →</a>
+</div></body></html>
