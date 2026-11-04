@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Game page — Snake prototype (HALO-118)</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+.state{display:none}
+.state:target{display:flex}
+.state:target ~ .state-ready{display:none}
+.state-ready{display:flex}
+</style></head>
+<body>
+<header class="crumbs"><a href="index.html">Snake prototype</a> / Game page <span class="tabs"><a href="#ready">Ready</a> · <a href="#playing">Playing</a> · <a href="#game-over">Game over</a></span></header>
+<main>
+<section class="state " id="playing">
+  <div class="game">
+    <p class="score">Score: 3</p>
+    <svg class="field" viewBox="0 0 400 400" width="400" height="400" role="img" aria-label="Play field: snake of 6 cells moving up toward the food"><defs><pattern id="g" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="var(--grid)" stroke-width="1"/></pattern></defs><rect width="400" height="400" fill="var(--field)"/><rect width="400" height="400" fill="url(#g)"/><rect x="242" y="42" width="16" height="16" fill="var(--food)"/><rect x="241" y="121" width="18" height="18" fill="var(--head)"/><rect x="241" y="141" width="18" height="18" fill="var(--snake)"/><rect x="241" y="161" width="18" height="18" fill="var(--snake)"/><rect x="221" y="161" width="18" height="18" fill="var(--snake)"/><rect x="201" y="161" width="18" height="18" fill="var(--snake)"/><rect x="181" y="161" width="18" height="18" fill="var(--snake)"/></svg>
+    <p class="message" aria-live="polite">&nbsp;</p>
+  </div>
+  <aside class="proto">
+    <p class="proto-title">Prototype controls — not part of the game</p>
+    <p class="step">State 2 of 3 · <b>Playing</b></p><p>The snake moves one cell per step at a steady pace. Arrow keys / WASD steer. Reversing (here: ↓ / S) is ignored.</p><ul><li><a href="#playing">Eat the food (↑ ×4)</a>: score 4, snake grows to 7, new food in a free cell</li><li><a href="#game-over">Hit the wall or own body</a> → Game over</li></ul>
+    <p class="proto-back"><a href="index.html">← Back to index</a></p>
+  </aside>
+</section>
+<section class="state " id="game-over">
+  <div class="game">
+    <p class="score">Score: 5</p>
+    <svg class="field" viewBox="0 0 400 400" width="400" height="400" role="img" aria-label="Play field: snake of 8 cells stopped at the right edge"><defs><pattern id="g" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="var(--grid)" stroke-width="1"/></pattern></defs><rect width="400" height="400" fill="var(--field)"/><rect width="400" height="400" fill="url(#g)"/><rect x="122" y="82" width="16" height="16" fill="var(--food)"/><rect x="381" y="281" width="18" height="18" fill="var(--head)"/><rect x="361" y="281" width="18" height="18" fill="var(--snake)"/><rect x="341" y="281" width="18" height="18" fill="var(--snake)"/><rect x="321" y="281" width="18" height="18" fill="var(--snake)"/><rect x="301" y="281" width="18" height="18" fill="var(--snake)"/><rect x="301" y="261" width="18" height="18" fill="var(--snake)"/><rect x="301" y="241" width="18" height="18" fill="var(--snake)"/><rect x="281" y="241" width="18" height="18" fill="var(--snake)"/></svg>
+    <p class="message" aria-live="polite"><strong>Game over</strong> — final score 5. Press any key to play again</p>
+  </div>
+  <aside class="proto">
+    <p class="proto-title">Prototype controls — not part of the game</p>
+    <p class="step">State 3 of 3 · <b>Game over</b></p><p>The head crossed the right edge. The snake stops where it crashed; it does not appear on the other side.</p><ul><li><a href="#ready">Press any key</a> → new round in Ready (score 0)</li></ul>
+    <p class="proto-back"><a href="index.html">← Back to index</a></p>
+  </aside>
+</section>
+<section class="state state-ready" id="ready">
+  <div class="game">
+    <p class="score">Score: 0</p>
+    <svg class="field" viewBox="0 0 400 400" width="400" height="400" role="img" aria-label="Play field: snake of 3 cells at rest, one food item"><defs><pattern id="g" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="var(--grid)" stroke-width="1"/></pattern></defs><rect width="400" height="400" fill="var(--field)"/><rect width="400" height="400" fill="url(#g)"/><rect x="282" y="202" width="16" height="16" fill="var(--food)"/><rect x="121" y="201" width="18" height="18" fill="var(--head)"/><rect x="101" y="201" width="18" height="18" fill="var(--snake)"/><rect x="81" y="201" width="18" height="18" fill="var(--snake)"/></svg>
+    <p class="message" aria-live="polite">Press an arrow key or WASD to start</p>
+  </div>
+  <aside class="proto">
+    <p class="proto-title">Prototype controls — not part of the game</p>
+    <p class="step">State 1 of 3 · <b>Ready</b></p><p>The page has just opened. The snake (3 cells) waits for a key. Other keys do nothing.</p><ul><li><a href="#playing">Press → / ↑ / ↓ or W A S D</a> → Playing</li></ul>
+    <p class="proto-back"><a href="index.html">← Back to index</a></p>
+  </aside>
+</section>
+</main>
+</body></html>
