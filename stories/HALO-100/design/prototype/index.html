@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HALO-100 prototype — New Performance tabs</title><link rel="stylesheet" href="tokens.css"></head>
+<body>
+<div class="proto-bar"><span>HALO-100 · clickable prototype of the main paths</span><span>Structure approved 4 Nov 2026</span></div>
+<header class="app-header"><svg width="24" height="24" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="11" fill="none" stroke="#2b4fd8" stroke-width="4"/></svg><span class="brand">Halo</span></header>
+<main class="index">
+<div class="card">
+<h1>New Performance tabs: clickable prototype</h1>
+<p>This prototype walks the main paths of the approved structure for the two new Performance tabs. A Harel or McKinsey stakeholder opens <strong>Performance</strong> from Halo's menu and lands on <strong>Engagement &amp; Adoption</strong>: active users with the per-team and per-person tables, lines of code, the stories funnel and stories per week. From there they change the date range, or switch to <strong>Scale</strong>: human review score, factory quality with post-mortem detail, rating history, delivery quality, the AI judge, flow completion, time to converge and cost. On Scale they narrow the flow sections by Epic and Mode, and open a post-mortem report. Every page shows realistic sample figures for 6 Oct – 3 Nov 2026, compared with the 29 days before.</p>
+<p><a class="btn" href="halo-navigation-performance.html">Start the journey</a></p>
+
+<h2>Screens</h2>
+<ol>
+<li><a href="halo-navigation-performance.html">Halo navigation — Performance</a>: Halo's menu, with <em>Performance</em> as the way in.</li>
+<li><a href="engagement-and-adoption.html">Engagement &amp; Adoption (default)</a>: the default tab, with the date range as its only filter.</li>
+<li><a href="date-range-picker.html">Date range picker</a>, opened from Engagement &amp; Adoption: <em>Apply</em> or <em>Cancel</em> return to the tab.</li>
+<li><a href="scale.html">Scale</a>: every Scale section in the order of the requirements doc, with the Epic and Mode filters unset.</li>
+<li><a href="date-range-picker-scale.html">Date range picker</a>, opened from Scale: the same control, returning to Scale.</li>
+<li><a href="scale-epic-and-mode-filters.html">Scale — Epic and Mode filters</a>: choose an epic and a mode, then <em>Apply</em>.</li>
+<li><a href="scale-filtered-by-epic-mode.html">Scale — filtered by Epic / Mode</a>: the flow sections show <em>Claims intake modernisation</em> · <em>Advanced</em>. Human Review Score and Rating history stay unchanged and are labelled "not filtered".</li>
+<li><a href="post-mortem-report-detail.html#pm-report">Post-mortem report detail</a>: a report row opened in place inside Factory quality, showing what went well, what went wrong and what to change next time.</li>
+</ol>
+
+<h2>Choices made in this prototype</h2>
+<ul>
+<li><strong>Only the main paths are drawn.</strong> The loading, error, empty-period and "people data not available" states are the Design step's work. One exception: on Scale, <em>average time per judge run</em> and <em>critiques that led to a revision</em> show a dash with "not available yet". Halo does not record them today (R7), so that is how Scale will look at launch.</li>
+<li><strong>Old links have no page.</strong> In the structure, an old Performance link redirects to Engagement &amp; Adoption, and an old Cost &amp; Usage, Factory Performance or Velocity link redirects to Scale. Neither redirect has a screen of its own.</li>
+<li><strong>Date range:</strong> a start and an end date, with no presets (open branch 1, simplest choice). There are no scripts, so <em>Apply</em> and <em>Cancel</em> both return to the tab and the figures stay as they are. The date range is shared by both tabs. Epic and Mode exist only on Scale (D13).</li>
+<li><strong>Tab switching:</strong> the Scale tab always opens Scale unfiltered here. In the product, Epic and Mode stay set when you come back to Scale (open branch 2, simplest choice).</li>
+<li><strong>Clearing a filter:</strong> on the filtered page, the × on each chip clears that filter and returns to unfiltered Scale. <em>Change</em> reopens the filter panel.</li>
+<li><strong>Post-mortem reports</strong> open in place: the row expands and <em>Close</em> collapses it (open branch 4, simplest choice). Every row in the list opens the same sample report (CLM-142, Delivery), and the report is always shown in the unfiltered Scale page.</li>
+<li><strong>Partial weeks:</strong> weeks run Sunday to Thursday. Partial weeks at the edges of the period are hatched bars, or shaded columns with hollow points on line charts, and are labelled "partial" under the axis. Every chart names both axes.</li>
+<li><strong>Headline figures</strong> show the change against the previous 29 days. Green means better and grey means neutral: cost and run counts going up are shown as neutral, not as bad.</li>
+<li><strong>Flows cost table:</strong> sorted by cost, highest first. Every column header shows a sort control, but without scripts clicking one does nothing.</li>
+<li><strong>Long lists:</strong> in the product every row is shown, with no pagination (open branch 8). The prototype cuts the post-mortem reports and the flows cost table short and marks the cut with an italic row.</li>
+<li><strong>Not drawn:</strong> no in-page section index (open branch 6). Flow IDs, story titles and people are plain text, not links (open branch 7). Only the final two-tab state is shown, not the transition period (open branch 9).</li>
+<li><strong>Look:</strong> the colours, type and components approximate Halo's current UI and reuse the header and palette of the other prototypes in this repository. Halo's frontend source was not available to this step, so the Design step checks the components, colours and fonts against the live app (A7).</li>
+<li><strong>Out of scope:</strong> there is no "Full dashboard" tab, no people/team page and no "Underwriting users vs Everyone" filter. Team is McKinsey or Internal, taken from the sign-in email, and is read-only everywhere.</li>
+</ul>
+</div>
+</main>
+</body></html>
