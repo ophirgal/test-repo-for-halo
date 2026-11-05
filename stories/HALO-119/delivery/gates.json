@@ -1,0 +1,73 @@
+{
+  "df9ebae6-b57c-45af-a309-774b875dfed7": {
+    "deps": {
+      "gate": "deps",
+      "state": "not_applicable",
+      "reason": "no deps command is declared or discoverable in this repository"
+    },
+    "lint": {
+      "gate": "lint",
+      "state": "not_applicable",
+      "reason": "no lint command is declared or discoverable in this repository"
+    },
+    "build": {
+      "gate": "build",
+      "state": "not_applicable",
+      "reason": "no build command is declared or discoverable in this repository"
+    },
+    "go-directive": {
+      "gate": "go-directive",
+      "state": "not_applicable",
+      "summary": "no go.mod changed",
+      "findings": []
+    },
+    "security": {
+      "gate": "security",
+      "state": "passed",
+      "command": "/security-review",
+      "commandSource": "authored",
+      "scanners": [],
+      "unavailable": [
+        "gitleaks",
+        "gosec",
+        "govulncheck"
+      ],
+      "scans": {
+        "gitleaks": {
+          "state": "unavailable",
+          "reason": "not on PATH in this pod"
+        },
+        "gosec": {
+          "state": "unavailable",
+          "reason": "not on PATH in this pod"
+        },
+        "govulncheck": {
+          "state": "unavailable",
+          "reason": "not on PATH in this pod"
+        }
+      },
+      "findings": [],
+      "execution": {
+        "command": "/security-review",
+        "exitCode": 0,
+        "startedAt": "2026-11-05T16:08:42Z",
+        "finishedAt": "2026-11-05T16:08:52Z",
+        "durationSeconds": 9.82,
+        "runner": {
+          "os": "darwin",
+          "arch": "arm64",
+          "platform": "darwin/arm64"
+        },
+        "maxTurns": 6,
+        "outputTail": "0 finding(s), 0 open blocker(s) from 0 scanner hit(s); scanners: none; unavailable: gitleaks, gosec, govulncheck"
+      },
+      "traceId": "b8c14d6062cbc513ef18a2cfed5af5ef"
+    },
+    "harel-gates:run-test-scripts": {
+      "gate": "harel-gates:run-test-scripts",
+      "skill": "harel-gates:run-test-scripts",
+      "state": "skipped",
+      "reason": "provider CI runs the suite on this head; CI is the proof"
+    }
+  }
+}
