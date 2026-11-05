@@ -1,0 +1,97 @@
+{
+  "McK-Private/harel-pdlc-infra": {
+    "qa": {
+      "status": "not-instrumented",
+      "contextGap": "in-pod QA is not set up; CI on the PR is the verification layer",
+      "manualSuggested": [
+        "Run `python3 halo-119-snake/test_snake.py` and confirm all tests pass (static self-containment and required strings).",
+        "With the network disabled, open halo-119-snake/snake.html via file:// in current Chrome and Firefox. Confirm a 20×20 grid, a 3-segment snake in the middle row with its head on the right, one red food item, 'Score: 0' and 'Press an arrow key or WASD to start'. Wait 3 seconds and confirm the snake does not move.",
+        "In Ready, press Left/A and confirm nothing happens. Reload, then press Up, W, Down, S, Right and D (one per reload). Confirm the snake moves one cell per step at about 8 per second in that direction, and the hint disappears.",
+        "While moving, turn in all four directions with arrow keys and then with WASD. Press the reverse key in each direction and confirm the snake keeps going and the round continues. Moving right, quickly press Up then Left within one step and confirm the snake does not reverse onto its neck.",
+        "Eat the first food: confirm the length goes 3→4, 'Score: 1' shows immediately, and exactly one new food appears off the snake. Eat several more and confirm the pace is unchanged.",
+        "Steer off each of the four edges, one per round. Confirm the snake stops, 'Game over', 'Score: N' and 'Press Space or Enter to play again' appear, and no segment appears on the opposite edge. Press arrow/WASD keys and confirm nothing changes.",
+        "Grow the snake to 5+ segments and steer the head into the body. Confirm Game over with the final score.",
+        "Reach Game over with score 5. Press Space and confirm 'Score: 0', a 3-segment snake in the start position, one food item and the start hint. Repeat with Enter.",
+        "Disable JavaScript and open the page. Then open snake.html?simulate-error=canvas and snake.html?simulate-error=startup. In each case confirm only 'Snake couldn't start in this browser.' is visible, with no empty or frozen field.",
+        "With DevTools' Network panel open, play a full round (start, eat, die, restart). Confirm no requests beyond the local file, and no sound, images, pause or saved scores."
+      ]
+    },
+    "tests": {
+      "ci": {
+        "checks": [],
+        "status": "unavailable"
+      },
+      "notes": [
+        "CI status is unavailable and no checks ran. halo-119-snake/test_snake.py is not collected by this repo's CI either, because CI discovery is rooted at scripts/tests.",
+        "Placement is provisional: the files sit in harel-pdlc-infra under halo-119-snake/ rather than in the spec's home, ophirgal/test-repo-for-halo (D-6). The placement question is still open.",
+        "The diff adds only two new files (halo-119-snake/snake.html, halo-119-snake/test_snake.py) and modifies no existing file.",
+        "The page includes a ?simulate-error=canvas|startup test hook. An unknown value is ignored and the game starts normally.",
+        "A step() exception is caught and routed to the visible error message, which stops the game loop."
+      ],
+      "testedSha": "de814da822e558739e86dccee89dc54e77770a03",
+      "acCoverage": [
+        {
+          "ac": "תרחיש 1: מסלול תקין — פתיחת העמוד. **בהינתן** דפדפן שולחני עדכני בלי חיבור לרשת, **כאשר** השחקן פותח את קובץ העמוד, **אז** מוצגים שדה משחק מרובע ברשת, הנחש, פריט מזון אחד והניקוד 0, **וגם** הנחש עומד במקום עד לחיצה על מקש.",
+          "tests": [],
+          "status": "untested"
+        },
+        {
+          "ac": "תרחיש 2: מסלול תקין — תחילת תנועה. **בהינתן** העמוד פתוח לפני תחילת הסבב, **כאשר** השחקן לוחץ על מקש חץ או על W/A/S/D, **אז** הנחש מתחיל לנוע תא אחד בכל צעד, בקצב קבוע, בכיוון המקש.",
+          "tests": [],
+          "status": "untested"
+        },
+        {
+          "ac": "תרחיש 3: מסלול תקין — היגוי. **בהינתן** נחש בתנועה, **כאשר** השחקן לוחץ על מקש חץ או על המקש המקביל ב-WASD של כיוון ניצב, **אז** הנחש פונה לכיוון הזה בצעד הבא.",
+          "tests": [],
+          "status": "untested"
+        },
+        {
+          "ac": "תרחיש 4: מקרה קצה — היפוך כיוון. **בהינתן** נחש שנע ימינה, **כאשר** השחקן לוחץ חץ שמאלה או A, **אז** הנחש ממשיך ימינה, **וגם** הסבב לא מסתיים.",
+          "tests": [],
+          "status": "untested"
+        },
+        {
+          "ac": "תרחיש 5: מסלול תקין — אכילת מזון. **בהינתן** נחש באורך 3 וניקוד 0, **כאשר** ראש הנחש נכנס לתא המזון, **אז** אורך הנחש גדל ל-4 והניקוד מוצג 1, **וגם** מזון חדש מופיע בתא שהנחש אינו תופס.",
+          "tests": [],
+          "status": "untested"
+        },
+        {
+          "ac": "תרחיש 6: מסלול תקין — פגיעה בקיר. **בהינתן** נחש שנע לעבר קצה השדה, **כאשר** הראש חוצה את הקצה, **אז** הנחש נעצר ומוצגת ההודעה \"Game over\" עם הניקוד הסופי, **וגם** הנחש אינו מופיע בצד השני של השדה.",
+          "tests": [],
+          "status": "untested"
+        },
+        {
+          "ac": "תרחיש 7: מסלול תקין — פגיעה בגוף. **בהינתן** נחש ארוך מספיק כדי לפגוש את עצמו, **כאשר** הראש נכנס לתא שגוף הנחש תופס, **אז** הנחש נעצר ומוצגת ההודעה \"Game over\" עם הניקוד הסופי.",
+          "tests": [],
+          "status": "untested"
+        },
+        {
+          "ac": "תרחיש 8: מסלול תקין — התחלה מחדש. **בהינתן** ההודעה \"Game over\" מוצגת עם ניקוד 5, **כאשר** השחקן לוחץ על מקש אחד, **אז** מתחיל סבב חדש עם הניקוד 0 ונחש באורכו ההתחלתי, **וגם** מוצג פריט מזון אחד.",
+          "tests": [],
+          "status": "untested"
+        },
+        {
+          "ac": "תרחיש 9: מקרה שגיאה — המשחק לא עולה. **בהינתן** דפדפן שבו המשחק אינו יכול לפעול, **כאשר** השחקן פותח את העמוד, **אז** מוצגת על המסך הודעת שגיאה גלויה במקום שדה משחק ריק או קפוא.",
+          "tests": [],
+          "status": "untested"
+        },
+        {
+          "ac": "תרחיש 10: גבול התחום — עמוד עצמאי. **בהינתן** העמוד פתוח במהלך סבב, **כאשר** בודקים את פעילות הרשת של הדפדפן, **אז** העמוד לא שולח שום בקשה לרשת, **וגם** אין בו צלילים, תמונות, השהיה או שמירת שיאים.",
+          "tests": [],
+          "status": "untested"
+        }
+      ],
+      "factoryRun": {
+        "deps": {
+          "state": "not_applicable",
+          "reason": "no deps command is declared or discoverable in this repository"
+        },
+        "state": "not_applicable",
+        "reason": "no test command is declared or discoverable in this repository",
+        "testedSha": "de814da822e558739e86dccee89dc54e77770a03"
+      }
+    },
+    "headSha": "de814da822e558739e86dccee89dc54e77770a03",
+    "workItem": "delivery-891d89d7045cfff98e2eca6a193207d5"
+  }
+}
