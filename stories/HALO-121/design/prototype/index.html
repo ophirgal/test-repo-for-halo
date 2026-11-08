@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HALO-121 prototype — role-based sidebar, View all page, wide card</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--halo-font-sans);background:var(--surface);color:var(--on-surface);font-size:var(--halo-text-body);line-height:var(--halo-leading-body)}
+.wrap{max-width:960px;margin:0 auto;padding:40px 32px 64px}
+.eyebrow{font-size:var(--halo-text-label);font-weight:600;letter-spacing:var(--halo-label-tracking);color:var(--on-surface-variant)}
+h1{margin:4px 0 12px;font-size:var(--halo-text-headline);line-height:var(--halo-leading-headline)}
+h2{margin:32px 0 8px;font-size:var(--halo-text-title)}
+p{color:var(--on-surface-variant);margin:0 0 12px}
+a{color:var(--primary-text);font-weight:600}
+.start{display:inline-flex;gap:8px;margin:8px 0 4px;flex-wrap:wrap}
+.start a{display:inline-flex;align-items:center;height:40px;padding:0 16px;border-radius:var(--radius-sm);background:var(--primary-solid);color:var(--on-primary);text-decoration:none}
+.start a.alt{background:var(--surface-container);color:var(--on-surface);border:1px solid var(--outline)}
+table{width:100%;border-collapse:collapse;background:var(--surface-container);border:1px solid var(--outline);border-radius:var(--radius-md);overflow:hidden}
+th,td{text-align:left;vertical-align:top;padding:10px 14px;border-top:1px solid var(--outline-variant);font-size:var(--halo-text-small)}
+th{background:var(--surface);font-size:var(--halo-text-label);letter-spacing:var(--halo-label-tracking);text-transform:uppercase;color:var(--on-surface-disabled);border-top:0}
+td:first-child{white-space:nowrap}
+.new{display:inline-block;font-size:11px;font-weight:600;border-radius:var(--radius-full);padding:0 6px;background:var(--primary-container);color:var(--primary-text)}
+ul{margin:0;padding-left:20px;color:var(--on-surface-variant)}
+li{margin-bottom:6px}
+</style></head>
+<body><div class="wrap">
+<div class="eyebrow">HALO-121 · PROTOTYPE</div>
+<h1>Role-based sidebar, View all page and the wide card</h1>
+<p>A clickable walk-through of the main paths in the approved journey. My Work shows each "View as" role only what it acts on. It has no "Backlog" or "Active sprint" headers, is wider (360px, was 288px), and its cards keep the title on the first row with the status tags in the bottom-right corner. A <b>View all</b> button stays pinned under the list and opens a page with <b>Active</b>, <b>Not Started</b> and <b>Archived</b> tabs. The Not Started rows end with a "Start in Jira" link on the Harel instance and a one-click <b>Start</b> button on Halo-developer instances. Everything outside these screens looks as it does today. The colours, type and spacing are Halo's own tokens (<code>tokens.css</code>), and the dashed "Prototype" strip on each page is not part of the design.</p>
+<div class="start"><a href="sidebar-dev-list.html">Start the journey — Dev list</a><a class="alt" href="sidebar-po-list.html">PO list</a><a class="alt" href="sidebar-po-and-dev-list.html">PO and Dev list</a></div>
+
+<h2>Screens</h2>
+<table>
+<tr><th>Screen</th><th>What it shows / what changed from today</th></tr>
+<tr><td><a href="sidebar-dev-list.html">Sidebar — Dev list</a></td><td>Today the started stories sit under the "Active sprint" header, grouped under grey epic bars. Now the developer's own started stories are one flat list, with no epic bars and no "Active sprint" header or sprint name.</td></tr>
+<tr><td><a href="sidebar-po-list.html">Sidebar — PO list</a></td><td>The same non-archived epics as today, without the "Backlog" header.</td></tr>
+<tr><td><a href="sidebar-po-and-dev-list.html">Sidebar — PO and Dev list</a></td><td>The two half-height sections are now one list. Each epic row is shaded (<code>--surface-dim</code>) and its stories sit beneath it, white and indented with a guide line.</td></tr>
+<tr><td>Wide card <small>(in all three lists)</small></td><td>The panel is 360px instead of 288px. The title has the whole first row. Row 2 holds <code>HALO-121 · STORY</code> on the left and the tags ("DESIGN", "Need you" and so on) in the bottom-right corner, where today they share the title's row.</td></tr>
+<tr><td><a href="work-actions-menu.html">Work actions menu</a></td><td>"Show archived", "Show unassigned issues" and "Show backlog issues" are gone, and so is the "Show N unassigned / backlog" hint under the list. Archive, Restore and Load canned story… stay as they are.</td></tr>
+<tr><td><a href="archive-restore-delete-dialog.html">Archive / Restore / Delete dialog</a></td><td>Unchanged. It is reached from the menu (<a href="archive-restore-delete-dialog.html#archive">Archive variant</a>) and from the Archived tab (Restore variant).</td></tr>
+<tr><td><a href="load-canned-story-dialog.html">Load canned story dialog</a></td><td>Unchanged. The dev-only exception (FR-2).</td></tr>
+<tr><td><a href="conversation-pane-unchanged.html">Conversation pane — unchanged</a></td><td>Out of scope. A stand-in that shows where a clicked card or row lands.</td></tr>
+<tr><td><a href="view-all-active-tab.html">View all — Active tab</a> <span class="new">new</span></td><td>Every epic and started story in the project, whoever it is assigned to. Each story sits under its epic, and each row shows its type, epic, assignee and status.</td></tr>
+<tr><td><a href="view-all-not-started-start-in-jira-link.html">View all — Not Started, Start in Jira link</a> <span class="new">new</span></td><td>Harel instance. Each row shows the story's Jira status, what it is still missing to start, and a "Start in Jira" link with an external-link icon.</td></tr>
+<tr><td><a href="start-in-jira-tooltip.html">Start in Jira tooltip</a></td><td>The exact FR-12 text, shown on hover and on focus, in the existing <code>HaloTooltip</code> style.</td></tr>
+<tr><td><a href="view-all-not-started-one-click-button.html">View all — Not Started, one-click button</a> <span class="new">new</span></td><td>Halo-developer instance. The link is replaced by a primary <b>Start</b> button.</td></tr>
+<tr><td><a href="not-started-row-starting.html">Not Started row — starting</a> <span class="new">new</span></td><td>The button reads "Starting…" and the row shows the three Jira steps as they complete.</td></tr>
+<tr><td><a href="not-started-row-started-leaves-the-tab.html">Not Started row — started, leaves the tab</a> <span class="new">new</span></td><td>A short confirmation, after which the row leaves the tab (the count goes from 3 to 2) and the user can go to Active.</td></tr>
+<tr><td><a href="not-started-row-step-failed.html">Not Started row — step failed</a> <span class="new">new</span></td><td>Shows which step failed and which ones succeeded (✓/✗), with <b>Try again</b> and <b>Open in Jira</b>.</td></tr>
+<tr><td><a href="story-page-in-jira.html">Story page in Jira</a></td><td>External. A stand-in for Jira, which opens in a new tab in the product.</td></tr>
+<tr><td><a href="view-all-archived-tab.html">View all — Archived tab</a> <span class="new">new</span></td><td>The items "Show archived" lists today, dimmed, each with a row ⋯ that holds Restore.</td></tr>
+</table>
+
+<h2>Choices made in this prototype</h2>
+<ul>
+<li><b>Switching roles.</b> "View as" lives in the expanded navigation today, so each page has a dashed Prototype strip for switching between PO, Dev and PO and Dev. The same strip switches between the Harel and Halo-developer instances on Not Started.</li>
+<li><b>Which stories go under an epic in the PO and Dev list.</b> Every non-archived story of the epic, started or not, assigned to anyone (open branch 1 of the structure).</li>
+<li><b>Search, Status and Sort on View all.</b> The page has its own controls, shared across its three tabs (open branch 3).</li>
+<li><b>While View all is open.</b> The View all button looks selected and no card in the sidebar is highlighted (open branch 6).</li>
+<li><b>The one-click button.</b> It is labelled <b>Start</b>, and its tooltip says what it does in Jira. The walk-through follows HALO-143, whose Jira status has no direct transition to In Progress, so the failure path is a realistic one.</li>
+<li><b>Restore, but no Delete.</b> Today's code offers only Archive and Restore on the list ("Archive and restore are the only removals", <code>epicBatchModel.ts</code>), so the Archived tab carries Restore only. FR-14 asks for "the same actions available today", which this keeps. The PRD's mention of "delete" does not match today's product.</li>
+</ul>
+</div></body></html>
