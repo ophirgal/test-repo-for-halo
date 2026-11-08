@@ -1,0 +1,15 @@
+{
+  "storyId": "f5673b02-2b1c-48ea-bd98-e5b1bee5fc7b",
+  "storyKey": "HALO-121",
+  "epicKey": "HALO-120",
+  "title": "עיצוב סרגל הצד לפי תפקיד, דף View all והכרטיס הרחב",
+  "approvals": [
+    {
+      "step": "structure",
+      "decisionId": "191c8398-20a2-4369-bc34-8193fc5a0e62",
+      "actor": "Ophir Gal",
+      "approvedAt": "2026-11-08T14:30:41.89355Z",
+      "headSha": "057e433df58ebec7cb45168f69a444e7a8991dca"
+    }
+  ]
+}
