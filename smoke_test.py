@@ -28,6 +28,31 @@ NON_ROOT_PATHS = [
 ]
 
 
+# HALO-93 — paths that look like /jungle but must stay 404.
+JUNGLE_LOOKALIKE_PATHS = [
+    "/jungle/",
+    "/jungle2",
+    "/jungles",
+    "/other",
+    "/jungle.html",
+    "/docs/jungle.html",
+]
+
+# HALO-93 — the only colours the jungle page may use (spec FR6).
+JUNGLE_PALETTE = {
+    "#0F3D2E", "#155239", "#1B5E3A", "#3E8E41", "#6DBE45",
+    "#6B4423", "#4A2F1A", "#F2C230", "#E8772E",
+}
+
+# HALO-93 — tokens the static, self-contained jungle page must never contain.
+JUNGLE_FORBIDDEN = [
+    r"<a[\s>]", r"<button\b", r"<form\b", r"<input\b", r"<script\b",
+    r"<link\b", r"<img\b", r"<iframe\b", r"<audio\b", r"<video\b",
+    r"@import", r"url\(", r"@keyframes", r"animation", r"transition",
+    r":hover", r"http://", r"https://", r"xmlns",
+]
+
+
 class QuietHandler(RootOnlyHandler):
     """Same routing, without per-request noise on stderr."""
 
@@ -66,6 +91,161 @@ def get(base, path):
             return response.status, response.headers, response.read().decode("utf-8", "replace")
     except urllib.error.HTTPError as err:
         return err.code, err.headers, err.read().decode("utf-8", "replace")
+
+
+def get_bytes(base, path):
+    """Like get(), but returns the raw body bytes for byte-equality checks."""
+    try:
+        with urllib.request.urlopen(base + path, timeout=10) as response:
+            return response.status, response.headers, response.read()
+    except urllib.error.HTTPError as err:
+        return err.code, err.headers, err.read()
+
+
+def run_jungle_checks(base, checks):
+    """HALO-93 — the /jungle page, its route, and the unchanged boundaries."""
+    # Routes: GET, GET with a query string, and HEAD all serve the page.
+    status, headers, raw = get_bytes(base, "/jungle")
+    checks.check("GET /jungle status", status == 200, "200", status)
+    content_type = headers.get("Content-Type", "")
+    checks.check(
+        "GET /jungle Content-Type",
+        content_type == "text/html; charset=utf-8",
+        "text/html; charset=utf-8",
+        content_type,
+    )
+    checks.check(
+        "GET /jungle body is docs/jungle.html",
+        raw == serve.JUNGLE.read_bytes(),
+        "the bytes of docs/jungle.html",
+        raw[:120],
+    )
+    status, _, _ = get(base, "/jungle?x=1")
+    checks.check("GET /jungle?x=1 status", status == 200, "200", status)
+    checks.check("HEAD /jungle status", head(base, "/jungle") == 200, "200", head(base, "/jungle"))
+
+    # The route table holds exactly the two fixed files.
+    checks.check(
+        "only two fixed routes",
+        serve.ROUTES == {"/": serve.INDEX, "/jungle": serve.JUNGLE},
+        "{'/': INDEX, '/jungle': JUNGLE}",
+        serve.ROUTES,
+    )
+
+    # The root is byte-for-byte the file on disk: no "!" and no link to /jungle.
+    status, _, root_raw = get_bytes(base, "/")
+    checks.check("GET / status (HALO-93)", status == 200, "200", status)
+    checks.check(
+        "GET / is byte-identical to docs/index.html",
+        root_raw == serve.INDEX.read_bytes(),
+        "the bytes of docs/index.html",
+        root_raw[:120],
+    )
+    root_text = root_raw.decode("utf-8", "replace")
+    checks.check(
+        "GET / greeting has no exclamation mark",
+        "Hello World" in root_text and "Hello World!" not in root_text,
+        "'Hello World' without '!'",
+        root_text[:200],
+    )
+    checks.check(
+        "GET / does not link to /jungle",
+        "/jungle" not in root_text,
+        "no '/jungle' in the root page",
+        root_text[:200],
+    )
+
+    # Look-alikes and every existing non-root path stay 404, GET and HEAD.
+    for path in JUNGLE_LOOKALIKE_PATHS + NON_ROOT_PATHS:
+        status, _, body_404 = get(base, path)
+        checks.check(f"GET {path} status (HALO-93)", status == 404, "404", status)
+        checks.check(
+            f"GET {path} is not a listing (HALO-93)",
+            "Directory listing" not in body_404,
+            "no directory listing",
+            body_404[:120],
+        )
+        checks.check(f"HEAD {path} status", head(base, path) == 404, "404", head(base, path))
+
+    # Page content.
+    body = raw.decode("utf-8", "replace")
+    checks.check(
+        "jungle page declares English",
+        re.search(r"<html\b[^>]*\blang=\"en\"", body, re.I) is not None,
+        '<html lang="en">',
+        body[:120],
+    )
+    checks.check(
+        "jungle viewport meta tag",
+        'name="viewport"' in body and "width=device-width" in body,
+        'name="viewport" with width=device-width',
+        "missing",
+    )
+    title = re.search(r"<title[^>]*>([^<]*)</title>", body, re.I)
+    title_text = title.group(1).strip() if title else None
+    checks.check(
+        "jungle title",
+        title_text == "Hello World! · Jungle",
+        "Hello World! · Jungle",
+        title_text,
+    )
+    headings = re.findall(r"<(h[1-6])\b", body, re.I)
+    checks.check("jungle page has exactly one heading, an <h1>", headings == ["h1"], ["h1"], headings)
+    h1 = re.search(r"<h1\b[^>]*>(.*?)</h1>", body, re.S | re.I)
+    h1_text = " ".join(re.sub(r"<[^>]*>", " ", h1.group(1)).split()) if h1 else None
+    checks.check("jungle heading text", h1_text == "Hello World!", "Hello World!", h1_text)
+
+    found = [token for token in JUNGLE_FORBIDDEN if re.search(token, body, re.I)]
+    checks.check("jungle page has no forbidden tokens", not found, "none of " + ", ".join(JUNGLE_FORBIDDEN), found)
+
+    svgs = re.findall(r"<svg\b[^>]*>", body, re.I)
+    checks.check("jungle page has decorations", len(svgs) > 0, "inline <svg> decorations", len(svgs))
+    unhidden = [tag for tag in svgs if 'aria-hidden="true"' not in tag]
+    checks.check("every decoration is aria-hidden", not unhidden, 'aria-hidden="true" on every <svg>', unhidden)
+    checks.check("decorations contain no text", "<text" not in body.lower(), "no <text>", "found <text")
+
+    visible = re.sub(r"<(style|svg|title)\b.*?</\1>", " ", body, flags=re.S | re.I)
+    visible = re.sub(r"<!--.*?-->", " ", visible, flags=re.S)
+    visible = " ".join(re.sub(r"<[^>]*>", " ", visible).split())
+    checks.check("jungle visible text is only the heading", visible == "Hello World!", "Hello World!", visible)
+
+    colours = {c.upper() for c in re.findall(r"#[0-9A-Fa-f]{3,8}\b", body)}
+    checks.check(
+        "jungle colours are all from the palette",
+        colours <= JUNGLE_PALETTE,
+        sorted(JUNGLE_PALETTE),
+        sorted(colours - JUNGLE_PALETTE),
+    )
+    checks.check(
+        "jungle page uses no rgb/hsl colours",
+        re.search(r"\b(?:rgba?|hsla?)\(", body, re.I) is None,
+        "hex palette colours only",
+        "rgb()/hsl() found",
+    )
+    checks.check(
+        "jungle heading, background and glow colours present",
+        {"#F2C230", "#0F3D2E", "#155239"} <= colours,
+        "#F2C230, #0F3D2E and #155239",
+        sorted(colours),
+    )
+
+    # Same width rule as the root page (pattern copied, not shared).
+    wide = [
+        f"{value}{unit}"
+        for value, unit in re.findall(
+            r"(?:\bmin-)?width\s*[:=]\s*\"?(\d+(?:\.\d+)?)\s*(px|pt)", body, re.I
+        )
+        if float(value) > 375
+    ]
+    checks.check("jungle: no declared width wider than 375px", not wide, "no width over 375px", wide)
+
+    secrets = re.findall(r"password|api_?key|secret|token=", body, re.I)
+    checks.check("jungle page holds no secrets", not secrets, "no keys or passwords", secrets)
+
+    # The server docstrings describe two fixed pages, not a root-only server.
+    doc = serve.__doc__ or ""
+    stale = [w for w in ("root-only", "exactly one document") if w in doc.lower()]
+    checks.check("serve.py docstring updated", not stale, "no 'Root-only'/'exactly one document'", stale)
 
 
 def run_checks(base):
@@ -193,6 +373,8 @@ def run_checks(base):
         "'Hello World' in the body",
         body[:120],
     )
+
+    run_jungle_checks(base, checks)
 
     return checks
 
