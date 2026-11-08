@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""Root-only HTTP server for the Hello World page (KAN-8).
+"""Fixed-route HTTP server for the Hello World pages (KAN-8, HALO-93).
 
-Serves exactly one document, ``docs/index.html``, and only at the root path.
-Every other path returns 404 — including ``/index.html``, ``/docs/index.html``
-and the repository's own files — so there is no directory listing and no file
-is ever chosen from request input.
+Serves two fixed pages and nothing else: ``docs/index.html`` at ``/`` and
+``docs/jungle.html`` at ``/jungle``, matched exactly (a query string is
+ignored). Every other path returns 404 — including ``/jungle/``,
+``/jungle.html``, ``/index.html``, ``/docs/index.html`` and the repository's
+own files — so there is no directory listing and no file is ever chosen from
+request input.
 
 Usage
 -----
@@ -30,10 +32,14 @@ DEFAULT_HOST = "127.0.0.1"
 DEFAULT_PORT = 8000
 
 INDEX = Path(__file__).resolve().parent / "docs" / "index.html"
+JUNGLE = Path(__file__).resolve().parent / "docs" / "jungle.html"
+
+# Exact request path -> fixed file. The only files the server can ever send.
+ROUTES = {"/": INDEX, "/jungle": JUNGLE}
 
 
 class RootOnlyHandler(http.server.BaseHTTPRequestHandler):
-    """Answer ``/`` with the greeting page; answer everything else with 404.
+    """Answer ``/`` and ``/jungle`` with their fixed pages; everything else 404.
 
     Deliberately not ``SimpleHTTPRequestHandler``: there are no directory
     semantics, no listings, and no path built from the request, so path
@@ -42,8 +48,9 @@ class RootOnlyHandler(http.server.BaseHTTPRequestHandler):
 
     server_version = "HelloWorld/1.0"
 
-    def _is_root(self):
-        return urllib.parse.urlsplit(self.path).path == "/"
+    def _route(self):
+        """Return the fixed file for an exact path match, or None."""
+        return ROUTES.get(urllib.parse.urlsplit(self.path).path)
 
     def _send_index_headers(self, body):
         self.send_response(200)
@@ -52,18 +59,20 @@ class RootOnlyHandler(http.server.BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_GET(self):
-        if not self._is_root():
+        target = self._route()
+        if target is None:
             self.send_error(404)
             return
-        body = INDEX.read_bytes()
+        body = target.read_bytes()
         self._send_index_headers(body)
         self.wfile.write(body)
 
     def do_HEAD(self):
-        if not self._is_root():
+        target = self._route()
+        if target is None:
             self.send_error(404)
             return
-        self._send_index_headers(INDEX.read_bytes())
+        self._send_index_headers(target.read_bytes())
 
 
 def make_server(host=DEFAULT_HOST, port=DEFAULT_PORT, handler=RootOnlyHandler):

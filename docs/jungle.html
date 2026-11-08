@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hello World! · Jungle</title>
+<style>
+  /* HALO-93: the approved HALO-92 jungle page, adapted from its review frames
+     to a real browser window. Everything is inline: no other request is made.
+     Sizes are in vw so the layout scales with the window width, as the design
+     scales with its frame. The stage reserves the decorations' footprint as
+     padding, so on a short window the page grows instead of overlapping. */
+  *, *::before, *::after { box-sizing: border-box; }
+  html { background: #0F3D2E; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    position: relative;
+    overflow-x: hidden;
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: radial-gradient(ellipse 60% 55% at 50% 50%, #155239 0%, #0F3D2E 100%);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  .deco { position: absolute; z-index: 1; pointer-events: none; display: block; }
+
+  /* Desktop (reference 1440): heading 9vw on one line; corners 21vw; vines
+     4vw at a 1.5vw inset; bushes 13vw; 16vw side and 12vw bottom clearance.
+     The heading sits where the design centres it, (height - 12vw) / 2, but
+     never closer than 14vw to the top, clear of the corner leaves. */
+  .stage {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: max(14vw, calc((100vh - 12vw - 9.45vw) / 2)) 16vw 12vw;
+    padding-top: max(14vw, calc((100dvh - 12vw - 9.45vw) / 2));
+  }
+  h1 {
+    margin: 0;
+    color: #F2C230;
+    font-family: inherit;
+    font-size: 9vw;
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .deco-tl { top: 0; left: 0; width: 21vw; height: 21vw; }
+  .deco-tr { top: 0; right: 0; width: 21vw; height: 21vw; transform: scaleX(-1); }
+  .deco-vl { top: 14vw; left: 1.5vw; width: 4vw; height: calc(100% - 28vw); }
+  .deco-vr { top: 14vw; right: 1.5vw; width: 4vw; height: calc(100% - 28vw); transform: scaleX(-1); }
+  .deco-bush { left: 0; right: 0; bottom: 0; width: 100%; height: 13vw; }
+
+  /* Mobile (reference 375): heading 19vw on two lines, "Hello" / "World!";
+     corners 34vw; bushes 24vw; side vines hidden; 16px side padding. The
+     heading is centred above the bushes but kept below the corner leaves. */
+  @media (max-width: 40em) {
+    .stage {
+      padding: max(34vw, calc((100vh - 22vw - 39.9vw) / 2)) 16px 22vw;
+      padding-top: max(34vw, calc((100dvh - 22vw - 39.9vw) / 2));
+    }
+    h1 { font-size: 19vw; white-space: normal; }
+    h1 span { display: block; }
+    .deco-tl, .deco-tr { width: 34vw; height: 34vw; }
+    .deco-vl, .deco-vr { display: none; }
+    .deco-bush { height: 24vw; }
+  }
+</style>
+</head>
+<body>
+<svg class="deco deco-tl" viewBox="0 0 300 300" aria-hidden="true">
+  <g transform="rotate(18)"><path d="M0 0C60-48 220-48 290 0C220 48 60 48 0 0Z" fill="#1B5E3A"/><path d="M4 0H282" stroke="#0F3D2E" stroke-width="4"/></g>
+  <g transform="rotate(62)"><path d="M0 0C55-44 200-44 270 0C200 44 55 44 0 0Z" fill="#1B5E3A"/><path d="M4 0H262" stroke="#0F3D2E" stroke-width="4"/></g>
+  <g transform="rotate(40)"><path d="M0 0C50-40 180-40 240 0C180 40 50 40 0 0Z" fill="#3E8E41"/><path d="M4 0H232" stroke="#1B5E3A" stroke-width="3"/></g>
+  <g transform="translate(6,6) rotate(8)"><path d="M0 0C35-26 120-26 160 0C120 26 35 26 0 0Z" fill="#6DBE45"/><path d="M4 0H154" stroke="#3E8E41" stroke-width="3"/></g>
+  <g transform="translate(6,6) rotate(76)"><path d="M0 0C35-26 120-26 150 0C120 26 35 26 0 0Z" fill="#6DBE45"/><path d="M4 0H144" stroke="#3E8E41" stroke-width="3"/></g>
+  <circle cx="58" cy="52" r="9" fill="#E8772E"/><circle cx="76" cy="42" r="7" fill="#F2C230"/><circle cx="44" cy="74" r="6" fill="#E8772E"/>
+</svg>
+<svg class="deco deco-tr" viewBox="0 0 300 300" aria-hidden="true">
+  <g transform="rotate(18)"><path d="M0 0C60-48 220-48 290 0C220 48 60 48 0 0Z" fill="#1B5E3A"/><path d="M4 0H282" stroke="#0F3D2E" stroke-width="4"/></g>
+  <g transform="rotate(62)"><path d="M0 0C55-44 200-44 270 0C200 44 55 44 0 0Z" fill="#1B5E3A"/><path d="M4 0H262" stroke="#0F3D2E" stroke-width="4"/></g>
+  <g transform="rotate(40)"><path d="M0 0C50-40 180-40 240 0C180 40 50 40 0 0Z" fill="#3E8E41"/><path d="M4 0H232" stroke="#1B5E3A" stroke-width="3"/></g>
+  <g transform="translate(6,6) rotate(8)"><path d="M0 0C35-26 120-26 160 0C120 26 35 26 0 0Z" fill="#6DBE45"/><path d="M4 0H154" stroke="#3E8E41" stroke-width="3"/></g>
+  <g transform="translate(6,6) rotate(76)"><path d="M0 0C35-26 120-26 150 0C120 26 35 26 0 0Z" fill="#6DBE45"/><path d="M4 0H144" stroke="#3E8E41" stroke-width="3"/></g>
+  <circle cx="58" cy="52" r="9" fill="#E8772E"/><circle cx="76" cy="42" r="7" fill="#F2C230"/>
+</svg>
+<svg class="deco deco-vl" viewBox="0 0 60 600" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M30 0C0 75 60 150 30 225S0 375 30 450 60 525 30 600" fill="none" stroke="#6B4423" stroke-width="5"/>
+  <path transform="translate(26,70) rotate(-35)" d="M0 0C8-11 28-11 36 0C28 11 8 11 0 0Z" fill="#3E8E41"/>
+  <path transform="translate(34,170) rotate(210)" d="M0 0C8-11 28-11 36 0C28 11 8 11 0 0Z" fill="#6DBE45"/>
+  <path transform="translate(24,280) rotate(-30)" d="M0 0C8-11 28-11 36 0C28 11 8 11 0 0Z" fill="#3E8E41"/>
+  <path transform="translate(34,390) rotate(205)" d="M0 0C8-11 28-11 36 0C28 11 8 11 0 0Z" fill="#6DBE45"/>
+  <path transform="translate(26,500) rotate(-35)" d="M0 0C8-11 28-11 36 0C28 11 8 11 0 0Z" fill="#3E8E41"/>
+</svg>
+<svg class="deco deco-vr" viewBox="0 0 60 600" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M30 0C0 75 60 150 30 225S0 375 30 450 60 525 30 600" fill="none" stroke="#6B4423" stroke-width="5"/>
+  <path transform="translate(26,110) rotate(-35)" d="M0 0C8-11 28-11 36 0C28 11 8 11 0 0Z" fill="#6DBE45"/>
+  <path transform="translate(34,220) rotate(210)" d="M0 0C8-11 28-11 36 0C28 11 8 11 0 0Z" fill="#3E8E41"/>
+  <path transform="translate(24,330) rotate(-30)" d="M0 0C8-11 28-11 36 0C28 11 8 11 0 0Z" fill="#6DBE45"/>
+  <path transform="translate(34,450) rotate(205)" d="M0 0C8-11 28-11 36 0C28 11 8 11 0 0Z" fill="#3E8E41"/>
+</svg>
+<svg class="deco deco-bush" viewBox="0 0 1440 200" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+  <g fill="#1B5E3A"><circle cx="40" cy="150" r="90"/><circle cx="230" cy="160" r="80"/><circle cx="430" cy="170" r="70"/><circle cx="1010" cy="170" r="70"/><circle cx="1210" cy="160" r="80"/><circle cx="1400" cy="150" r="90"/><circle cx="720" cy="190" r="60"/></g>
+  <g fill="#3E8E41"><circle cx="130" cy="175" r="65"/><circle cx="330" cy="185" r="55"/><circle cx="580" cy="190" r="50"/><circle cx="860" cy="190" r="50"/><circle cx="1110" cy="185" r="55"/><circle cx="1310" cy="175" r="65"/></g>
+  <g fill="#F2C230"><circle cx="110" cy="120" r="7"/><circle cx="300" cy="140" r="6"/><circle cx="1140" cy="140" r="6"/><circle cx="1330" cy="120" r="7"/><circle cx="700" cy="150" r="5"/></g>
+  <g fill="#E8772E"><circle cx="190" cy="105" r="6"/><circle cx="420" cy="125" r="6"/><circle cx="1020" cy="125" r="6"/><circle cx="1250" cy="105" r="6"/><circle cx="760" cy="160" r="5"/></g>
+  <rect x="0" y="186" width="1440" height="14" fill="#4A2F1A"/>
+</svg>
+<main class="stage"><h1><span>Hello</span> <span>World!</span></h1></main>
+</body>
+</html>
