@@ -1,0 +1,10 @@
+{
+  "storyId": "ae40ca7c-530f-436d-8f2a-fcb515f188db",
+  "storyKey": "HALO-128",
+  "epicKey": "HALO-127",
+  "title": "מפתח מריץ סקריפט Bash ומקבל ברכת Hello World במסוף",
+  "decisionId": "abc244d3-7b26-41e6-b799-454cc4c6a4a2",
+  "actor": "Ophir Gal",
+  "approvedAt": "2026-11-09T18:29:27Z",
+  "planHeadSha": "73e44c07833eb63e1597e0146ec65404957eb803"
+}
