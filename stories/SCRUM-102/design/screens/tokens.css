@@ -1,0 +1,82 @@
+/* SCRUM-102 screen set. Visual base: the approved prototype (itself from story 0e4e726a's tokens).
+   No layout media queries: desktop pages use body.desktop, phone pages use body.mobile. */
+:root{
+  --c-bg:#f6f7f9; --c-surface:#ffffff; --c-text:#1b1f27; --c-muted:#5a6270;
+  --c-border:#8a93a3; --c-divider:#d5d9e0; --c-primary:#2b4fd8; --c-primary-dark:#1f3cae; --c-focus:#1f3cae;
+  --c-accent-bg:#eef2ff; --c-matcha:#9dbf6b; --c-matcha-deep:#86ad52; --c-matcha-ink:#1e3311; --c-matcha-done:#3d5a1e; --c-matcha-track:#e9f1dc; --c-matcha-hero:#eef4e2; --c-success:#1d7a46; --c-error:#b3261e; --c-error-bg:#fdecea; --c-disabled:#6b7380;
+  --font:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --fs-sm:.875rem; --fs-md:1rem; --fs-lg:1.25rem; --fs-xl:1.75rem; --fs-xl-m:1.5rem;
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px; --sp-6:32px; --sp-7:48px;
+  --radius:10px; --tap:48px; --maxw:560px; --maxw-m:390px;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:var(--font);font-size:var(--fs-md);line-height:1.5;color:var(--c-text);background:var(--c-bg);overflow-x:hidden}
+a{color:var(--c-primary)}
+a:focus-visible,input:focus-visible,.btn:focus-visible{outline:3px solid var(--c-focus);outline-offset:2px}
+
+/* Review bar: for the design gallery only, not part of the product. */
+.review-bar{font-size:var(--fs-sm);background:#fff;border-bottom:1px dashed var(--c-border);padding:var(--sp-2) var(--sp-4);display:flex;gap:var(--sp-3);flex-wrap:wrap;align-items:center;color:var(--c-muted)}
+.review-bar a{font-weight:600}
+
+/* Layout: desktop */
+.desktop .page{max-width:var(--maxw);margin:0 auto;padding:var(--sp-6) var(--sp-4) var(--sp-7)}
+.desktop .card{padding:var(--sp-6)}
+.desktop h1{font-size:var(--fs-xl)}
+/* Layout: phone */
+.mobile .page{max-width:var(--maxw-m);margin:0 auto;padding:var(--sp-4) var(--sp-3) var(--sp-6)}
+.mobile .card{padding:var(--sp-5) var(--sp-4)}
+.mobile h1{font-size:var(--fs-xl-m)}
+
+.card{background:var(--c-surface);border:1px solid var(--c-divider);border-radius:var(--radius)}
+.steps{display:flex;gap:var(--sp-2);list-style:none;padding:0;margin:0 0 var(--sp-5);font-size:var(--fs-sm);color:var(--c-muted)}
+.steps li{flex:1;border-top:4px solid var(--c-divider);padding-top:var(--sp-2)}
+.steps li.done{border-color:var(--c-primary-dark)}
+.steps li.current{border-color:var(--c-primary);color:var(--c-text);font-weight:600}
+h1{line-height:1.2;margin:0 0 var(--sp-4)}
+h2{font-size:var(--fs-lg);margin:var(--sp-6) 0 var(--sp-3)}
+p{margin:0 0 var(--sp-4)}
+.muted{color:var(--c-muted)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--sp-2);min-height:var(--tap);padding:0 var(--sp-5);border-radius:var(--radius);background:var(--c-primary);color:#fff;font-weight:600;text-decoration:none;border:0;font:inherit;font-weight:600}
+.btn:hover{background:var(--c-primary-dark)}
+.btn[disabled],.btn[aria-disabled="true"]{background:var(--c-disabled);cursor:not-allowed}
+.btn-block{width:100%}
+.link-back{display:inline-flex;align-items:center;min-height:var(--tap);font-weight:600}
+.link-back[aria-disabled="true"]{color:var(--c-disabled);pointer-events:none;text-decoration:none}
+.field{margin:0 0 var(--sp-5)}
+.field label{display:block;font-weight:600;margin-bottom:var(--sp-2)}
+.input{width:100%;min-height:var(--tap);padding:0 var(--sp-3);border:1px solid var(--c-border);border-radius:var(--radius);font:inherit;color:var(--c-text);background:var(--c-surface)}
+.input[readonly]{background:var(--c-bg);color:var(--c-muted)}
+.input[aria-invalid="true"]{border:2px solid var(--c-error)}
+.hint{font-size:var(--fs-sm);color:var(--c-muted);margin-top:var(--sp-2)}
+.error-msg{display:flex;gap:var(--sp-2);align-items:flex-start;font-size:var(--fs-sm);font-weight:600;color:var(--c-error);margin-top:var(--sp-2)}
+.error-msg svg{flex:none;margin-top:2px}
+.alert{display:flex;gap:var(--sp-3);align-items:flex-start;background:var(--c-error-bg);border-left:4px solid var(--c-error);border-radius:var(--radius);padding:var(--sp-4);margin:0 0 var(--sp-5)}
+.alert svg{flex:none;margin-top:2px}
+.alert p{margin:0}
+.alert strong{display:block;color:var(--c-error)}
+.actions{display:flex;flex-direction:column;gap:var(--sp-2);margin-top:var(--sp-5)}
+.spinner{animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.success-icon{display:block;margin:0 0 var(--sp-4)}
+
+/* Matcha theme (designer change request): matcha green page background and a matcha illustration on every journey screen.
+   Contrast on --c-matcha #9dbf6b: progress text #1e3311 6.6:1; current bar #1e3311 6.6:1 and done bar #3d5a1e 3.8:1 (non-text, 1.4.11).
+   All form text, buttons and errors stay on the white card, so their contrast is unchanged. */
+body.matcha{background-color:var(--c-matcha);background-image:radial-gradient(circle at 15% 10%,#b3cf86 0,transparent 45%),radial-gradient(circle at 85% 90%,var(--c-matcha-deep) 0,transparent 50%);background-attachment:fixed;min-height:100vh}
+.matcha .steps{color:var(--c-matcha-ink)}
+.matcha .steps li{border-color:var(--c-matcha-track)}
+.matcha .steps li.done{border-color:var(--c-matcha-done)}
+.matcha .steps li.current{border-color:var(--c-matcha-ink);color:var(--c-matcha-ink)}
+.matcha .card{border-color:var(--c-matcha-deep);box-shadow:0 8px 24px rgba(30,51,17,.18);overflow:hidden}
+.matcha-hero{background:var(--c-matcha-hero);border-bottom:1px solid #d3e2bb}
+.desktop .matcha-hero{height:168px;margin:calc(-1*var(--sp-6)) calc(-1*var(--sp-6)) var(--sp-4);padding:var(--sp-3) var(--sp-6) 0}
+.mobile .matcha-hero{height:124px;margin:calc(-1*var(--sp-5)) calc(-1*var(--sp-4)) var(--sp-3);padding:var(--sp-2) var(--sp-4) 0}
+.matcha-hero svg{display:block}
+
+/* Gallery */
+.gallery{max-width:960px;margin:0 auto;padding:var(--sp-6) var(--sp-4) var(--sp-7)}
+.gallery table{width:100%;border-collapse:collapse;background:var(--c-surface);margin-bottom:var(--sp-5)}
+.gallery th,.gallery td{text-align:left;padding:var(--sp-3);border-bottom:1px solid var(--c-divider);vertical-align:top}
+.gallery th{font-size:var(--fs-sm);color:var(--c-muted)}
