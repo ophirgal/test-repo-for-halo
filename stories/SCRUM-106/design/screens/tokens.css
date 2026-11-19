@@ -1,5 +1,5 @@
 :root{
-  --c-bg:#faf6f0; --c-surface:#ffffff; --c-ink:#2b211b; --c-ink-2:#6b5d53;
+  --c-bg:#000000; --c-on-bg:#f5efe8; --c-on-bg-2:#b5a99e; --c-brand-on-bg:#e0b48c; --c-frame:#2e2a27; --c-surface:#ffffff; --c-ink:#2b211b; --c-ink-2:#6b5d53;
   --c-brand:#7a4a2e; --c-brand-ink:#ffffff; --c-accent:#e8d9c6;
   --c-open:#2f7a4b; --c-line:#e6ddd2; --c-error:#a63b2b; --c-error-bg:#fbeae6;
   --c-skel:#ece4d9; --c-skel-hi:#f6f0e8;
@@ -10,12 +10,12 @@
   --shadow:0 1px 3px rgba(43,33,27,.08),0 4px 12px rgba(43,33,27,.06);
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:var(--f-sans);color:var(--c-ink);background:#ece6de;font-size:var(--t-md);line-height:1.4}
+body{margin:0;font-family:var(--f-sans);color:var(--c-on-bg);background:var(--c-bg);font-size:var(--t-md);line-height:1.4}
 a{color:var(--c-brand)}
 /* review bar (gallery chrome, not part of the screen) */
 .review{display:flex;flex-wrap:wrap;gap:var(--s-3);align-items:center;font-size:var(--t-sm);padding:var(--s-3) var(--s-4);margin:0 auto}
-.review a{text-decoration:none}
-.review .cur{font-weight:700;color:var(--c-ink)}
+.review a{text-decoration:none;color:var(--c-brand-on-bg)}
+.review .cur{font-weight:700;color:var(--c-on-bg)}
 /* shared components */
 .logo h1{font-size:var(--t-xl);margin:0;line-height:1.1}
 .logo p{margin:0;color:var(--c-ink-2);font-size:var(--t-sm)}
@@ -49,3 +49,7 @@ h2{font-size:var(--t-lg);margin:0 0 var(--s-3)}
 .oos:target{display:flex}
 .sheet{background:var(--c-surface);max-width:420px;width:100%;border-radius:var(--r-lg);padding:var(--s-5)}
 .sheet h3{margin:0 0 var(--s-2)}
+/* black background: text that sits directly on it goes light; cards, bars and sheets keep their dark ink */
+.app,.frame{border:1px solid var(--c-frame)}
+.card,.sheet,.top,.frame nav,table{color:var(--c-ink)}
+.frame header .logo p{color:var(--c-on-bg-2)}
