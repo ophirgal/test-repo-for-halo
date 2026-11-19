@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SCRUM-99 screens — Newsletter signup journey</title>
+<link rel="stylesheet" href="tokens.css">
+</head>
+<body>
+<main class="gallery">
+  <h1>Newsletter signup journey — screen set</h1>
+  <p>Every screen of the approved structure in every state it names, each as a desktop page and a phone-width page (390px). The layout, copy and palette are the approved prototype's; all colours meet WCAG 2.1 AA contrast (ratios in <code>tokens.css</code>). Start the journey at <a href="any-site-page.default.html">Any site page</a>; every page links on along the approved flow and back here.</p>
+  <h2>Any site page (footer entry point)</h2>
+  <p>Changed from today (docs/index.html): the page content is unchanged; a new site footer is added with a <strong>Newsletter</strong> link — the site has no footer today.</p>
+  <table>
+    <thead><tr><th scope="col">State</th><th scope="col">Desktop</th><th scope="col">Mobile</th></tr></thead>
+    <tbody>
+      <tr><td>Default</td><td><a href="any-site-page.default.html">any-site-page.default.html</a></td><td><a href="any-site-page.default.mobile.html">any-site-page.default.mobile.html</a></td></tr>
+    </tbody>
+  </table>
+  <h2>Welcome</h2>
+  <p>New.</p>
+  <table>
+    <thead><tr><th scope="col">State</th><th scope="col">Desktop</th><th scope="col">Mobile</th></tr></thead>
+    <tbody>
+      <tr><td>Default</td><td><a href="welcome.default.html">welcome.default.html</a></td><td><a href="welcome.default.mobile.html">welcome.default.mobile.html</a></td></tr>
+    </tbody>
+  </table>
+  <h2>Signup form</h2>
+  <p>New.</p>
+  <table>
+    <thead><tr><th scope="col">State</th><th scope="col">Desktop</th><th scope="col">Mobile</th></tr></thead>
+    <tbody>
+      <tr><td>Default</td><td><a href="signup-form.default.html">signup-form.default.html</a></td><td><a href="signup-form.default.mobile.html">signup-form.default.mobile.html</a></td></tr>
+      <tr><td>Error — empty name</td><td><a href="signup-form.empty-name.html">signup-form.empty-name.html</a></td><td><a href="signup-form.empty-name.mobile.html">signup-form.empty-name.mobile.html</a></td></tr>
+      <tr><td>Error — empty email</td><td><a href="signup-form.empty-email.html">signup-form.empty-email.html</a></td><td><a href="signup-form.empty-email.mobile.html">signup-form.empty-email.mobile.html</a></td></tr>
+      <tr><td>Error — malformed email</td><td><a href="signup-form.malformed-email.html">signup-form.malformed-email.html</a></td><td><a href="signup-form.malformed-email.mobile.html">signup-form.malformed-email.mobile.html</a></td></tr>
+      <tr><td>Loading — submitting</td><td><a href="signup-form.loading.html">signup-form.loading.html</a></td><td><a href="signup-form.loading.mobile.html">signup-form.loading.mobile.html</a></td></tr>
+      <tr><td>Error — submission failed</td><td><a href="signup-form.submission-failed.html">signup-form.submission-failed.html</a></td><td><a href="signup-form.submission-failed.mobile.html">signup-form.submission-failed.mobile.html</a></td></tr>
+    </tbody>
+  </table>
+  <h2>Confirmation</h2>
+  <p>New.</p>
+  <table>
+    <thead><tr><th scope="col">State</th><th scope="col">Desktop</th><th scope="col">Mobile</th></tr></thead>
+    <tbody>
+      <tr><td>Default</td><td><a href="confirmation.default.html">confirmation.default.html</a></td><td><a href="confirmation.default.mobile.html">confirmation.default.mobile.html</a></td></tr>
+    </tbody>
+  </table>
+  <h2>Choices made in this screen set</h2>
+  <ul>
+    <li>Each inline-error page shows one error with the other field valid, as the structure draws them; when several fields fail at once, each shows its own message together (open branch 2).</li>
+    <li>Errors are text plus an icon, never colour alone; the field gets a thicker red border, <code>aria-invalid</code> and <code>aria-describedby</code>, the page title starts with "Error:", and focus moves to the first field in error (shown with the focus ring).</li>
+    <li>Focus order on every screen follows reading order: Back, then Name, Email address, Submit, then the footer links.</li>
+    <li>Submitting keeps the fields visible but read-only and turns Submit into a disabled "Subscribing…" button with a spinner (slowed for reduced motion). The viewer runs no scripts, so its two outcomes are links in the note under the page.</li>
+    <li>Submission failed shows its message above the form with <code>role="alert"</code>, keeps the typed values, and Submit is the retry (open branch 4).</li>
+    <li>The Name field stops input at 80 characters, so there is no separate "too long" state (open branch 3).</li>
+  </ul>
+</main>
+</body>
+</html>

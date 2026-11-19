@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Subscribe to the newsletter</title>
+<link rel="stylesheet" href="tokens.css">
+</head>
+<body>
+<main>
+  <div class="panel">
+    <a class="back" href="welcome.default.html">&larr; Back</a>
+    <h1>Subscribe to the newsletter</h1>
+    <p class="lead">Your name and email address are all we need.</p>
+    <form novalidate aria-busy="true">
+      <div class="field">
+        <label for="name">Name</label>
+        <span class="hint" id="name-hint">Up to 80 characters</span>
+        <input id="name" name="name" type="text" autocomplete="name" maxlength="80" value="Maya Cohen" aria-describedby="name-hint" readonly>
+      </div>
+      <div class="field">
+        <label for="email">Email address</label>
+        <input id="email" name="email" type="email" autocomplete="email" inputmode="email" value="maya.cohen@example.com" readonly>
+      </div>
+      <div class="actions">
+        <span class="button" role="button" aria-disabled="true"><span class="spinner" aria-hidden="true"></span>Subscribing…</span>
+      </div>
+    </form>
+  </div>
+</main>
+<footer class="site-footer">
+  <nav aria-label="Site footer">
+    <ul>
+      <li><a href="any-site-page.default.html">Home</a></li>
+      <li><a href="welcome.default.html">Newsletter</a></li>
+    </ul>
+  </nav>
+</footer>
+<p class="design-note">Design · Signup form — submitting: fields read-only, Submit disabled with progress. Outcomes: <a href="confirmation.default.html">stored or already subscribed</a> · <a href="signup-form.submission-failed.html">could not be saved</a>. <a href="index.html">Back to the gallery</a></p>
+</body>
+</html>

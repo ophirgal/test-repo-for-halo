@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Subscribe to the newsletter</title>
+<link rel="stylesheet" href="tokens.css">
+</head>
+<body class="mobile">
+<main>
+  <div class="panel">
+    <a class="back" href="welcome.default.mobile.html">&larr; Back</a>
+    <h1>Subscribe to the newsletter</h1>
+    <p class="lead">Your name and email address are all we need.</p>
+    <form novalidate>
+      <div class="field">
+        <label for="name">Name</label>
+        <span class="hint" id="name-hint">Up to 80 characters</span>
+        <input id="name" name="name" type="text" autocomplete="name" maxlength="80" value="" aria-describedby="name-hint">
+      </div>
+      <div class="field">
+        <label for="email">Email address</label>
+        <input id="email" name="email" type="email" autocomplete="email" inputmode="email" value="">
+      </div>
+      <div class="actions">
+        <a class="button" role="button" href="signup-form.empty-name.mobile.html">Submit</a>
+      </div>
+    </form>
+  </div>
+</main>
+<footer class="site-footer">
+  <nav aria-label="Site footer">
+    <ul>
+      <li><a href="any-site-page.default.mobile.html">Home</a></li>
+      <li><a href="welcome.default.mobile.html">Newsletter</a></li>
+    </ul>
+  </nav>
+</footer>
+<p class="design-note">Design · Signup form — default: both fields empty, no errors. Submit leads to the inline-error states. <a href="index.html">Back to the gallery</a></p>
+</body>
+</html>

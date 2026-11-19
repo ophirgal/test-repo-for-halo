@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Error: Subscribe to the newsletter</title>
+<link rel="stylesheet" href="tokens.css">
+</head>
+<body>
+<main>
+  <div class="panel">
+    <a class="back" href="welcome.default.html">&larr; Back</a>
+    <h1>Subscribe to the newsletter</h1>
+    <p class="lead">Your name and email address are all we need.</p>
+    <form novalidate>
+      <div class="field">
+        <label for="name">Name</label>
+        <span class="hint" id="name-hint">Up to 80 characters</span>
+        <input id="name" name="name" type="text" autocomplete="name" maxlength="80" value="" aria-describedby="name-hint name-error" aria-invalid="true" autofocus class="is-focused">
+        <p class="field-error" id="name-error"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="7.5" fill="#b3261e"/><path d="M8 4v5" stroke="#fff" stroke-width="2" stroke-linecap="round"/><circle cx="8" cy="11.75" r="1.1" fill="#fff"/></svg><span><span class="visually-hidden">Error: </span>Enter your name</span></p>
+      </div>
+      <div class="field">
+        <label for="email">Email address</label>
+        <input id="email" name="email" type="email" autocomplete="email" inputmode="email" value="maya.cohen@example.com">
+      </div>
+      <div class="actions">
+        <a class="button" role="button" href="signup-form.loading.html">Submit</a>
+      </div>
+    </form>
+  </div>
+</main>
+<footer class="site-footer">
+  <nav aria-label="Site footer">
+    <ul>
+      <li><a href="any-site-page.default.html">Home</a></li>
+      <li><a href="welcome.default.html">Newsletter</a></li>
+    </ul>
+  </nav>
+</footer>
+<p class="design-note">Design · Signup form — empty name: the error sits under Name, focus moves to Name. Fixing it and pressing Submit leads to submitting. <a href="index.html">Back to the gallery</a></p>
+</body>
+</html>
