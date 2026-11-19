@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hello World</title>
+<style>
+  html, body { margin: 0; padding: 0; }
+  body { font-family: system-ui, sans-serif; }
+  main { padding: 1rem; }
+  h1 { overflow-wrap: anywhere; }
+  /* Added by SCRUM-102: the site footer with the newsletter link. Everything above is today's page. */
+  body { min-height: 100vh; display: flex; flex-direction: column; }
+  main { flex: 1; }
+  .site-footer { border-top: 1px solid #d5d9e0; padding: 1rem; font-size: .875rem; color: #5a6270; display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; align-items: center; }
+  .site-footer a { color: #2b4fd8; font-weight: 600; display: inline-flex; align-items: center; min-height: 48px; }
+  .site-footer a:focus-visible { outline: 3px solid #1f3cae; outline-offset: 2px; }
+  .review-bar { font-size: .875rem; border-bottom: 1px dashed #8a93a3; padding: .5rem 1rem; color: #5a6270; display: flex; gap: .75rem; flex-wrap: wrap; }
+  .review-bar a { color: #2b4fd8; font-weight: 600; }
+</style>
+</head>
+<body>
+<nav class="review-bar" aria-label="Design review"><a href="index.html">← Design gallery</a><span>Site page — footer link · default · mobile</span></nav>
+<main>
+  <h1>Hello World</h1>
+</main>
+<footer class="site-footer">
+  <a href="welcome.default.mobile.html">Newsletter</a>
+</footer>
+</body>
+</html>
