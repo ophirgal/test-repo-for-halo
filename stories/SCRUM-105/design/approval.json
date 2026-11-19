@@ -1,0 +1,28 @@
+{
+  "storyId": "cb4313ba-c2fb-4242-b688-aeb1d0dad821",
+  "storyKey": "SCRUM-105",
+  "title": "design home screen of a neighbourhood cafe's mobile app",
+  "approvals": [
+    {
+      "step": "structure",
+      "decisionId": "9c9e98e6-84d1-4510-93d4-0b50e85debc2",
+      "actor": "Ophir (Guest) (guest)",
+      "approvedAt": "2026-11-19T13:09:11.692761Z",
+      "headSha": "d79b819f36e795e7da5c6a6150b73ffd92b10f6a"
+    },
+    {
+      "step": "prototype",
+      "decisionId": "8b3304f2-7a90-4c81-8996-d5f73043c5df",
+      "actor": "Ophir (Guest) (guest)",
+      "approvedAt": "2026-11-19T13:10:23.688308Z",
+      "headSha": "72de94d57dca83fb00dd7333d50af78111fced54"
+    },
+    {
+      "step": "screens",
+      "decisionId": "5c667e85-b2e4-475b-b200-33cb21543989",
+      "actor": "Ophir (Guest) (guest)",
+      "approvedAt": "2026-11-19T13:13:10.391408Z",
+      "headSha": "542fd8218faf95007d901670a12c5f15076a7841"
+    }
+  ]
+}

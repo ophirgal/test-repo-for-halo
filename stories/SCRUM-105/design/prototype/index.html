@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SCRUM-105 — Cafe app home: prototype</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+main{max-width:680px;margin:0 auto;padding:var(--s-6) var(--s-4);background:var(--c-bg);min-height:100vh}
+h1{font-size:var(--t-xl);margin:0 0 var(--s-3)}
+h2{font-size:var(--t-lg);margin:var(--s-6) 0 var(--s-2)}
+p,li{color:var(--c-ink-2)}
+.start{display:inline-block;margin-top:var(--s-3);padding:var(--s-3) var(--s-5);background:var(--c-brand);color:var(--c-brand-ink);border-radius:var(--r-lg);text-decoration:none;font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:var(--t-sm)}
+th,td{text-align:left;padding:var(--s-2);border-bottom:1px solid var(--c-line);vertical-align:top}
+</style></head>
+<body><main>
+<h1>Corner Bean — home screen prototype</h1>
+<p>This prototype walks the main path of SCRUM-105: a neighbourhood customer opens the cafe's mobile app and lands on Home, where they see which cafe this is, whether it is open right now and where it is, today's featured items, and one-tap entry points to the rest of the app. The app does not exist yet, so Home is a new screen; the cafe name and all content are realistic sample data.</p>
+<a class="start" href="home.html">Start the journey → open the app</a>
+
+<h2>Screens</h2>
+<table>
+<tr><th>Screen</th><th>Status</th><th>Page</th></tr>
+<tr><td>Home</td><td>new</td><td><a href="home.html">home.html</a> — default state</td></tr>
+</table>
+
+<h2>Choices made for this prototype</h2>
+<ul>
+<li><b>Content</b>: option (b) from the structure's open branches: brand header, "Open now" status with today's hours, address with a directions entry, featured items, and a "View full menu" entry. No ordering.</li>
+<li><b>Navigation</b>: bottom tab bar (Home · Menu · Visit · More) with Home selected.</li>
+<li><b>Anonymous</b>: no sign-in, greeting or loyalty card.</li>
+<li><b>Leaving the story</b>: menu, item detail, directions and the other tabs are out of scope. Tapping them shows an "out of scope" note with a way back to Home instead of a page.</li>
+<li><b>Loading, error and empty states</b>: drawn in the next step. Pull-to-refresh is shown as a hint at the top of Home.</li>
+</ul>
+</main></body></html>
