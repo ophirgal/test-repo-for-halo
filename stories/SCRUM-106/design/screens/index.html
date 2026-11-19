@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SCRUM-106 — Cafe app home: screen set</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+main{max-width:880px;margin:0 auto;padding:var(--s-6) var(--s-4);background:var(--c-bg);min-height:100vh}
+h1{font-size:var(--t-xl);margin:0 0 var(--s-3)}
+h2{margin-top:var(--s-6)}
+p,li{color:var(--c-ink-2)}
+table{width:100%;border-collapse:collapse;font-size:var(--t-sm);background:var(--c-surface);border-radius:var(--r-md);overflow:hidden;box-shadow:var(--shadow)}
+th,td{text-align:left;padding:var(--s-3);border-bottom:1px solid var(--c-line);vertical-align:top}
+td:first-child{width:55%}
+</style></head>
+<body><main>
+<h1>Corner Bean — home screen: all states</h1>
+<p>The complete screen set for SCRUM-106, a clone of SCRUM-105: the cafe app's Home screen in its four states (default, loading, error, empty), each as a desktop and a mobile page. Layout, navigation, tokens and sample content follow the approved prototype, which carries the approved SCRUM-105 Home over unchanged.</p>
+
+<h2>Home <span class="muted" style="font-size:var(--t-sm);font-weight:400">· based on SCRUM-105 Home</span></h2>
+<p><b>What changed from SCRUM-105:</b> nothing in the design. All four states are the approved SCRUM-105 screens; only the story reference in the “out of scope” note now reads SCRUM-106.</p>
+<table>
+<tr><th>State</th><th>Desktop</th><th>Mobile</th></tr>
+<tr><td><b>Default</b><br><span class="muted">Logo header, “Open now” card with today's hours and address + Directions, Today's favourites, View full menu, tab bar with Home selected.</span></td>
+<td><a href="home.default.html">Desktop</a><br><span class="muted">home.default.html</span></td>
+<td><a href="home.default.mobile.html">Mobile</a><br><span class="muted">home.default.mobile.html</span></td></tr>
+<tr><td><b>Loading</b><br><span class="muted">Header and navigation shown at once; shimmer skeletons where the hours/location card and the favourites will appear; “Updating…” spinner at the top.</span></td>
+<td><a href="home.loading.html">Desktop</a><br><span class="muted">home.loading.html</span></td>
+<td><a href="home.loading.mobile.html">Mobile</a><br><span class="muted">home.loading.mobile.html</span></td></tr>
+<tr><td><b>Error</b><br><span class="muted">Header and navigation stay; the content area shows what failed, why (no connection), and a Try again button that returns to Loading.</span></td>
+<td><a href="home.error.html">Desktop</a><br><span class="muted">home.error.html</span></td>
+<td><a href="home.error.mobile.html">Mobile</a><br><span class="muted">home.error.mobile.html</span></td></tr>
+<tr><td><b>Empty</b><br><span class="muted">Content loaded but nothing is featured: hours/location card stays, favourites replaced by a friendly note and a Browse the full menu action.</span></td>
+<td><a href="home.empty.html">Desktop</a><br><span class="muted">home.empty.html</span></td>
+<td><a href="home.empty.mobile.html">Mobile</a><br><span class="muted">home.empty.mobile.html</span></td></tr>
+</table>
+
+<h2>Rendering choices</h2>
+<ul>
+<li><b>Desktop layout</b>: the bottom tab bar becomes a top bar with the same four entries (Home · Menu · Visit · More); hours/location card and View full menu sit in a left column, favourites in a four-across grid on the right. Pull to refresh becomes a Refresh link.</li>
+<li><b>Loading</b>: the hours/location card is skeletoned too, not only the favourites — both come from the same content load, so both are pending.</li>
+<li><b>Error</b>: the whole content area is replaced (hours, location and favourites all failed together); header and navigation stay usable. “Try again” leads to Loading.</li>
+<li><b>Empty</b>: only the favourites are missing; hours, location and the menu entry stay.</li>
+<li><b>Leaving Home</b>: menu, directions, items and other tabs open an “out of scope” note with a way back, as in the prototype.</li>
+<li>Each page has a review bar above the screen (gallery link, state switcher, desktop/mobile switch); it is review chrome, not part of the design.</li>
+</ul>
+</main></body></html>
