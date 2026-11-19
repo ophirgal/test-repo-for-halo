@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Home — Corner Bean</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+.frame{max-width:390px;margin:var(--s-5) auto;background:var(--c-bg);border-radius:36px;box-shadow:var(--shadow);overflow:hidden;position:relative;min-height:780px;padding-bottom:84px}
+.proto-back{display:block;max-width:390px;margin:var(--s-4) auto 0;font-size:var(--t-sm)}
+.status{display:flex;justify-content:space-between;padding:var(--s-3) var(--s-5) 0;font-size:var(--t-xs);font-weight:600}
+.pull{text-align:center;font-size:var(--t-xs);color:var(--c-ink-2);padding:var(--s-2) 0 0}
+header{display:flex;align-items:center;gap:var(--s-3);padding:var(--s-4) var(--s-5)}
+header h1{font-size:var(--t-xl);margin:0;line-height:1.1}
+header p{margin:0;color:var(--c-ink-2);font-size:var(--t-sm)}
+.card{background:var(--c-surface);margin:0 var(--s-4) var(--s-4);border-radius:var(--r-md);box-shadow:var(--shadow);padding:var(--s-4)}
+.open{display:inline-flex;align-items:center;gap:var(--s-2);color:var(--c-open);font-weight:700;font-size:var(--t-sm)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--c-open)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:var(--s-3)}
+.muted{color:var(--c-ink-2);font-size:var(--t-sm);margin:var(--s-1) 0 0}
+.btn{display:inline-block;padding:var(--s-2) var(--s-4);border-radius:var(--r-lg);background:var(--c-accent);color:var(--c-brand);text-decoration:none;font-weight:600;font-size:var(--t-sm);white-space:nowrap}
+.btn.primary{background:var(--c-brand);color:var(--c-brand-ink);display:block;text-align:center;padding:var(--s-3)}
+h2{font-size:var(--t-lg);margin:var(--s-5) var(--s-5) var(--s-3)}
+.featured{display:flex;gap:var(--s-3);overflow-x:auto;padding:0 var(--s-4) var(--s-4)}
+.item{flex:0 0 150px;background:var(--c-surface);border-radius:var(--r-md);box-shadow:var(--shadow);text-decoration:none;color:var(--c-ink);overflow:hidden}
+.item svg{display:block;width:100%;height:96px}
+.item div{padding:var(--s-2) var(--s-3) var(--s-3)}
+.item b{display:block;font-size:var(--t-sm)}
+.item span{font-size:var(--t-xs);color:var(--c-ink-2)}
+.item .price{color:var(--c-brand);font-weight:700;font-size:var(--t-sm)}
+nav{position:absolute;bottom:0;left:0;right:0;display:flex;background:var(--c-surface);border-top:1px solid var(--c-line);padding:var(--s-2) 0 var(--s-5)}
+nav a{flex:1;text-align:center;font-size:var(--t-xs);color:var(--c-ink-2);text-decoration:none}
+nav a svg{display:block;margin:0 auto 2px}
+nav a[aria-current]{color:var(--c-brand);font-weight:700}
+.oos{display:none;position:absolute;inset:0;background:rgba(43,33,27,.45);align-items:flex-end}
+.oos:target{display:flex}
+.sheet{background:var(--c-surface);width:100%;border-radius:var(--r-lg) var(--r-lg) 0 0;padding:var(--s-5)}
+.sheet h3{margin:0 0 var(--s-2)}
+</style></head>
+<body>
+<a class="proto-back" href="index.html">← Prototype index</a>
+<div class="frame">
+  <div class="status"><span>8:12</span><span>●●● 5G ▮</span></div>
+  <div class="pull">↓ Pull to refresh</div>
+
+  <header>
+    <svg width="52" height="52" viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="26" fill="#7a4a2e"/><path d="M15 21h18v8a9 9 0 0 1-18 0z" fill="#faf6f0"/><path d="M33 23h3a4 4 0 0 1 0 8h-3" stroke="#faf6f0" stroke-width="2.5" fill="none"/><path d="M20 13c0 3 3 3 3 6M26 13c0 3 3 3 3 6" stroke="#e8d9c6" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+    <div><h1>Corner Bean</h1><p>Your coffee on Elm Street</p></div>
+  </header>
+
+  <section class="card" aria-label="Opening hours and location">
+    <div class="row">
+      <div>
+        <span class="open"><span class="dot"></span>Open now</span>
+        <p class="muted">Today 7:00 – 18:00 · closes in 9 h 48 min</p>
+      </div>
+    </div>
+    <hr style="border:0;border-top:1px solid var(--c-line);margin:var(--s-3) 0">
+    <div class="row">
+      <div><b style="font-size:var(--t-sm)">42 Elm Street</b><p class="muted">Corner of Elm &amp; Mill Lane · 4 min walk</p></div>
+      <a class="btn" href="#out-of-scope">Directions</a>
+    </div>
+  </section>
+
+  <h2>Today's favourites</h2>
+  <div class="featured">
+    <a class="item" href="#out-of-scope">
+      <svg viewBox="0 0 150 96" aria-hidden="true"><rect width="150" height="96" fill="#e8d9c6"/><ellipse cx="75" cy="52" rx="30" ry="22" fill="#fff"/><ellipse cx="75" cy="50" rx="22" ry="14" fill="#c8a27a"/><path d="M68 48c4-6 10-6 14 0c-4 4-10 4-14 0z" fill="#f3e6d4"/></svg>
+      <div><b>Oat flat white</b><span>Single-origin espresso</span><br><span class="price">€3.40</span></div>
+    </a>
+    <a class="item" href="#out-of-scope">
+      <svg viewBox="0 0 150 96" aria-hidden="true"><rect width="150" height="96" fill="#f3e6d4"/><path d="M40 62c0-20 18-30 35-30s35 10 35 30z" fill="#d9a35b"/><path d="M50 52c8-6 16-6 25 0M75 52c8-6 16-6 25 0" stroke="#b97f3a" stroke-width="3" fill="none"/></svg>
+      <div><b>Butter croissant</b><span>Baked this morning</span><br><span class="price">€2.60</span></div>
+    </a>
+    <a class="item" href="#out-of-scope">
+      <svg viewBox="0 0 150 96" aria-hidden="true"><rect width="150" height="96" fill="#e8d9c6"/><rect x="45" y="34" width="60" height="34" rx="4" fill="#8a5a3c"/><rect x="45" y="34" width="60" height="10" rx="4" fill="#f3e6d4"/><circle cx="62" cy="54" r="3" fill="#5a3824"/><circle cx="85" cy="58" r="3" fill="#5a3824"/></svg>
+      <div><b>Banana bread</b><span>With walnuts</span><br><span class="price">€3.10</span></div>
+    </a>
+  </div>
+
+  <div style="padding:0 var(--s-4)"><a class="btn primary" href="#out-of-scope">View full menu</a></div>
+
+  <nav aria-label="Main">
+    <a href="home.html" aria-current="page"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9h-6v-6H9v6H3z" fill="currentColor"/></svg>Home</a>
+    <a href="#out-of-scope"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M5 5h14M5 12h14M5 19h14" stroke="currentColor" stroke-width="2"/></svg>Menu</a>
+    <a href="#out-of-scope"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="9" r="2.5" fill="currentColor"/></svg>Visit</a>
+    <a href="#out-of-scope"><svg width="22" height="22" viewBox="0 0 24 24"><circle cx="5" cy="12" r="2" fill="currentColor"/><circle cx="12" cy="12" r="2" fill="currentColor"/><circle cx="19" cy="12" r="2" fill="currentColor"/></svg>More</a>
+  </nav>
+
+  <div class="oos" id="out-of-scope">
+    <div class="sheet">
+      <h3>Out of scope for this story</h3>
+      <p class="muted">The destination screens (menu, item detail, directions, other tabs) are not part of SCRUM-107. In the app this tap leaves Home.</p>
+      <a class="btn primary" href="home.html" style="margin-top:var(--s-4)">Back to Home</a>
+    </div>
+  </div>
+</div>
+</body></html>
