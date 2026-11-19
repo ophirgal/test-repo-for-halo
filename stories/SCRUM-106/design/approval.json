@@ -1,0 +1,14 @@
+{
+  "storyId": "e0453678-e980-48fa-9ff8-3ccd6d4158c2",
+  "storyKey": "SCRUM-106",
+  "title": "CLONE - design home screen of a neighbourhood cafe's mobile app",
+  "approvals": [
+    {
+      "step": "structure",
+      "decisionId": "3650779e-8978-4b35-b92f-f4e7d3759df3",
+      "actor": "Ophir (Guest) (guest)",
+      "approvedAt": "2026-11-19T13:25:37.865098Z",
+      "headSha": "98c631ac9aa785f040eab33c3f2e2a2f2059aa42"
+    }
+  ]
+}
