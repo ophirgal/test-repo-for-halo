@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Your details — Newsletter — Hello World</title><link rel="stylesheet" href="tokens.css"></head>
+<body>
+<main class="page">
+<ol class="steps" aria-label="Progress"><li class="done">1. Welcome</li><li class="current" aria-current="step">2. Your details</li><li>3. Done</li></ol>
+<div class="card">
+<a class="link-back" href="welcome.html">← Back</a>
+<h1>Subscribe to the newsletter</h1>
+<form action="confirmation.html" method="get" novalidate>
+<div class="field">
+<label for="name">Name</label>
+<input class="input" id="name" name="name" type="text" autocomplete="name" maxlength="80" required value="Maya Levi" aria-describedby="name-hint">
+<div class="hint" id="name-hint">Up to 80 characters.</div>
+</div>
+<div class="field">
+<label for="email">Email address</label>
+<input class="input" id="email" name="email" type="email" autocomplete="email" inputmode="email" required value="maya.levi@example.com" aria-describedby="email-hint">
+<div class="hint" id="email-hint">For example, name@example.com. We only use it to send the newsletter.</div>
+</div>
+<div class="actions"><a class="btn btn-block" href="confirmation.html">Submit</a></div>
+</form>
+</div>
+</main>
+</body></html>
