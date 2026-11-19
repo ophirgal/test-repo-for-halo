@@ -3,7 +3,7 @@
 :root{
   --c-bg:#f6f7f9; --c-surface:#ffffff; --c-text:#1b1f27; --c-muted:#5a6270;
   --c-border:#8a93a3; --c-divider:#d5d9e0; --c-primary:#2b4fd8; --c-primary-dark:#1f3cae; --c-focus:#1f3cae;
-  --c-accent-bg:#eef2ff; --c-success:#1d7a46; --c-error:#b3261e; --c-error-bg:#fdecea; --c-disabled:#6b7380;
+  --c-accent-bg:#eef2ff; --c-matcha:#9dbf6b; --c-matcha-deep:#86ad52; --c-matcha-ink:#1e3311; --c-matcha-done:#3d5a1e; --c-matcha-track:#e9f1dc; --c-matcha-hero:#eef4e2; --c-success:#1d7a46; --c-error:#b3261e; --c-error-bg:#fdecea; --c-disabled:#6b7380;
   --font:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   --fs-sm:.875rem; --fs-md:1rem; --fs-lg:1.25rem; --fs-xl:1.75rem; --fs-xl-m:1.5rem;
   --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px; --sp-6:32px; --sp-7:48px;
@@ -60,6 +60,20 @@ p{margin:0 0 var(--sp-4)}
 @keyframes spin{to{transform:rotate(360deg)}}
 .visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .success-icon{display:block;margin:0 0 var(--sp-4)}
+
+/* Matcha theme (designer change request): matcha green page background and a matcha illustration on every journey screen.
+   Contrast on --c-matcha #9dbf6b: progress text #1e3311 6.6:1; current bar #1e3311 6.6:1 and done bar #3d5a1e 3.8:1 (non-text, 1.4.11).
+   All form text, buttons and errors stay on the white card, so their contrast is unchanged. */
+body.matcha{background-color:var(--c-matcha);background-image:radial-gradient(circle at 15% 10%,#b3cf86 0,transparent 45%),radial-gradient(circle at 85% 90%,var(--c-matcha-deep) 0,transparent 50%);background-attachment:fixed;min-height:100vh}
+.matcha .steps{color:var(--c-matcha-ink)}
+.matcha .steps li{border-color:var(--c-matcha-track)}
+.matcha .steps li.done{border-color:var(--c-matcha-done)}
+.matcha .steps li.current{border-color:var(--c-matcha-ink);color:var(--c-matcha-ink)}
+.matcha .card{border-color:var(--c-matcha-deep);box-shadow:0 8px 24px rgba(30,51,17,.18);overflow:hidden}
+.matcha-hero{background:var(--c-matcha-hero);border-bottom:1px solid #d3e2bb}
+.desktop .matcha-hero{height:168px;margin:calc(-1*var(--sp-6)) calc(-1*var(--sp-6)) var(--sp-4);padding:var(--sp-3) var(--sp-6) 0}
+.mobile .matcha-hero{height:124px;margin:calc(-1*var(--sp-5)) calc(-1*var(--sp-4)) var(--sp-3);padding:var(--sp-2) var(--sp-4) 0}
+.matcha-hero svg{display:block}
 
 /* Gallery */
 .gallery{max-width:960px;margin:0 auto;padding:var(--sp-6) var(--sp-4) var(--sp-7)}
