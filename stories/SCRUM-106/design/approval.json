@@ -9,6 +9,13 @@
       "actor": "Ophir (Guest) (guest)",
       "approvedAt": "2026-11-19T13:25:37.865098Z",
       "headSha": "98c631ac9aa785f040eab33c3f2e2a2f2059aa42"
+    },
+    {
+      "step": "prototype",
+      "decisionId": "f78125ee-12fa-4ebc-a225-fc3b2a33e9e0",
+      "actor": "Ophir (Guest) (guest)",
+      "approvedAt": "2026-11-19T13:26:55.151367Z",
+      "headSha": "a7fc048475f1c4a15d8586f5f4f9e5d594c435b8"
     }
   ]
 }
