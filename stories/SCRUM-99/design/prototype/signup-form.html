@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Subscribe to the newsletter</title>
+<link rel="stylesheet" href="tokens.css">
+</head>
+<body>
+<main>
+  <div class="panel">
+    <a class="back" href="welcome.html">&larr; Back</a>
+    <h1>Subscribe to the newsletter</h1>
+    <p class="lead">Your name and email address are all we need.</p>
+    <form novalidate>
+      <div class="field">
+        <label for="name">Name</label>
+        <span class="hint" id="name-hint">Up to 80 characters</span>
+        <input id="name" name="name" type="text" autocomplete="name" maxlength="80" aria-describedby="name-hint" value="Maya Cohen">
+      </div>
+      <div class="field">
+        <label for="email">Email address</label>
+        <input id="email" name="email" type="email" autocomplete="email" inputmode="email" value="maya.cohen@example.com">
+      </div>
+      <div class="actions">
+        <a class="button" role="button" href="confirmation.html">Submit</a>
+      </div>
+    </form>
+  </div>
+</main>
+<footer class="site-footer">
+  <nav aria-label="Site footer">
+    <ul>
+      <li><a href="any-site-page.html">Home</a></li>
+      <li><a href="welcome.html">Newsletter</a></li>
+    </ul>
+  </nav>
+</footer>
+<p class="proto-note">Prototype · Signup form (step 2 of 3), filled in with a valid name and email. Submit goes to the Confirmation; the inline error, submitting and failed states come in the next step. <a href="index.html">Back to the prototype index</a></p>
+</body>
+</html>

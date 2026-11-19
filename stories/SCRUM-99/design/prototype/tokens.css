@@ -1,0 +1,55 @@
+/* Taken from docs/index.html today: system-ui type, zero page margin, 1rem main padding.
+   Added for the signup screens: a small palette that meets WCAG 2.1 AA on white. */
+:root {
+  --font: system-ui, sans-serif;
+  --space-1: 0.5rem;
+  --space-2: 1rem;      /* main padding, as on docs/index.html */
+  --space-3: 1.5rem;
+  --space-4: 2rem;
+  --text: #1a1a1a;      /* 17.4:1 on white */
+  --muted: #555555;     /* 7.5:1 on white */
+  --border: #767676;    /* 4.5:1 on white, field outlines */
+  --rule: #d9d9d9;
+  --surface: #f5f5f5;
+  --primary: #1f4fd1;   /* 6.9:1 on white; white text on it 6.9:1 */
+  --primary-dark: #163a9c;
+  --success: #1e6b34;   /* 6.6:1 on white */
+  --focus: #ffbf47;
+  --radius: 6px;
+  --measure: 32rem;
+}
+html, body { margin: 0; padding: 0; }
+body { font-family: var(--font); color: var(--text); line-height: 1.5; background: #fff;
+  min-height: 100vh; display: flex; flex-direction: column; }
+main { padding: var(--space-2); flex: 1; }
+h1 { overflow-wrap: anywhere; }
+a { color: var(--primary); }
+a:hover { color: var(--primary-dark); }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; box-shadow: 0 0 0 5px var(--text); }
+
+.panel { max-width: var(--measure); margin: var(--space-4) auto; }
+.lead { font-size: 1.125rem; color: var(--muted); margin: 0 0 var(--space-3); }
+.button { display: inline-block; min-height: 44px; box-sizing: border-box; padding: 0.625rem 1.5rem;
+  background: var(--primary); color: #fff; border: 0; border-radius: var(--radius);
+  font: 600 1rem var(--font); text-decoration: none; cursor: pointer; }
+.button:hover { background: var(--primary-dark); color: #fff; }
+.back { display: inline-block; margin-bottom: var(--space-2); }
+
+.field { margin-bottom: var(--space-3); }
+.field label { display: block; font-weight: 600; margin-bottom: 0.25rem; }
+.field .hint { display: block; color: var(--muted); font-size: 0.875rem; margin-bottom: 0.25rem; }
+.field input { width: 100%; box-sizing: border-box; min-height: 44px; padding: 0.5rem 0.75rem;
+  font: 1rem var(--font); color: var(--text); border: 2px solid var(--border); border-radius: var(--radius); }
+.actions { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center; }
+
+.site-footer { border-top: 1px solid var(--rule); background: var(--surface);
+  padding: var(--space-2); font-size: 0.9375rem; }
+.site-footer nav ul { list-style: none; margin: 0; padding: 0; display: flex; gap: var(--space-3); flex-wrap: wrap; }
+.site-footer a { display: inline-block; min-height: 44px; line-height: 44px; }
+
+.proto-note { font-size: 0.8125rem; color: var(--muted); border-top: 1px dashed var(--rule);
+  padding: var(--space-1) var(--space-2); }
+@media (max-width: 480px) {
+  .panel { margin-top: var(--space-2); }
+  .button { width: 100%; text-align: center; }
+}

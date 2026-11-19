@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SCRUM-99 prototype — Newsletter signup journey</title>
+<link rel="stylesheet" href="tokens.css">
+</head>
+<body>
+<main>
+  <div class="panel">
+    <h1>Newsletter signup journey — prototype</h1>
+    <p>This clickable prototype walks the main path of SCRUM-99: from the new footer link on any site page to the Welcome screen, the Signup form and the Confirmation, then back to the site. It keeps the site's current look (system font, plain page with 1rem padding, from <code>docs/index.html</code>) and adds only a small, AA-contrast palette for the button, fields and footer. Every page fits a phone width; resize the viewer to check mobile.</p>
+
+    <h2>Screens</h2>
+    <ol>
+      <li><a href="any-site-page.html">Any site page</a> — rebuilt from <code>docs/index.html</code>; the only change from today is a new site footer with a <strong>Newsletter</strong> link (the site has no footer today).</li>
+      <li><a href="welcome.html">Welcome</a> — new: one sentence about the newsletter and a <strong>Subscribe</strong> button.</li>
+      <li><a href="signup-form.html">Signup form</a> — new: Name and Email address, filled in with a valid sample, <strong>Submit</strong> and <strong>Back</strong>.</li>
+      <li><a href="confirmation.html">Confirmation</a> — new: "You're subscribed" with the address, and <strong>Back to the site</strong>.</li>
+    </ol>
+
+    <p><a class="button" href="any-site-page.html">Start the journey</a></p>
+
+    <h2>Choices made in this prototype</h2>
+    <ul>
+      <li>The three screens are separate pages, not a dialog (structure, open branch 5).</li>
+      <li>"Back to the site" goes to the home page (open branch 6).</li>
+      <li>The Name field stops input at 80 characters, shown as a hint under the label (open branch 3).</li>
+      <li>The viewer runs no scripts, so Submit is a link straight to the Confirmation. The inline errors (empty name, empty email, malformed email), the submitting state and the submission-failed state are drawn in the next step.</li>
+    </ul>
+  </div>
+</main>
+</body>
+</html>
