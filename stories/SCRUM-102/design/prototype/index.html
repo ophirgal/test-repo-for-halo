@@ -3,7 +3,15 @@
 <title>User Journey</title>
 <style>
   :root { --bg:#f6f8f2; --ink:#1f2a14; --muted:#5b6750; --line:#4a6b25; --border:#d3e2bb;
-          --s:.17; --dw:1280px; --dh:800px; --pw:390px; --ph:844px; }
+          --s:.15; --dw:1280px; --dh:800px; --pw:390px; --ph:844px; }
+  /* The thumbnails grow with the window: the largest scale whose row (≈ 5120·s + 510 px) still fits. */
+  @media (min-width:1400px) { :root { --s:0.17; } }
+  @media (min-width:1550px) { :root { --s:0.2; } }
+  @media (min-width:1700px) { :root { --s:0.23; } }
+  @media (min-width:1850px) { :root { --s:0.26; } }
+  @media (min-width:2000px) { :root { --s:0.29; } }
+  @media (min-width:2200px) { :root { --s:0.33; } }
+  @media (min-width:2500px) { :root { --s:0.38; } }
   * { box-sizing:border-box; }
   body { margin:0; background:var(--bg); color:var(--ink); font-family:system-ui,sans-serif; }
   header { padding:32px 16px 0; text-align:center; }
