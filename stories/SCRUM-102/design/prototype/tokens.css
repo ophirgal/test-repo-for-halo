@@ -1,9 +1,11 @@
-/* Visual base copied from the approved newsletter design (story 0e4e726a), per open branch 3 of the structure.
-   One change: the focus colour is a dark blue instead of yellow, so the focus ring has 3:1 contrast on white (WCAG 2.1 AA, 1.4.11). */
+/* Layout, type and spacing from the approved newsletter design (story 0e4e726a), per open branch 3 of the structure.
+   Palette: matcha theme (designer change request) — every colour is a shade of matcha green.
+   Contrast (WCAG 2.1 AA): text #1e2a16 13.4:1 on the page; muted #4f5d43 7.1:1 on white; white on primary #4a6b25 6.1:1;
+   links #4a6b25 6.1:1 on white; focus ring #2d4214 11:1 on white (1.4.11); input border #6f8259 4.2:1 on white (1.4.11). */
 :root{
-  --c-bg:#f6f7f9; --c-surface:#ffffff; --c-text:#1b1f27; --c-muted:#5a6270;
-  --c-border:#8a93a3; --c-divider:#d5d9e0; --c-primary:#2b4fd8; --c-primary-dark:#1f3cae; --c-focus:#1f3cae;
-  --c-accent-bg:#eef2ff; --c-success:#1d7a46;
+  --c-bg:#eef4e2; --c-surface:#ffffff; --c-text:#1e2a16; --c-muted:#4f5d43;
+  --c-border:#6f8259; --c-divider:#d3e2bb; --c-primary:#4a6b25; --c-primary-dark:#3a541c; --c-focus:#2d4214;
+  --c-accent-bg:#e3eecf; --c-success:#4a6b25; --c-hero:#e3eecf;
   --font:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   --fs-sm:.875rem; --fs-md:1rem; --fs-lg:1.25rem; --fs-xl:1.75rem;
   --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px; --sp-6:32px; --sp-7:48px;
@@ -34,8 +36,13 @@ p{margin:0 0 var(--sp-4)}
 .hint{font-size:var(--fs-sm);color:var(--c-muted);margin-top:var(--sp-2)}
 .actions{display:flex;flex-direction:column;gap:var(--sp-2);margin-top:var(--sp-5)}
 .success-icon{display:block;margin:0 0 var(--sp-4)}
+body{background-image:radial-gradient(circle at 12% 0,#dcebc4 0,transparent 40%),radial-gradient(circle at 90% 100%,#d6e6bb 0,transparent 45%);min-height:100vh}
+.card{box-shadow:0 6px 20px rgba(45,66,20,.10);overflow:hidden}
+.matcha-hero{height:160px;margin:calc(-1*var(--sp-6)) calc(-1*var(--sp-6)) var(--sp-4);padding:var(--sp-3) var(--sp-6) 0;background:var(--c-hero);border-bottom:1px solid var(--c-divider)}
+.matcha-hero svg{display:block}
 @media (max-width:480px){
   .page{padding:var(--sp-4) var(--sp-3) var(--sp-6)}
   .card{padding:var(--sp-5) var(--sp-4)}
   h1{font-size:1.5rem}
+  .matcha-hero{height:120px;margin:calc(-1*var(--sp-5)) calc(-1*var(--sp-4)) var(--sp-3);padding:var(--sp-2) var(--sp-4) 0}
 }

@@ -10,7 +10,7 @@
 
 <h2>Screens</h2>
 <ol>
-<li><a href="site-page-footer-link.html">Site page — footer link</a>. This is today's page from <code>docs/index.html</code>, unchanged except for a new footer with a "Newsletter" link. The page has no footer today.</li>
+<li><a href="site-page-footer-link.html">Site page — footer link</a>. This is today's page from <code>docs/index.html</code>, unchanged except for a new matcha-green footer with a "Newsletter" link. The page has no footer today.</li>
 <li><a href="welcome.html">Welcome</a> (new): a one-sentence description of the newsletter and a "Subscribe" button.</li>
 <li><a href="signup-form.html">Signup form</a> (new): the Name and Email address fields, with a "Submit" button.</li>
 <li><a href="confirmation.html">Confirmation</a> (new): "You're subscribed". New and already-subscribed addresses see the same page.</li>
@@ -18,7 +18,9 @@
 
 <h2>Choices made in this prototype</h2>
 <ul>
-<li>The new screens reuse the visual base of the approved newsletter design in story 0e4e726a, as recommended in the structure. One change: the focus ring is dark blue instead of yellow so that it meets the AA contrast requirement. Input borders are also darker, for the same reason.</li>
+<li><strong>Matcha theme</strong>, as you asked. Every colour is now a shade of matcha green: a pale matcha page (#eef4e2), matcha buttons, links and progress bar (#4a6b25, darker #3a541c on hover), a deep matcha focus ring (#2d4214), and soft matcha borders. Every pairing meets WCAG 2.1 AA: white on the buttons is 6.1:1, body text 13.4:1, the focus ring 11:1, and input borders 4.2:1. Layout, type and spacing still come from the approved newsletter design in story 0e4e726a, as the structure recommended.</li>
+<li>A <strong>matcha illustration</strong> (a bowl of whisked matcha, a bamboo whisk, a tea scoop and leaves) tops the card on Welcome, Signup form and Confirmation. It is inline SVG, decorative and hidden from screen readers, so focus order is unchanged. It carries over the matcha image you asked for on the screens; it can be dropped without changing anything else.</li>
+<li>On the <strong>site page</strong>, only the new footer takes the matcha theme. The rest of the page stays as it is today, because restyling the existing site is outside this story.</li>
 <li>The Name field is capped at 80 characters (<code>maxlength</code>), as recommended in the structure. There is no "name too long" error.</li>
 <li>A three-step progress bar (Welcome, Your details, Done) shows the visitor's current step.</li>
 <li>The confirmation does not mention a confirmation email, because this epic has no double opt-in.</li>
