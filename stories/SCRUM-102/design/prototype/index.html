@@ -48,7 +48,7 @@
   .wrap::before { content:""; position:absolute; left:14px; right:0; top:0; height:36px; border:2.5px solid var(--line); border-top:0; border-left:0; border-bottom-right-radius:14px; }
   .wrap::after { content:""; position:absolute; left:0; right:14px; top:33.5px; bottom:9px; border:2.5px solid var(--line); border-right:0; border-bottom:0; border-top-left-radius:14px; }
   .wrap::before, .wrap::after { box-sizing:border-box; }
-  .wrap .label { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); white-space:nowrap; }
+  .wrap .label { position:absolute; z-index:1; left:50%; top:50%; transform:translate(-50%,-50%); white-space:nowrap; }
   .wrap .tip { position:absolute; left:-5.75px; bottom:0; border:7px solid transparent; border-top:10px solid var(--line); border-bottom:0; }
   /* "Back to site": a dashed return along the left, from the last screen up to the first. */
   .loop { position:absolute; left:8px; width:40px; top:calc(26px + var(--dh)*var(--s)/2);
