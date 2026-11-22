@@ -40,9 +40,3 @@ body{background-image:radial-gradient(circle at 12% 0,#dcebc4 0,transparent 40%)
 .card{box-shadow:0 6px 20px rgba(45,66,20,.10);overflow:hidden}
 .matcha-hero{height:160px;margin:calc(-1*var(--sp-6)) calc(-1*var(--sp-6)) var(--sp-4);padding:var(--sp-3) var(--sp-6) 0;background:var(--c-hero);border-bottom:1px solid var(--c-divider)}
 .matcha-hero svg{display:block}
-@media (max-width:480px){
-  .page{padding:var(--sp-4) var(--sp-3) var(--sp-6)}
-  .card{padding:var(--sp-5) var(--sp-4)}
-  h1{font-size:1.5rem}
-  .matcha-hero{height:120px;margin:calc(-1*var(--sp-5)) calc(-1*var(--sp-4)) var(--sp-3);padding:var(--sp-2) var(--sp-4) 0}
-}

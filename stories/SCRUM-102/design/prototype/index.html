@@ -3,16 +3,18 @@
 <title>User Journey</title>
 <style>
   :root { --bg:#f6f8f2; --ink:#1f2a14; --muted:#5b6750; --line:#4a6b25; --border:#d3e2bb; --panel:340px;
-          --s:.13; --dw:1280px; --dh:800px; --pw:390px; --ph:844px; --aw:116px;
-          --w:calc(var(--dw)*var(--s) + 28px); --h:calc(var(--dh)*var(--s) + 52px); }
-  /* Thumbnails grow with the window: the largest scale whose row of three (≈ 3840·s + 400 px) fits beside the open panel (340 px). */
-  @media (min-width:1300px) { :root { --s:.14; } }
-  @media (min-width:1450px) { :root { --s:.18; } }
-  @media (min-width:1600px) { :root { --s:.22; } }
-  @media (min-width:1750px) { :root { --s:.255; } }
-  @media (min-width:1900px) { :root { --s:.29; } }
-  @media (min-width:2100px) { :root { --s:.34; } }
-  @media (min-width:2400px) { :root { --s:.41; } }
+          --s:.11; --dw:1280px; --dh:800px; --aw:116px;
+          --w:calc(var(--dw)*var(--s)); --h:calc(var(--dh)*var(--s)); }
+  /* Thumbnails grow with the window: the largest scale whose row of three (3840·s + 336 px) fits beside the open panel (340 px). */
+  @media (min-width:1300px) { :root { --s:0.16; } .wrap path[class] { display:none; } .wrap path.b16 { display:inline; } }
+  @media (min-width:1450px) { :root { --s:0.2; } .wrap path[class] { display:none; } .wrap path.b20 { display:inline; } }
+  @media (min-width:1600px) { :root { --s:0.235; } .wrap path[class] { display:none; } .wrap path.b23 { display:inline; } }
+  @media (min-width:1750px) { :root { --s:0.275; } .wrap path[class] { display:none; } .wrap path.b27 { display:inline; } }
+  @media (min-width:1900px) { :root { --s:0.31; } .wrap path[class] { display:none; } .wrap path.b31 { display:inline; } }
+  @media (min-width:2100px) { :root { --s:0.37; } .wrap path[class] { display:none; } .wrap path.b37 { display:inline; } }
+  @media (min-width:2400px) { :root { --s:0.44; } .wrap path[class] { display:none; } .wrap path.b44 { display:inline; } }
+  @media (min-width:2800px) { :root { --s:0.52; } .wrap path[class] { display:none; } .wrap path.b52 { display:inline; } }
+  @media (min-width:3200px) { :root { --s:0.6; } .wrap path[class] { display:none; } .wrap path.b60 { display:inline; } }
   * { box-sizing:border-box; }
   html, body { height:100%; }
   body { margin:0; display:flex; background:var(--bg); color:var(--ink); font-family:system-ui,sans-serif; }
@@ -26,33 +28,29 @@
   .row { display:flex; align-items:flex-start; }
   .screen { display:flex; flex-direction:column; align-items:center; gap:10px; width:var(--w); }
   .step { font-size:.75rem; font-weight:600; color:var(--muted); letter-spacing:.04em; text-transform:uppercase; }
-  /* Desktop at 1280×800 with the phone (390×844) overlapping its lower-right corner, both scaled by --s. */
+  /* Desktop browser at 1280×800, scaled by --s (desktop only, as the designer asked). */
   .device { position:relative; display:block; width:var(--w); height:var(--h); }
   .device > span { position:absolute; overflow:hidden; background:#fff; border:1px solid var(--border); box-shadow:0 2px 10px rgba(31,42,20,.10); }
   .desktop { left:0; top:0; width:calc(var(--dw)*var(--s)); height:calc(var(--dh)*var(--s)); border-radius:8px; }
-  .phone { right:0; bottom:0; width:calc(var(--pw)*var(--s)); height:calc(var(--ph)*var(--s)); border-radius:12px; border:3px solid #2f3a25 !important; }
   .device iframe { border:0; transform:scale(var(--s)); transform-origin:0 0; pointer-events:none; }
   .desktop iframe { width:var(--dw); height:var(--dh); }
-  .phone iframe { width:var(--pw); height:var(--ph); }
-  .device:hover .desktop, .device:hover .phone { outline:3px solid var(--line); outline-offset:2px; }
+  .device:hover .desktop { outline:3px solid var(--line); outline-offset:2px; }
   .name { font-weight:600; color:var(--line); font-size:.95rem; text-decoration:underline; text-underline-offset:3px; }
   .name:focus-visible { outline:3px solid #2d4214; outline-offset:3px; }
   .tag { font-size:.75rem; color:var(--muted); text-align:center; }
   .label { font-size:.8rem; background:#e4eed3; border-radius:999px; padding:3px 10px; text-align:center; }
   .arrow { width:var(--aw); height:80px; margin-top:calc(26px + var(--dh)*var(--s)/2 - 72px); display:flex; flex-direction:column; justify-content:flex-end; align-items:center; gap:6px; padding:0 6px; }
   .arrow svg { width:100%; height:16px; }
-  /* The wrap: from under the row's last screen, down, back left, and down into the next row's first screen. */
-  .wrap { position:relative; height:72px; margin:4px 0 8px; margin-left:calc(var(--w)/2);
-           width:calc(var(--span)*(var(--w) + var(--aw))); }
-  /* Each half draws one whole corner plus the shared horizontal run, so neither corner has a seam; the runs overlap exactly (fixed px, not %). */
-  .wrap::before { content:""; position:absolute; left:14px; right:0; top:0; height:36px; border:2.5px solid var(--line); border-top:0; border-left:0; border-bottom-right-radius:14px; }
-  .wrap::after { content:""; position:absolute; left:0; right:14px; top:33.5px; bottom:9px; border:2.5px solid var(--line); border-right:0; border-bottom:0; border-top-left-radius:14px; }
-  .wrap::before, .wrap::after { box-sizing:border-box; }
-  .wrap .label { position:absolute; z-index:1; left:50%; top:50%; transform:translate(-50%,-50%); white-space:nowrap; }
-  .wrap .tip { position:absolute; left:-5.75px; bottom:0; border:7px solid transparent; border-top:10px solid var(--line); border-bottom:0; }
+  /* The wrap: ONE svg path from under the row's last screen, down, back left along the gap, and down into the next row's first screen.
+     The row width changes with --s, so the path is drawn once per scale step and only the current step's path is shown. */
+  .wrap { position:relative; height:84px; margin:4px 0 8px; margin-left:calc(var(--w)/2); width:calc(var(--span)*(var(--w) + var(--aw))); }
+  .wrap svg { position:absolute; left:0; top:0; width:100%; height:84px; overflow:visible; }
+  .wrap path { display:none; fill:none; stroke:var(--line); stroke-width:2.5; stroke-linecap:round; }
+  @media (max-width:1299.98px) { .wrap path.b11 { display:inline; } }
+  .wrap .label { position:absolute; z-index:1; left:50%; top:10px; transform:translateX(-50%); white-space:nowrap; }
   /* "Back to site": a dashed return along the left, from the last screen up to the first. */
-  .loop { position:absolute; left:8px; width:40px; top:calc(26px + var(--dh)*var(--s)/2);
-           bottom:calc(var(--h) - var(--dh)*var(--s)/2 + 56px); border:2px dashed var(--line); border-right:0; border-radius:14px 0 0 14px; }
+  .loop { position:absolute; left:8px; width:40px; top:calc(26px + var(--h)/2);
+           bottom:calc(var(--h)/2 + 58px); border:2px dashed var(--line); border-right:0; border-radius:14px 0 0 14px; }
   .loop::before { content:""; position:absolute; right:-4px; top:-8px; border:7px solid transparent; border-left:10px solid var(--line); border-right:0; }
   .loop span { position:absolute; left:-2px; top:50%; transform:translate(-50%,-50%) rotate(-90deg); background:var(--bg); padding:0 8px; font-size:.75rem; white-space:nowrap; }
   .legend { text-align:center; color:var(--muted); font-size:.8rem; margin:8px 16px 32px; }
@@ -82,43 +80,40 @@
   <div class="row">
     <div class="screen"><div class="step">1 · Existing page</div>
       <a class="device" href="site-page-footer-link.html" tabindex="-1" aria-hidden="true">
-        <span class="desktop"><iframe src="site-page-footer-link.html" title="Site page — desktop"></iframe></span>
-        <span class="phone"><iframe src="site-page-footer-link.html" title="Site page — mobile"></iframe></span>
+        <span class="desktop"><iframe src="site-page-footer-link.html" title="Site page"></iframe></span>
       </a>
       <a class="name" href="site-page-footer-link.html">Site page</a><span class="tag">Updated: new footer link</span></div>
     <div class="arrow"><span class="label">Clicks “Newsletter”</span><svg viewBox="0 0 120 16" preserveAspectRatio="none" aria-hidden="true"><line x1="2" y1="8" x2="108" y2="8" stroke="#4a6b25" stroke-width="2.5"/><path d="M106 2l10 6-10 6z" fill="#4a6b25"/></svg></div>
     <div class="screen"><div class="step">2 · Welcome</div>
       <a class="device" href="welcome.html" tabindex="-1" aria-hidden="true">
-        <span class="desktop"><iframe src="welcome.html" title="Welcome — desktop"></iframe></span>
-        <span class="phone"><iframe src="welcome.html" title="Welcome — mobile"></iframe></span>
+        <span class="desktop"><iframe src="welcome.html" title="Welcome"></iframe></span>
       </a>
       <a class="name" href="welcome.html">Welcome</a><span class="tag">New</span></div>
     <div class="arrow"><span class="label">Clicks “Subscribe”</span><svg viewBox="0 0 120 16" preserveAspectRatio="none" aria-hidden="true"><line x1="2" y1="8" x2="108" y2="8" stroke="#4a6b25" stroke-width="2.5"/><path d="M106 2l10 6-10 6z" fill="#4a6b25"/></svg></div>
     <div class="screen"><div class="step">3 · Your details</div>
       <a class="device" href="signup-form.html" tabindex="-1" aria-hidden="true">
-        <span class="desktop"><iframe src="signup-form.html" title="Signup form — desktop"></iframe></span>
-        <span class="phone"><iframe src="signup-form.html" title="Signup form — mobile"></iframe></span>
+        <span class="desktop"><iframe src="signup-form.html" title="Signup form"></iframe></span>
       </a>
       <a class="name" href="signup-form.html">Signup form</a><span class="tag">New</span></div>
   </div>
-  <div class="wrap" style="--span:2" aria-hidden="true"><span class="label">Enters name + email, clicks “Submit”</span><b class="tip"></b></div>
+  <div class="wrap" style="--span:2" aria-hidden="true"><span class="label">Enters name + email, clicks “Submit”</span><svg><defs><marker id="tip" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" refX="10" refY="7" orient="auto"><path d="M0 1L12 7L0 13z" style="display:inline;stroke:none;fill:#4a6b25"/></marker></defs><path class="b11" d="M513.6 0V36Q513.6 50 499.6 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b16" d="M641.6 0V36Q641.6 50 627.6 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b20" d="M744.0 0V36Q744.0 50 730.0 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b23" d="M833.6 0V36Q833.6 50 819.6 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b27" d="M936.0 0V36Q936.0 50 922.0 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b31" d="M1025.6 0V36Q1025.6 50 1011.6 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b37" d="M1179.2 0V36Q1179.2 50 1165.2 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b44" d="M1358.4 0V36Q1358.4 50 1344.4 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b52" d="M1563.2 0V36Q1563.2 50 1549.2 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b60" d="M1768.0 0V36Q1768.0 50 1754.0 50H14Q0 50 0 64V80" marker-end="url(#tip)"/></svg></div>
   <div class="row">
     <div class="screen"><div class="step">4 · Done</div>
       <a class="device" href="confirmation.html" tabindex="-1" aria-hidden="true">
-        <span class="desktop"><iframe src="confirmation.html" title="Confirmation — desktop"></iframe></span>
-        <span class="phone"><iframe src="confirmation.html" title="Confirmation — mobile"></iframe></span>
+        <span class="desktop"><iframe src="confirmation.html" title="Confirmation"></iframe></span>
       </a>
       <a class="name" href="confirmation.html">Confirmation</a><span class="tag">New · same page for already-subscribed</span></div>
   </div>
   <div class="loop" aria-hidden="true"><span>Clicks “Back to site”</span></div>
 </div></div>
-<p class="legend">Each screen is shown at desktop width (1280&nbsp;px) with its mobile layout (390&nbsp;px) in front, as the structure asks (R4).</p>
+<p class="legend">Each screen is shown as a desktop browser at 1280×800: you asked for desktop screens only, so there is no mobile layout.</p>
 </main>
 <aside>
 <details open>
 <summary>Choices made in this prototype</summary>
 <div class="choices">
   <ul>
+    <li><strong>Desktop only</strong>, as you asked: every page is laid out for a desktop browser and the phone layout is gone (the thumbnails show 1280×800). This sets aside the mobile part of R4 and acceptance criterion 1, which ask for desktop and mobile widths; the screens step will draw desktop pages only.</li>
     <li><strong>Matcha theme</strong>: every colour is a shade of matcha green (page #eef4e2, buttons and links #4a6b25, focus ring #2d4214); every pairing meets WCAG 2.1 AA. Layout, type and spacing come from the approved newsletter design.</li>
     <li>A decorative <strong>matcha illustration</strong> (inline SVG, hidden from screen readers) tops Welcome, Signup form and Confirmation.</li>
     <li>On the <strong>site page</strong>, only the new footer takes the matcha theme, and the page’s content is centred; restyling the rest of the site is outside this story.</li>
