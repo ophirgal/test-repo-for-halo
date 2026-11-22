@@ -2,75 +2,85 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>User Journey</title>
 <style>
-  :root { --bg:#f6f8f2; --ink:#1f2a14; --muted:#5b6750; --line:#4a6b25; --border:#d3e2bb; --panel:340px;
-          --s:.11; --dw:1280px; --dh:800px; --aw:116px;
+  /* The pages' own palette (tokens.css): night purple, neon pink lines, violet labels, cyan focus. */
+  :root { --bg:#120624; --ink:#f5eefe; --muted:#c9b6e8; --line:#ff4fd8; --link:#e0a6ff; --chip:#2a1250; --border:#4a2c78; --panel-bg:#1a0b2e; --focus:#39f3ff; --panel:340px;
+          --s:0.09; --aw:70px; --dw:1280px; --dh:800px;
           --w:calc(var(--dw)*var(--s)); --h:calc(var(--dh)*var(--s)); }
-  /* Thumbnails grow with the window: the largest scale whose row of three (3840·s + 336 px) fits beside the open panel (340 px). */
-  @media (min-width:1300px) { :root { --s:0.16; } .wrap path[class] { display:none; } .wrap path.b16 { display:inline; } }
-  @media (min-width:1450px) { :root { --s:0.2; } .wrap path[class] { display:none; } .wrap path.b20 { display:inline; } }
-  @media (min-width:1600px) { :root { --s:0.235; } .wrap path[class] { display:none; } .wrap path.b23 { display:inline; } }
-  @media (min-width:1750px) { :root { --s:0.275; } .wrap path[class] { display:none; } .wrap path.b27 { display:inline; } }
-  @media (min-width:1900px) { :root { --s:0.31; } .wrap path[class] { display:none; } .wrap path.b31 { display:inline; } }
-  @media (min-width:2100px) { :root { --s:0.37; } .wrap path[class] { display:none; } .wrap path.b37 { display:inline; } }
-  @media (min-width:2400px) { :root { --s:0.44; } .wrap path[class] { display:none; } .wrap path.b44 { display:inline; } }
-  @media (min-width:2800px) { :root { --s:0.52; } .wrap path[class] { display:none; } .wrap path.b52 { display:inline; } }
-  @media (min-width:3200px) { :root { --s:0.6; } .wrap path[class] { display:none; } .wrap path.b60 { display:inline; } }
+  /* Thumbnails grow with the frame the index renders in: the largest scale whose row of three (3840·s + 2·arrow + 112 px) fits beside the open panel (340 px). Under 700 px the panel moves below the flow. */
+  .wrap path[class] { display:none; }
+  @media (min-width:700px) { :root { --s:0.03; --aw:70px; } .wrap path[class] { display:none; } .wrap path.b30 { display:inline; } }
+  @media (min-width:900px) { :root { --s:0.07; --aw:90px; } .wrap path[class] { display:none; } .wrap path.b70 { display:inline; } }
+  @media (min-width:1100px) { :root { --s:0.12; --aw:96px; } .wrap path[class] { display:none; } .wrap path.b120 { display:inline; } }
+  @media (min-width:1300px) { :root { --s:0.17; --aw:96px; } .wrap path[class] { display:none; } .wrap path.b170 { display:inline; } }
+  @media (min-width:1500px) { :root { --s:0.22; --aw:96px; } .wrap path[class] { display:none; } .wrap path.b220 { display:inline; } }
+  @media (min-width:1700px) { :root { --s:0.275; --aw:96px; } .wrap path[class] { display:none; } .wrap path.b275 { display:inline; } }
+  @media (min-width:1900px) { :root { --s:0.325; --aw:96px; } .wrap path[class] { display:none; } .wrap path.b325 { display:inline; } }
+  @media (min-width:2100px) { :root { --s:0.375; --aw:96px; } .wrap path[class] { display:none; } .wrap path.b375 { display:inline; } }
+  @media (min-width:2400px) { :root { --s:0.455; --aw:96px; } .wrap path[class] { display:none; } .wrap path.b455 { display:inline; } }
+  @media (min-width:2800px) { :root { --s:0.555; --aw:96px; } .wrap path[class] { display:none; } .wrap path.b555 { display:inline; } }
+  @media (min-width:3200px) { :root { --s:0.66; --aw:96px; } .wrap path[class] { display:none; } .wrap path.b660 { display:inline; } }
+  @media (max-width:699.98px) { .wrap path.b90 { display:inline; } }
   * { box-sizing:border-box; }
   html, body { height:100%; }
-  body { margin:0; display:flex; background:var(--bg); color:var(--ink); font-family:system-ui,sans-serif; }
+  body { margin:0; display:flex; background:var(--bg); color:var(--ink); font-family:system-ui,sans-serif;
+         background-image:radial-gradient(ellipse at 40% -20%,rgba(168,85,247,.35) 0,transparent 60%); }
   main { flex:1; min-width:0; overflow:auto; }
   header { padding:32px 16px 0; text-align:center; }
-  h1 { margin:0 0 6px; font-size:1.375rem; }
+  h1 { margin:0 0 6px; font-size:1.375rem; font-style:italic; text-shadow:0 0 12px rgba(255,79,216,.6); }
   header p { margin:0; color:var(--muted); font-size:.9rem; }
   .canvas { overflow-x:auto; padding:36px 24px 8px; }
   /* At most three screens a row; a longer path continues on the next row, left to right again. */
-  .flow { position:relative; width:max-content; margin:0 auto; padding-left:56px; }
+  .flow { position:relative; width:max-content; margin:0 auto; padding-left:64px; }
   .row { display:flex; align-items:flex-start; }
   .screen { display:flex; flex-direction:column; align-items:center; gap:10px; width:var(--w); }
-  .step { font-size:.75rem; font-weight:600; color:var(--muted); letter-spacing:.04em; text-transform:uppercase; }
+  .step { font-size:.75rem; font-weight:600; color:var(--muted); letter-spacing:.04em; text-transform:uppercase; white-space:nowrap; }
   /* Desktop browser at 1280×800, scaled by --s (desktop only, as the designer asked). */
   .device { position:relative; display:block; width:var(--w); height:var(--h); }
-  .device > span { position:absolute; overflow:hidden; background:#fff; border:1px solid var(--border); box-shadow:0 2px 10px rgba(31,42,20,.10); }
-  .desktop { left:0; top:0; width:calc(var(--dw)*var(--s)); height:calc(var(--dh)*var(--s)); border-radius:8px; }
-  .device iframe { border:0; transform:scale(var(--s)); transform-origin:0 0; pointer-events:none; }
-  .desktop iframe { width:var(--dw); height:var(--dh); }
-  .device:hover .desktop { outline:3px solid var(--line); outline-offset:2px; }
-  .name { font-weight:600; color:var(--line); font-size:.95rem; text-decoration:underline; text-underline-offset:3px; }
-  .name:focus-visible { outline:3px solid #2d4214; outline-offset:3px; }
+  .desktop { position:absolute; left:0; top:0; width:var(--w); height:var(--h); overflow:hidden; border-radius:8px; border:1px solid var(--line); box-shadow:0 0 16px rgba(255,79,216,.35); background:#fff; }
+  .desktop iframe { width:var(--dw); height:var(--dh); border:0; transform:scale(var(--s)); transform-origin:0 0; pointer-events:none; }
+  .device:hover .desktop { outline:3px solid var(--focus); outline-offset:2px; }
+  /* In a narrow frame the thumbnails are small: the step shows its number only and the arrow labels shrink to fit between the screens. */
+  @media (max-width:1099.98px) { .step .st { display:none; } .arrow .label { font-size:.7rem; padding:2px 6px; max-width:100%; } .name { font-size:.85rem; } }
+  .name { font-weight:600; color:var(--link); font-size:.95rem; text-decoration:underline; text-underline-offset:3px; white-space:nowrap; }
+  .name:focus-visible { outline:3px solid var(--focus); outline-offset:3px; }
   .tag { font-size:.75rem; color:var(--muted); text-align:center; }
-  .label { font-size:.8rem; background:#e4eed3; border-radius:999px; padding:3px 10px; text-align:center; }
-  .arrow { width:var(--aw); height:80px; margin-top:calc(26px + var(--dh)*var(--s)/2 - 72px); display:flex; flex-direction:column; justify-content:flex-end; align-items:center; gap:6px; padding:0 6px; }
-  .arrow svg { width:100%; height:16px; }
+  .label { font-size:.8rem; background:var(--chip); color:var(--ink); border:1px solid var(--border); border-radius:999px; padding:3px 10px; text-align:center; }
+  /* A step arrow: the label stacked above the line. */
+  .arrow { width:var(--aw); flex:none; height:80px; margin-top:calc(26px + var(--h)/2 - 72px); display:flex; flex-direction:column; justify-content:flex-end; align-items:center; gap:6px; padding:0 6px; }
+  .arrow svg { width:100%; height:16px; overflow:visible; }
   /* The wrap: ONE svg path from under the row's last screen, down, back left along the gap, and down into the next row's first screen.
      The row width changes with --s, so the path is drawn once per scale step and only the current step's path is shown. */
   .wrap { position:relative; height:84px; margin:4px 0 8px; margin-left:calc(var(--w)/2); width:calc(var(--span)*(var(--w) + var(--aw))); }
   .wrap svg { position:absolute; left:0; top:0; width:100%; height:84px; overflow:visible; }
-  .wrap path { display:none; fill:none; stroke:var(--line); stroke-width:2.5; stroke-linecap:round; }
-  @media (max-width:1299.98px) { .wrap path.b11 { display:inline; } }
+  .wrap path[class] { fill:none; stroke:var(--line); stroke-width:2.5; stroke-linecap:round; }
   .wrap .label { position:absolute; z-index:1; left:50%; top:10px; transform:translateX(-50%); white-space:nowrap; }
-  /* "Back to site": a dashed return along the left, from the last screen up to the first. */
-  .loop { position:absolute; left:8px; width:40px; top:calc(26px + var(--h)/2);
-           bottom:calc(var(--h)/2 + 58px); border:2px dashed var(--line); border-right:0; border-radius:14px 0 0 14px; }
+  /* "Back to site": a dashed return along the left edge, from the last screen up to the first; its label sits beside the line, never on it. */
+  .loop { position:absolute; left:28px; width:30px; top:calc(26px + var(--h)/2); bottom:calc(var(--h)/2 + 58px); border:2px dashed var(--line); border-right:0; border-radius:14px 0 0 14px; }
   .loop::before { content:""; position:absolute; right:-4px; top:-8px; border:7px solid transparent; border-left:10px solid var(--line); border-right:0; }
-  .loop span { position:absolute; left:-2px; top:50%; transform:translate(-50%,-50%) rotate(-90deg); background:var(--bg); padding:0 8px; font-size:.75rem; white-space:nowrap; }
+  .loop span { position:absolute; left:-14px; top:50%; transform:translate(-50%,-50%) rotate(-90deg); font-size:.75rem; white-space:nowrap; color:var(--ink); }
   .legend { text-align:center; color:var(--muted); font-size:.8rem; margin:8px 16px 32px; }
   /* The choices: a collapsible panel on the right (no script: <details>). */
-  aside { flex:0 0 auto; height:100%; border-left:1px solid var(--border); background:#fff; overflow:auto; }
+  aside { flex:0 0 auto; height:100%; border-left:1px solid var(--border); background:var(--panel-bg); overflow:auto; }
   aside details { width:var(--panel); }
   aside details:not([open]) { width:44px; }
-  aside summary { list-style:none; cursor:pointer; display:flex; align-items:center; gap:8px; padding:14px 16px; font-weight:600; font-size:.9rem; border-bottom:1px solid var(--border); position:sticky; top:0; background:#fff; }
+  aside summary { list-style:none; cursor:pointer; display:flex; align-items:center; gap:8px; padding:14px 16px; font-weight:600; font-size:.9rem; border-bottom:1px solid var(--border); position:sticky; top:0; background:var(--panel-bg); }
   aside summary::-webkit-details-marker { display:none; }
   aside summary::before { content:"›"; font-size:1.2rem; line-height:1; color:var(--line); }
   aside details:not([open]) summary { writing-mode:vertical-rl; padding:16px 12px; border-bottom:0; height:100vh; justify-content:flex-start; }
   aside details:not([open]) summary::before { content:"‹"; writing-mode:horizontal-tb; }
-  aside summary:focus-visible { outline:3px solid #2d4214; outline-offset:-3px; }
+  aside summary:focus-visible { outline:3px solid var(--focus); outline-offset:-3px; }
   .choices { padding:4px 16px 24px; color:var(--muted); font-size:.85rem; line-height:1.5; }
   .choices ul { padding-left:18px; }
   .choices li { margin-bottom:8px; }
   .choices strong { color:var(--ink); }
-  @media (max-width:900px) { body { display:block; height:auto; } aside { height:auto; border-left:0; border-top:1px solid var(--border); } aside details, aside details:not([open]) { width:auto; } aside details:not([open]) summary { writing-mode:horizontal-tb; height:auto; } }
+  .choices code { color:var(--ink); }
+  @media (max-width:699.98px) { body { display:block; height:auto; } aside { height:auto; border-left:0; border-top:1px solid var(--border); } aside details, aside details:not([open]) { width:auto; } aside details:not([open]) summary { writing-mode:horizontal-tb; height:auto; } }
 </style></head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<marker id="tip" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" refX="10" refY="7" orient="auto"><path d="M0 1L12 7L0 13z" fill="#ff4fd8"/></marker>
+<marker id="tip-h" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" refX="11" refY="7" orient="auto"><path d="M0 1L12 7L0 13z" fill="#ff4fd8"/></marker>
+</defs></svg>
 <main>
 <header>
   <h1>Newsletter signup — user journey (SCRUM-102)</h1>
@@ -78,27 +88,27 @@
 </header>
 <div class="canvas"><div class="flow">
   <div class="row">
-    <div class="screen"><div class="step">1 · Existing page</div>
+    <div class="screen"><div class="step">1<span class="st"> · Existing page</span></div>
       <a class="device" href="site-page-footer-link.html" tabindex="-1" aria-hidden="true">
         <span class="desktop"><iframe src="site-page-footer-link.html" title="Site page"></iframe></span>
       </a>
       <a class="name" href="site-page-footer-link.html">Site page</a><span class="tag">Updated: new footer link</span></div>
-    <div class="arrow"><span class="label">Clicks “Newsletter”</span><svg viewBox="0 0 120 16" preserveAspectRatio="none" aria-hidden="true"><line x1="2" y1="8" x2="108" y2="8" stroke="#4a6b25" stroke-width="2.5"/><path d="M106 2l10 6-10 6z" fill="#4a6b25"/></svg></div>
-    <div class="screen"><div class="step">2 · Welcome</div>
+    <div class="arrow"><span class="label">Clicks “Newsletter”</span><svg aria-hidden="true"><line x1="2" y1="8" x2="100%" y2="8" stroke="#ff4fd8" stroke-width="2.5" marker-end="url(#tip-h)"/></svg></div>
+    <div class="screen"><div class="step">2<span class="st"> · Welcome</span></div>
       <a class="device" href="welcome.html" tabindex="-1" aria-hidden="true">
         <span class="desktop"><iframe src="welcome.html" title="Welcome"></iframe></span>
       </a>
       <a class="name" href="welcome.html">Welcome</a><span class="tag">New</span></div>
-    <div class="arrow"><span class="label">Clicks “Subscribe”</span><svg viewBox="0 0 120 16" preserveAspectRatio="none" aria-hidden="true"><line x1="2" y1="8" x2="108" y2="8" stroke="#4a6b25" stroke-width="2.5"/><path d="M106 2l10 6-10 6z" fill="#4a6b25"/></svg></div>
-    <div class="screen"><div class="step">3 · Your details</div>
+    <div class="arrow"><span class="label">Clicks “Subscribe”</span><svg aria-hidden="true"><line x1="2" y1="8" x2="100%" y2="8" stroke="#ff4fd8" stroke-width="2.5" marker-end="url(#tip-h)"/></svg></div>
+    <div class="screen"><div class="step">3<span class="st"> · Your details</span></div>
       <a class="device" href="signup-form.html" tabindex="-1" aria-hidden="true">
         <span class="desktop"><iframe src="signup-form.html" title="Signup form"></iframe></span>
       </a>
       <a class="name" href="signup-form.html">Signup form</a><span class="tag">New</span></div>
   </div>
-  <div class="wrap" style="--span:2" aria-hidden="true"><span class="label">Enters name + email, clicks “Submit”</span><svg><defs><marker id="tip" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" refX="10" refY="7" orient="auto"><path d="M0 1L12 7L0 13z" style="display:inline;stroke:none;fill:#4a6b25"/></marker></defs><path class="b11" d="M513.6 0V36Q513.6 50 499.6 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b16" d="M641.6 0V36Q641.6 50 627.6 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b20" d="M744.0 0V36Q744.0 50 730.0 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b23" d="M833.6 0V36Q833.6 50 819.6 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b27" d="M936.0 0V36Q936.0 50 922.0 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b31" d="M1025.6 0V36Q1025.6 50 1011.6 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b37" d="M1179.2 0V36Q1179.2 50 1165.2 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b44" d="M1358.4 0V36Q1358.4 50 1344.4 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b52" d="M1563.2 0V36Q1563.2 50 1549.2 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b60" d="M1768.0 0V36Q1768.0 50 1754.0 50H14Q0 50 0 64V80" marker-end="url(#tip)"/></svg></div>
+  <div class="wrap" style="--span:2" aria-hidden="true"><span class="label">Enters name + email, clicks “Submit”</span><svg><path class="b90" d="M370.4 0V36Q370.4 50 356.4 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b30" d="M216.8 0V36Q216.8 50 202.8 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b70" d="M359.2 0V36Q359.2 50 345.2 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b120" d="M499.2 0V36Q499.2 50 485.2 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b170" d="M627.2 0V36Q627.2 50 613.2 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b220" d="M755.2 0V36Q755.2 50 741.2 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b275" d="M896 0V36Q896 50 882 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b325" d="M1024 0V36Q1024 50 1010 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b375" d="M1152 0V36Q1152 50 1138 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b455" d="M1356.8 0V36Q1356.8 50 1342.8 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b555" d="M1612.8 0V36Q1612.8 50 1598.8 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b660" d="M1881.6 0V36Q1881.6 50 1867.6 50H14Q0 50 0 64V80" marker-end="url(#tip)"/></svg></div>
   <div class="row">
-    <div class="screen"><div class="step">4 · Done</div>
+    <div class="screen"><div class="step">4<span class="st"> · Done</span></div>
       <a class="device" href="confirmation.html" tabindex="-1" aria-hidden="true">
         <span class="desktop"><iframe src="confirmation.html" title="Confirmation"></iframe></span>
       </a>
@@ -113,12 +123,12 @@
 <summary>Choices made in this prototype</summary>
 <div class="choices">
   <ul>
-    <li><strong>Desktop only</strong>, as you asked: every page is laid out for a desktop browser and the phone layout is gone (the thumbnails show 1280×800). This sets aside the mobile part of R4 and acceptance criterion 1, which ask for desktop and mobile widths; the screens step will draw desktop pages only.</li>
-    <li><strong>Matcha theme</strong>: every colour is a shade of matcha green (page #eef4e2, buttons and links #4a6b25, focus ring #2d4214); every pairing meets WCAG 2.1 AA. Layout, type and spacing come from the approved newsletter design.</li>
-    <li>A decorative <strong>matcha illustration</strong> (inline SVG, hidden from screen readers) tops Welcome, Signup form and Confirmation.</li>
-    <li>On the <strong>site page</strong>, only the new footer takes the matcha theme, and the page’s content is centred; restyling the rest of the site is outside this story.</li>
+    <li><strong>Purple neon 80s sports-car theme</strong>, replacing matcha as you asked: a night-purple page (#120624) with a violet glow, a dark violet card (#1f0d3a) edged in neon pink, neon pink uppercase buttons (#ff4fd8) with dark text, violet links (#e0a6ff), a glowing italic heading and a cyan focus ring (#39f3ff). Every pairing meets WCAG 2.1 AA: body text 15.8:1, button text 6.6:1, links 9.4:1, focus ring 13:1, input borders 5.4:1.</li>
+    <li>A decorative <strong>sports-car illustration</strong> replaces the matcha one at the top of Welcome, Signup form and Confirmation: a generic wedge-shaped coupe (not a real model) on a neon grid road under a striped sunset, with violet mountains. It is inline SVG and hidden from screen readers, so focus order is unchanged.</li>
+    <li><strong>Desktop only</strong>, as you asked earlier: every page is laid out for a desktop browser (the thumbnails show 1280×800). This sets aside the mobile part of R4 and acceptance criterion 1; the screens step will draw desktop pages only.</li>
+    <li>On the <strong>site page</strong>, only the new footer takes the neon theme (a night-purple bar with a pink neon edge); the page’s content is centred and otherwise as it is today, because restyling the rest of the site is outside this story.</li>
     <li>The Name field is capped at 80 characters (<code>maxlength</code>); there is no “name too long” error.</li>
-    <li>A three-step progress bar (Welcome, Your details, Done) shows the visitor’s current step.</li>
+    <li>A three-step progress bar (Welcome, Your details, Done) shows the visitor’s current step, lit in neon pink.</li>
     <li>The confirmation does not mention a confirmation email: this epic has no double opt-in. New and already-subscribed addresses see the same page.</li>
     <li>Each screen also has a “← Back” link to the previous one. The error, submitting and submission-failed states of the form are drawn in the next step.</li>
   </ul>
