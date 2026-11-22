@@ -2,32 +2,38 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>User Journey</title>
 <style>
-  :root { --bg:#f6f8f2; --ink:#1f2a14; --muted:#5b6750; --line:#4a6b25; --card:#fff; --border:#d3e2bb; }
+  :root { --bg:#f6f8f2; --ink:#1f2a14; --muted:#5b6750; --line:#4a6b25; --border:#d3e2bb;
+          --s:.17; --dw:1280px; --dh:800px; --pw:390px; --ph:844px; }
   * { box-sizing:border-box; }
   body { margin:0; background:var(--bg); color:var(--ink); font-family:system-ui,sans-serif; }
-  header { padding:24px 32px 0; }
-  h1 { margin:0 0 4px; font-size:1.25rem; }
+  header { padding:32px 16px 0; text-align:center; }
+  h1 { margin:0 0 6px; font-size:1.375rem; }
   header p { margin:0; color:var(--muted); font-size:.9rem; }
-  .canvas { overflow-x:auto; padding:32px 32px 24px; }
-  .flow { display:flex; align-items:flex-start; width:max-content; position:relative; padding-bottom:80px; }
+  .canvas { overflow-x:auto; padding:40px 24px 16px; }
+  .flow { display:flex; align-items:flex-start; width:max-content; margin:0 auto; position:relative; padding-bottom:84px; }
   .screen { display:flex; flex-direction:column; align-items:center; gap:10px; }
   .step { font-size:.75rem; font-weight:600; color:var(--muted); letter-spacing:.04em; text-transform:uppercase; }
-  .frame { --w:390px; --h:780px; --s:.62; width:calc(var(--w)*var(--s)); height:calc(var(--h)*var(--s));
-           border:1px solid var(--border); border-radius:14px; overflow:hidden; background:#fff;
-           box-shadow:0 2px 10px rgba(31,42,20,.08); position:relative; display:block; }
-  .frame iframe { width:var(--w); height:var(--h); border:0; transform:scale(var(--s)); transform-origin:0 0; pointer-events:none; }
-  .frame:hover { outline:3px solid var(--line); outline-offset:2px; }
+  /* Desktop at 1280×800 with the phone (390×844) overlapping its lower-right corner, both scaled by --s. */
+  .device { position:relative; display:block; width:calc(var(--dw)*var(--s) + 28px); height:calc(var(--dh)*var(--s) + 52px); }
+  .device > span { position:absolute; overflow:hidden; background:#fff; border:1px solid var(--border); box-shadow:0 2px 10px rgba(31,42,20,.10); }
+  .desktop { left:0; top:0; width:calc(var(--dw)*var(--s)); height:calc(var(--dh)*var(--s)); border-radius:8px; }
+  .phone { right:0; bottom:0; width:calc(var(--pw)*var(--s)); height:calc(var(--ph)*var(--s)); border-radius:12px; border-width:3px !important; border-color:#2f3a25 !important; }
+  .device iframe { border:0; transform:scale(var(--s)); transform-origin:0 0; pointer-events:none; }
+  .desktop iframe { width:var(--dw); height:var(--dh); }
+  .phone iframe { width:var(--pw); height:var(--ph); }
+  .device:hover .desktop, .device:hover .phone { outline:3px solid var(--line); outline-offset:2px; }
   .name { font-weight:600; color:var(--line); font-size:.95rem; text-decoration:underline; text-underline-offset:3px; }
-  .name:focus-visible, .frame:focus-visible { outline:3px solid #2d4214; outline-offset:3px; }
-  .tag { font-size:.7rem; color:var(--muted); }
-  .arrow { width:150px; margin-top:calc(24px + 780px*.62/2 - 72px); height:80px; justify-content:flex-end; display:flex; flex-direction:column; align-items:center; gap:6px; }
-  .arrow .label { font-size:.8rem; color:var(--ink); background:#e4eed3; border-radius:999px; padding:3px 10px; text-align:center; max-width:140px; }
+  .name:focus-visible { outline:3px solid #2d4214; outline-offset:3px; }
+  .tag { font-size:.75rem; color:var(--muted); text-align:center; max-width:280px; }
+  .arrow { width:116px; height:80px; margin-top:calc(26px + var(--dh)*var(--s)/2 - 72px); display:flex; flex-direction:column; justify-content:flex-end; align-items:center; gap:6px; padding:0 6px; }
+  .arrow .label { font-size:.8rem; background:#e4eed3; border-radius:999px; padding:3px 10px; text-align:center; }
   .arrow svg { width:100%; height:16px; }
-  .loop { position:absolute; left:calc(390px*.62/2); right:calc(390px*.62/2); bottom:16px; height:48px;
-          border:2px dashed var(--line); border-top:0; border-radius:0 0 16px 16px; }
+  .loop { position:absolute; left:calc((var(--dw)*var(--s) + 28px)/2); right:calc((var(--dw)*var(--s) + 28px)/2); bottom:16px; height:44px; border:2px dashed var(--line); border-top:0; border-radius:0 0 16px 16px; }
   .loop::before { content:""; position:absolute; left:-8px; top:-12px; border:7px solid transparent; border-bottom:10px solid var(--line); border-top:0; }
-  .loop span { position:absolute; left:50%; bottom:-12px; transform:translateX(-50%); background:var(--bg); padding:0 10px; font-size:.8rem; color:var(--ink); white-space:nowrap; }
-  footer { padding:0 32px 32px; color:var(--muted); font-size:.85rem; }
+  .loop span { position:absolute; left:50%; bottom:-11px; transform:translateX(-50%); background:var(--bg); padding:0 10px; font-size:.8rem; white-space:nowrap; }
+  .legend { text-align:center; color:var(--muted); font-size:.8rem; margin:0 16px; }
+  footer { max-width:760px; margin:24px auto 40px; padding:0 16px; color:var(--muted); font-size:.875rem; line-height:1.5; }
+  footer h2 { font-size:1rem; color:var(--ink); }
 </style></head>
 <body>
 <header>
@@ -35,38 +41,43 @@
   <p>Main path, left to right. Click a screen or its name to open it full size.</p>
 </header>
 <div class="canvas"><div class="flow">
-
   <div class="screen"><div class="step">1 · Existing page</div>
-    <a class="frame" href="site-page-footer-link.html" tabindex="-1" aria-hidden="true"><iframe src="site-page-footer-link.html" title="Site page"></iframe></a>
-    <a class="name" href="site-page-footer-link.html">Site page — footer link</a><span class="tag">Updated: new footer</span></div>
-
-  <div class="arrow"><span class="label">Clicks “Newsletter”</span><svg viewBox="0 0 150 16" preserveAspectRatio="none"><line x1="4" y1="8" x2="138" y2="8" stroke="#4a6b25" stroke-width="2.5"/><path d="M136 2l10 6-10 6z" fill="#4a6b25"/></svg></div>
-
+    <a class="device" href="site-page-footer-link.html" tabindex="-1" aria-hidden="true">
+      <span class="desktop"><iframe src="site-page-footer-link.html" title="Site page — desktop"></iframe></span>
+      <span class="phone"><iframe src="site-page-footer-link.html" title="Site page — mobile"></iframe></span>
+    </a>
+    <a class="name" href="site-page-footer-link.html">Site page</a><span class="tag">Updated: new footer link</span></div>
+  <div class="arrow"><span class="label">Clicks “Newsletter”</span><svg viewBox="0 0 120 16" preserveAspectRatio="none" aria-hidden="true"><line x1="2" y1="8" x2="108" y2="8" stroke="#4a6b25" stroke-width="2.5"/><path d="M106 2l10 6-10 6z" fill="#4a6b25"/></svg></div>
   <div class="screen"><div class="step">2 · Welcome</div>
-    <a class="frame" href="welcome.html" tabindex="-1" aria-hidden="true"><iframe src="welcome.html" title="Welcome"></iframe></a>
+    <a class="device" href="welcome.html" tabindex="-1" aria-hidden="true">
+      <span class="desktop"><iframe src="welcome.html" title="Welcome — desktop"></iframe></span>
+      <span class="phone"><iframe src="welcome.html" title="Welcome — mobile"></iframe></span>
+    </a>
     <a class="name" href="welcome.html">Welcome</a><span class="tag">New</span></div>
-
-  <div class="arrow"><span class="label">Clicks “Subscribe”</span><svg viewBox="0 0 150 16" preserveAspectRatio="none"><line x1="4" y1="8" x2="138" y2="8" stroke="#4a6b25" stroke-width="2.5"/><path d="M136 2l10 6-10 6z" fill="#4a6b25"/></svg></div>
-
+  <div class="arrow"><span class="label">Clicks “Subscribe”</span><svg viewBox="0 0 120 16" preserveAspectRatio="none" aria-hidden="true"><line x1="2" y1="8" x2="108" y2="8" stroke="#4a6b25" stroke-width="2.5"/><path d="M106 2l10 6-10 6z" fill="#4a6b25"/></svg></div>
   <div class="screen"><div class="step">3 · Your details</div>
-    <a class="frame" href="signup-form.html" tabindex="-1" aria-hidden="true"><iframe src="signup-form.html" title="Signup form"></iframe></a>
+    <a class="device" href="signup-form.html" tabindex="-1" aria-hidden="true">
+      <span class="desktop"><iframe src="signup-form.html" title="Signup form — desktop"></iframe></span>
+      <span class="phone"><iframe src="signup-form.html" title="Signup form — mobile"></iframe></span>
+    </a>
     <a class="name" href="signup-form.html">Signup form</a><span class="tag">New</span></div>
-
-  <div class="arrow"><span class="label">Enters name + email, clicks “Submit”</span><svg viewBox="0 0 150 16" preserveAspectRatio="none"><line x1="4" y1="8" x2="138" y2="8" stroke="#4a6b25" stroke-width="2.5"/><path d="M136 2l10 6-10 6z" fill="#4a6b25"/></svg></div>
-
+  <div class="arrow"><span class="label">Enters name + email, clicks “Submit”</span><svg viewBox="0 0 120 16" preserveAspectRatio="none" aria-hidden="true"><line x1="2" y1="8" x2="108" y2="8" stroke="#4a6b25" stroke-width="2.5"/><path d="M106 2l10 6-10 6z" fill="#4a6b25"/></svg></div>
   <div class="screen"><div class="step">4 · Done</div>
-    <a class="frame" href="confirmation.html" tabindex="-1" aria-hidden="true"><iframe src="confirmation.html" title="Confirmation"></iframe></a>
-    <a class="name" href="confirmation.html">Confirmation</a><span class="tag">New · same for already-subscribed</span></div>
-
+    <a class="device" href="confirmation.html" tabindex="-1" aria-hidden="true">
+      <span class="desktop"><iframe src="confirmation.html" title="Confirmation — desktop"></iframe></span>
+      <span class="phone"><iframe src="confirmation.html" title="Confirmation — mobile"></iframe></span>
+    </a>
+    <a class="name" href="confirmation.html">Confirmation</a><span class="tag">New · same page for already-subscribed</span></div>
   <div class="loop" aria-hidden="true"><span>Clicks “Back to site” → returns to the site page</span></div>
 </div></div>
+<p class="legend">Each screen is shown at desktop width (1280&nbsp;px) with its mobile layout (390&nbsp;px) in front, as the structure asks (R4).</p>
 <footer>
   <p>Each screen also has a “← Back” link to the previous one. The error, submitting and submission-failed states of the form are drawn in the next step.</p>
-  <h2 style="font-size:1rem;color:var(--ink)">Choices made in this prototype</h2>
+  <h2>Choices made in this prototype</h2>
   <ul>
     <li><strong>Matcha theme</strong>: every colour is a shade of matcha green (page #eef4e2, buttons and links #4a6b25, focus ring #2d4214); every pairing meets WCAG 2.1 AA. Layout, type and spacing come from the approved newsletter design.</li>
     <li>A decorative <strong>matcha illustration</strong> (inline SVG, hidden from screen readers) tops Welcome, Signup form and Confirmation.</li>
-    <li>On the <strong>site page</strong>, only the new footer takes the matcha theme; restyling the existing site is outside this story.</li>
+    <li>On the <strong>site page</strong>, only the new footer takes the matcha theme, and the page’s content is centred; restyling the rest of the site is outside this story.</li>
     <li>The Name field is capped at 80 characters (<code>maxlength</code>); there is no “name too long” error.</li>
     <li>A three-step progress bar (Welcome, Your details, Done) shows the visitor’s current step.</li>
     <li>The confirmation does not mention a confirmation email: this epic has no double opt-in. New and already-subscribed addresses see the same page.</li>
