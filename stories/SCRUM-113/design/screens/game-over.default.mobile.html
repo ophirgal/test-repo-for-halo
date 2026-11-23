@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Game over</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+.crash{width:160px;margin:0 auto var(--sp-4);display:block}
+.otitle{font-size:var(--fs-xl);font-weight:900;letter-spacing:.14em;margin:0;color:var(--food);text-shadow:0 0 16px rgba(255,61,129,.55)}
+.label{color:var(--muted);letter-spacing:.14em;font-size:var(--fs-xs);font-weight:700;margin:var(--sp-6) 0 0;text-transform:uppercase}
+.big{font-size:120px;line-height:1;font-weight:900;margin:var(--sp-2) 0 0;color:var(--accent);text-shadow:0 0 28px rgba(163,255,18,.55)}
+.desk .crash{width:220px}.desk .otitle{font-size:48px}
+</style>
+</head>
+<body class="mob">
+<main class="phone">
+  <div class="grow"></div>
+  <svg class="crash" viewBox="0 0 120 60" role="img" aria-label="The snake, dizzy after the crash">
+    <path d="M10 45H60V25H84" fill="none" stroke="#22d3ee" stroke-opacity=".5" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+    <ellipse cx="94" cy="25" rx="10" ry="9" fill="#a3ff12" fill-opacity=".7"/>
+    <path d="M95 18l4 4M99 18l-4 4M95 28l4 4M99 28l-4 4" stroke="#0b0f1a" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M108 10v30" stroke="#ff3d81" stroke-width="3" stroke-linecap="round"/>
+  </svg>
+  <h1 class="otitle">GAME OVER</h1>
+  <p class="label">Final score</p>
+  <p class="big">14</p>
+  <div class="grow"></div>
+  <p><a class="btn btn-primary" href="game.default.mobile.html"><svg width="22" height="22" viewBox="0 0 20 20" aria-hidden="true"><path d="M6 3.5v13l11-6.5z" fill="currentColor"/></svg> Play again</a></p>
+  <p><a class="btn btn-ghost" href="welcome.default.mobile.html">Home</a></p>
+  <div class="grow"></div>
+</main>
+</body>
+</html>

@@ -1,0 +1,45 @@
+/* Concept A · Neon Arcade — shared tokens */
+:root{
+  --bg:#0b0f1a; --surface:#121a2b; --surface-2:#1a2438; --fg:#eef3ff; --muted:#8d9bb8;
+  --line:#26324a; --accent:#a3ff12; --accent-2:#22d3ee; --accent-fg:#0b0f1a; --food:#ff3d81;
+  --font:ui-rounded,"SF Pro Rounded",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --fs-xs:12px; --fs-sm:14px; --fs-md:17px; --fs-lg:22px; --fs-xl:34px; --fs-xxl:64px;
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px; --sp-6:32px; --sp-7:48px;
+  --radius:18px; --radius-pill:999px;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);-webkit-font-smoothing:antialiased}
+.phone{max-width:430px;min-height:100vh;margin:0 auto;display:flex;flex-direction:column;position:relative;text-align:center}
+a{color:inherit}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+.food{transform-box:fill-box;transform-origin:center;animation:pulse 1.2s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){.food{animation:none}}
+
+.phone{padding:var(--sp-5) var(--sp-4)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--sp-2);min-height:56px;padding:0 var(--sp-6);border-radius:var(--radius-pill);font-weight:800;font-size:var(--fs-md);text-decoration:none;letter-spacing:.02em}
+.btn-primary{background:var(--accent);color:var(--accent-fg);box-shadow:0 0 24px rgba(163,255,18,.45)}
+.btn-ghost{color:var(--muted);min-height:48px}
+.title{font-size:var(--fs-xxl);font-weight:900;letter-spacing:.08em;margin:0;color:var(--accent);text-shadow:0 0 18px rgba(163,255,18,.6)}
+.tag{color:var(--muted);font-size:var(--fs-md);margin:var(--sp-2) 0 0}
+.hud{display:flex;align-items:center;justify-content:space-between;padding:0 var(--sp-1) var(--sp-3)}
+.score{font-size:var(--fs-xl);font-weight:900;color:var(--accent);text-shadow:0 0 12px rgba(163,255,18,.5);text-align:left;line-height:1}
+.score small{display:block;font-size:var(--fs-xs);letter-spacing:.14em;color:var(--muted);font-weight:700;text-shadow:none}
+.icon-btn{width:48px;height:48px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:var(--surface-2);color:var(--fg);border:1px solid var(--line);text-decoration:none}
+.field{display:block;border-radius:14px;overflow:hidden;box-shadow:0 0 0 2px var(--accent-2),0 0 28px rgba(34,211,238,.35)}
+.field-svg{display:block;width:100%;height:auto}
+.hint{color:var(--muted);font-size:var(--fs-sm);display:flex;align-items:center;justify-content:center;gap:var(--sp-2);margin-top:var(--sp-4)}
+.proto{color:var(--muted);opacity:.7;font-size:var(--fs-xs);margin-top:var(--sp-2)}
+.grow{flex:1}
+
+/* desktop layout: the same column, wider and roomier */
+.desk .phone{max-width:600px;padding:var(--sp-7) var(--sp-5)}
+.desk .title{font-size:88px}
+.desk .tag{font-size:var(--fs-lg)}
+.desk .hero{max-width:460px}
+.desk .score{font-size:44px}
+.desk .icon-btn{width:56px;height:56px}
+.desk .btn{min-height:60px;font-size:19px;padding:0 var(--sp-7)}
+.desk .big{font-size:160px}
+.desk .hint{font-size:var(--fs-md)}
