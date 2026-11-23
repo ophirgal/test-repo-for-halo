@@ -1,8 +1,8 @@
-# Feature Specification Document — SCRUM-119 (draft, not ready)
+# Feature Specification Document — SCRUM-119
 
 ## 1. Feature Overview
 
-> **Status: PARTIALLY_READY.** This is the in-progress draft. The open P0 questions in §8 must be answered before this becomes the final specification.
+> **Status: READY_FOR_SPEC.** On 2026-11-23 the developer asked the intake to make the open decisions itself ("make your own decisions"). Every question raised earlier has been settled with the intake's recommended option. §8 lists each decision so it can be reviewed and reversed before implementation starts.
 
 **Summary:** A small, standard-library-only Python package, `kvstore`, at the repository root. It keeps key-value pairs in one append-only log file of JSON lines, and each key can have its own expiry (TTL). It recovers from a torn last record, refuses to work on a log corrupted in the middle, and compacts the log atomically. The repository's existing `serve.py` serves it over HTTP under `/kv/`.
 
@@ -38,30 +38,35 @@ The story adds a new, stdlib-only Python package `kvstore` at the repository roo
 
 ## 3. Functional Requirements
 
-Items marked **[open]** depend on a question in §8. The behavior written next to them is the working assumption, not a settled requirement.
+Decisions settled at intake are marked with the §8 decision they come from (D1–D12).
 
 **Log and recovery (t1)**
 - FR1: All data lives in one append-only log file. Each line is one JSON record `{"op":"set"|"del","k":..,"v":..,"exp":..,"crc":..}`, where `crc` is the CRC32 of the record without the `crc` field.
 - FR2: When the store opens, it replays the log, and the latest record for each key wins. A `del` removes the key.
-- FR3: If only the **last** line is torn (truncated mid-record), the store drops it, truncates the file to the end of the last good record, and emits a warning that names the byte offset. **[open, P1-1: where the warning appears]**
-- FR4: If a record **before** the last one fails its CRC check, opening raises `CorruptLogError` naming the line number, and the store refuses writes. **[open, P1-2: what a refused write looks like; P0-1: what `serve.py` does then]**
+- FR3: If only the **last** line is torn (truncated mid-record), the store drops it, truncates the file to the end of the last good record, and emits a Python `warnings` warning that names the byte offset. Under `serve.py` that warning appears on stderr. (D4)
+- FR4: If a record **before** the last one fails its CRC check, opening raises `CorruptLogError` naming the line number. The store then refuses writes: every mutation attempted on it raises `CorruptLogError`, and nothing is appended. (D5)
 
 **Store API with TTL (t2)**
-- FR5: `set(k, v, ttl=None)`, `get(k)`, `delete(k)` and `keys()` behave like a dict. `get` and `delete` on a missing key raise `KeyError`. Each mutation is durably written (appended and fsynced) before the call returns.
-- FR6: With `ttl` set, a key expires at exactly `set time + ttl` on the injected `clock`. From that instant `get` raises `KeyError` and `keys()` omits the key. Fractional times and TTLs are allowed (AC5 uses 109.9). **[open, P1-3: invalid ttl values; P1-4: whether `set` without `ttl` on a key that had a TTL clears it]**
-- FR7: Validation. A key must be 1–128 printable characters, and a value must be a JSON value of at most 64 KiB once serialized. A violation raises `ValueError` naming the rule, and nothing is appended. **[open, P0-3: what "printable" means and how keys travel in URLs; P1-5: whether exactly 64 KiB is allowed and how size is counted]**
-- FR8: Concurrent mutations from several threads in one process are never lost. Two threads each setting 500 distinct keys leave all 1000 keys present after reopening.
+- FR5: `set(k, v, ttl=None)`, `get(k)`, `delete(k)` and `keys()` behave like a dict. `get` and `delete` on a missing or expired key raise `KeyError`. Each mutation is durably written (appended and fsynced) before the call returns.
+- FR6: With `ttl` set, a key expires at exactly `set time + ttl` on the injected `clock`. From that instant `get` raises `KeyError` and `keys()` omits the key. Fractional times and TTLs are allowed (AC5 uses 109.9). A `ttl` that is zero, negative or not a number raises `ValueError` and nothing is appended (D6). A `set` without `ttl` on a key that had one replaces the key fully, so the key no longer expires (D7).
+- FR7: Validation. A key must be 1–128 characters and pass Python's `str.isprintable()` (Unicode and the space character are allowed; control characters are not) (D3). A value must be a JSON value whose compact UTF-8 serialization is at most 65,536 bytes; exactly 65,536 is allowed (D8). A violation raises `ValueError` naming the rule, and nothing is appended.
+- FR8: Concurrent mutations from several threads in one process are never lost. Two threads each setting 500 distinct keys leave all 1000 keys present after reopening. One process per store file is supported; several processes sharing a file is out of scope (D10).
+- FR9a: `keys()` returns the live, unexpired keys in ascending sorted order (D9).
 
 **Compaction (t3)**
-- FR9: `compact()` rewrites the log so it holds only live, unexpired records. It replaces the old log atomically (write a temp file, fsync, rename). Reads return the same values before and after. **[open, P0-2: what triggers compaction and what the 50% figure means]**
+- FR9: `compact()` rewrites the log so it holds only live, unexpired records. It replaces the old log atomically (write a temp file, fsync, rename). Reads return the same values before and after. Called by hand, `compact()` always compacts, whatever the live ratio.
+- FR9b: The store also compacts automatically after a mutation once live records are under 50% of all records in the log, with the same atomic replacement. No HTTP route triggers compaction; automatic compaction keeps a long-running `serve.py` log from growing forever. (D2)
 - FR10: If a crash happens after the temp file is written but before the rename, the next open uses the old log and removes the stale temp file.
 
 **HTTP routes in `serve.py` (t4)**
-- FR11: `GET /kv/<key>` returns 200 with the JSON value, or 404. `PUT /kv/<key>` takes a JSON body and an optional `?ttl=<seconds>` and returns 204. `DELETE /kv/<key>` returns 204, or 404. `GET /kv/` returns the live keys as a JSON array. **[open, P1-6: list order]**
-- FR12: Errors. An invalid JSON body or an invalid key returns 400 with `{"error": ...}`. A body over 64 KiB returns 413 without the server reading the whole body.
+- FR11: `GET /kv/<key>` returns 200 with the JSON value, or 404. `PUT /kv/<key>` takes a JSON body and an optional `?ttl=<seconds>` and returns 204. `DELETE /kv/<key>` returns 204, or 404. `GET /kv/` returns the live keys as a JSON array, sorted ascending (D9).
+- FR11a: `<key>` is the percent-decoded rest of the path after `/kv/`, without the query string. It may contain `/` (for example `/kv/app/config` is key `app/config`). The same key rules as the Python API apply, so both accept exactly the same keys. (D3)
+- FR12: Errors. An invalid JSON body, an invalid key or an invalid `ttl` (zero, negative, not a number) returns 400 with `{"error": ...}` (D6). A body over 64 KiB (more than 65,536 bytes, judged from the declared request size) returns 413 without the server reading the whole body (D8).
+- FR12a: If the log at `KV_PATH` is corrupt in the middle, `serve.py` still starts and serves `/` and `/jungle` as before, and every `/kv/` request answers `503` with `{"error": ...}` naming the corrupt line number. (D1)
 - FR13: The store file location comes from `KV_PATH`, and defaults to `./kv.log`.
-- FR14: Regression. Every path `serve.py` answered before still answers as before (see §4), and `smoke_test.py` still passes.
-- FR15: README.md documents `KV_PATH` (default `./kv.log`) and every route with a curl example.
+- FR14: Regression. Every path `serve.py` answered before still answers as before (see §4), and `smoke_test.py` still passes unchanged.
+- FR15: README.md documents `KV_PATH` (default `./kv.log`) and every route with a curl example, and warns that binding with `HOST=0.0.0.0` exposes unauthenticated read and write access to the store (D11).
+- FR16: `kv.log` is listed in `.gitignore`, so a demo run doesn't leave an untracked data file in the repository root (D12).
 
 ## 4. User Experience & Behavior
 
@@ -75,11 +80,14 @@ Items marked **[open]** depend on a question in §8. The behavior written next t
 - `curl -X PUT --data '{"a":1}' 'http://127.0.0.1:8000/kv/cfg?ttl=60'` returns `204`.
 - `curl http://127.0.0.1:8000/kv/cfg` returns `200` with `{"a":1}`. It returns `404` once the key has expired or been deleted.
 - `curl http://127.0.0.1:8000/kv/` returns `200` with a JSON array of live keys.
-- Errors return `400 {"error": "..."}` (bad JSON or bad key) and `413` (body over 64 KiB).
+- `curl -X PUT --data '1' http://127.0.0.1:8000/kv/app/config` stores key `app/config`; a key with spaces or Unicode is sent percent-encoded (`/kv/my%20key`).
+- Errors return `400 {"error": "..."}` (bad JSON, bad key or bad `ttl`) and `413` (body over 64 KiB).
 
-**Existing users of `serve.py` (unchanged):** `GET`/`HEAD /` and `/jungle` still return 200 with the same bytes. Every other non-`/kv/` path (for example `/foo/bar`, `/README.md`, `/jungle/`) still returns 404 for `GET` and `HEAD`. Working assumption: `PUT` and `DELETE` on non-`/kv/` paths keep today's answer (501, from the standard handler), because the story allows no change to existing behavior.
+**Existing users of `serve.py` (unchanged):** `GET`/`HEAD /` and `/jungle` still return 200 with the same bytes. Every other non-`/kv/` path (for example `/foo/bar`, `/README.md`, `/jungle/`) still returns 404 for `GET` and `HEAD`. `PUT` and `DELETE` on non-`/kv/` paths keep today's answer (501, from the standard handler), because the story allows no change to existing behavior.
 
-**Corrupt log while serving:** what the HTTP user sees is open question P0-1.
+**Torn tail at start-up:** `serve.py` starts normally and the warning naming the byte offset appears on stderr.
+
+**Corrupt log while serving:** `serve.py` starts and the pages work. Every `/kv/` request answers `503 {"error": "..."}`, and the error names the corrupt line, so the developer knows which file and line to fix.
 
 ## 5. Acceptance Criteria
 
@@ -96,6 +104,11 @@ Items marked **[open]** depend on a question in §8. The behavior written next t
 11. Scenario 11 — Errors: an invalid JSON body or key returns 400 with `{"error": ...}`; a body over 64 KiB returns 413 without reading it fully.
 12. Scenario 12 — Existing behaviour: every path `serve.py` served before still answers as before, and `smoke_test.py` still passes.
 13. Scenario 13 — Docs: README.md documents the store file location (`KV_PATH`, default `./kv.log`) and the routes with curl examples.
+14. Scenario 14 — Corrupt log under serve.py: Given `KV_PATH` points at a log with a corrupt record in the middle, When `serve.py` starts, Then `/` and `/jungle` answer as before and every `/kv/` request returns 503 with `{"error": ...}` naming the line number.
+15. Scenario 15 — Automatic compaction: Given a store whose live records fall under 50% of all records after a mutation, Then the log is compacted atomically without calling `compact()`, and reads return the same values before and after; a manual `compact()` always compacts.
+16. Scenario 16 — Keys: Given a key of 1–128 characters that passes `str.isprintable()` (including spaces, Unicode and `/`), Then the Python API accepts it, and `PUT /kv/<key>` with the key percent-encoded stores the same key, readable by `get` and by `GET /kv/<key>`; `GET /kv/` and `keys()` list keys sorted ascending.
+17. Scenario 17 — Limits and TTL rules: A value whose compact UTF-8 JSON is exactly 65,536 bytes is accepted; a `ttl` that is zero, negative or not a number raises `ValueError` in the API and returns 400 over HTTP; `set` without `ttl` on a key that had one removes its expiry; a mutation on a store opened over a corrupt log raises `CorruptLogError`.
+18. Scenario 18 — Housekeeping: README.md warns that `HOST=0.0.0.0` exposes the unauthenticated store, and `kv.log` is listed in `.gitignore`.
 
 ## 6. Dependencies & Constraints (product-level)
 
@@ -103,7 +116,8 @@ Items marked **[open]** depend on a question in §8. The behavior written next t
 - **`smoke_test.py` constrains the change.** It asserts `serve.ROUTES == {"/": serve.INDEX, "/jungle": serve.JUNGLE}` (`smoke_test.py:128-133`), and it asserts 404 for `/foo/bar`, `/README.md`, `/jungle/` and others. AC12 requires it to keep passing unchanged, so `/kv/` cannot be added to that route table. STRUCTURE chooses the mechanism. Changing `smoke_test.py` is not an option unless the PO widens AC12.
 - **Test runner:** `python -m unittest discover -s tests`. `tests/` does not exist yet and this story creates it. The repository has no `AGENTS.md`, `CLAUDE.md`, `.factory/` or CI workflow, so no repository gate adds constraints beyond the above.
 - **Standard library only**, in the package and in its tests.
-- **Default bind is 127.0.0.1.** `HOST=0.0.0.0` exposes the unauthenticated `/kv/` routes to the network. Authentication is out of scope, so the README should say this (P2-1).
+- **Default bind is 127.0.0.1.** `HOST=0.0.0.0` exposes the unauthenticated `/kv/` routes to the network. Authentication is out of scope, so the README says this (D11).
+- **One process per store file.** Several processes sharing one `KV_PATH` is out of scope (D10).
 
 ## 7. Technical Design (deferred to STRUCTURE)
 
@@ -114,41 +128,26 @@ The record format and CRC rule are fixed by the story. STRUCTURE decides:
 - how the 413 is detected from `Content-Length` without reading the body;
 - how the `clock` is injected.
 
-## 8. Open Questions
+## 8. Decisions & Open Questions
 
-**P0 — blocking**
-- **P0-1. Corrupt log under `serve.py`.** AC3 makes opening raise `CorruptLogError`, and AC12 says everything `serve.py` served before must keep working. When `KV_PATH` points at a log corrupted in the middle, what should `serve.py` do?
-  - (a) Refuse to start, with an error naming the line.
-  - (b) Start, serve `/` and `/jungle` as before, and answer every `/kv/` request with `503 {"error": "...line N..."}`.
+**Decisions settled at intake (2026-11-23).** The developer asked the intake to decide every open point itself. Each decision below is the option the intake recommended; any of them can be reversed by the developer before implementation.
 
-  *Recommendation: (b).* It is the only option that keeps AC12 true when the log is bad. A PO answer that the KV store matters more than the pages would change the pick to (a).
-- **P0-2. Compaction trigger.** AC8 says "live records are under 50% … when `compact()` runs". Who runs compaction, and what is the 50% figure?
-  - (a) Manual only. `compact()` always compacts when called, and 50% is just the test setup.
-  - (b) The store runs it automatically after a mutation once live records drop under 50% of all records. `compact()` stays callable by hand.
-  - (c) Automatic as in (b), but `compact()` called by hand does nothing while live records are at or above 50%.
+- **D1. Corrupt log under `serve.py`:** start, serve `/` and `/jungle` as before, and answer every `/kv/` request with `503 {"error": ...}` naming the line. Chosen because it is the only option that keeps Scenario 12 true when the log is bad. (Rejected: refuse to start.)
+- **D2. Compaction trigger:** automatic after a mutation once live records are under 50% of all records; a manual `compact()` always compacts. Chosen because no HTTP route triggers compaction, so a manual-only store would grow forever behind `serve.py`.
+- **D3. Valid keys:** 1–128 characters passing `str.isprintable()`. Over HTTP, the key is the percent-decoded rest of the path after `/kv/`, query string excluded, and may contain `/`. Chosen so the Python API and the HTTP API accept exactly the same keys.
+- **D4. Torn-tail warning:** a Python `warnings` warning naming the byte offset, shown on stderr under `serve.py`.
+- **D5. Refused writes:** after opening over a corrupt log, every mutation raises `CorruptLogError` and appends nothing.
+- **D6. Invalid `ttl`:** zero, negative or non-numeric gives `ValueError` in the API and 400 over HTTP; fractional values are allowed.
+- **D7. Re-set without `ttl`:** replaces the key fully, clearing its old expiry, as a dict would.
+- **D8. Size limit:** size is the UTF-8 byte length of the compact JSON serialization; exactly 65,536 bytes is allowed. The HTTP 413 judges the raw request body size from its declared length.
+- **D9. Key order:** `keys()` and `GET /kv/` list keys sorted ascending.
+- **D10. Processes:** one process per store file; sharing a file across processes is out of scope.
+- **D11. README warning:** the README warns that `HOST=0.0.0.0` exposes unauthenticated read and write access.
+- **D12. `.gitignore`:** `kv.log` is added to `.gitignore`.
 
-  *Recommendation: (b).* No HTTP route triggers compaction, so under (a) a `serve.py` log grows forever. An answer that the HTTP server is restarted often enough not to care would make (a) acceptable.
-- **P0-3. What counts as a valid key, and how it travels in a URL.** "Printable" could mean:
-  - (a) Python `str.isprintable()`, which allows Unicode and the space character.
-  - (b) ASCII 0x21–0x7E only.
+**Story hygiene (recorded, not blocking).**
+- The Jira size "L (≈8)" doesn't match Harel's story template, where L is about 5 points and XL about 8. With Scenarios 14–18 added, the story is XL (about 8). The ticket's size field should be corrected in Jira by a person; the factory does not edit it.
+- The story has no "traces to" row, because SCRUM-119 has no parent epic or PRD.
+- Scenarios 1 and 4 state internal outcomes. They are checked through what `get` and `keys()` return, and by reopening the file.
 
-  Separately, is `<key>` in `/kv/<key>` percent-decoded, and may a key contain `/`?
-
-  *Recommendation:* (a) on the percent-decoded rest of the path after `/kv/`, so `/` is allowed and the query string is excluded. That keeps the Python API and the HTTP API accepting exactly the same keys. An answer that keys must be shell-safe without quoting would change the pick to (b).
-
-**P1 — important (working assumptions in brackets)**
-- **P1-1.** Where does the torn-tail warning appear? [A Python `warnings` warning, which `serve.py` shows on stderr.]
-- **P1-2.** What does a refused write after corruption look like in the API? [Every mutation raises `CorruptLogError`. Reads also raise it, because opening failed.]
-- **P1-3.** Invalid `ttl` values: zero, negative, non-numeric or fractional, in both the API and `?ttl=`. [Zero, negative and non-numeric give `ValueError` / 400. Fractional values are allowed.]
-- **P1-4.** Does `set` / `PUT` without a ttl on a key that had one clear the old expiry? [Yes, the new write replaces the key fully, as in a dict.]
-- **P1-5.** Is exactly 64 KiB (65,536 bytes) allowed, and is size counted as UTF-8 bytes of the compact JSON serialization? [Yes and yes. The HTTP 413 check applies to the raw request body size.]
-- **P1-6.** What order does `GET /kv/` (and `keys()`) use? [Sorted ascending.]
-- **P1-7.** Is several processes sharing one `KV_PATH` out of scope? [Yes, only one process per file. AC7 covers threads only.]
-- **P1-8. Story hygiene against Harel's story template.**
-  - The size "L (≈8)" doesn't match the template's scale, where L is about 5 and XL about 8. [XL (about 8).]
-  - The story has no "traces to" row, because there is no epic or PRD.
-  - AC1 ("the in-memory index holds…") and AC4 ("appended and fsynced") state internal outcomes. [Check AC1 by what `get` and `keys()` return, and AC4 by reopening the file.]
-
-**P2 — notes**
-- **P2-1.** README should warn that `HOST=0.0.0.0` exposes unauthenticated read and write access to the store.
-- **P2-2.** Should `kv.log` be added to `.gitignore` so a demo run doesn't leave an untracked data file in the repository root?
+**Remaining open questions:** none at product level. The technical choices in §7 belong to STRUCTURE.
