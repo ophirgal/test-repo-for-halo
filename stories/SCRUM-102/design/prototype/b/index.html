@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>User Journey</title>
+<title>Concept B · Split</title>
+<meta name="description" content="Split panel: context and stepper on the left, the action on the right">
 <style>
   /* The pages' own palette (tokens.css): light grey page, blue lines and links, dark blue focus. */
   :root { --bg:#f6f7f9; --ink:#1b1f27; --muted:#5a6270; --line:#2b4fd8; --link:#2b4fd8; --chip:#eef2ff; --border:#d5d9e0; --panel-bg:#ffffff; --focus:#1f3cae; --panel:340px;
@@ -87,8 +88,8 @@
 </defs></svg>
 <main>
 <header>
-  <h1>Newsletter signup — user journey (SCRUM-102)</h1>
-  <p>Main path, left to right and row by row. Click a screen or its name to open it full size.</p>
+  <h1>Concept B · Split — newsletter signup journey (SCRUM-102)</h1>
+  <p>One wide split panel per page: where you are and what this is on the left, the action on the right. Main path, left to right and row by row; click a screen or its name to open it full size.</p>
 </header>
 <div class="canvas"><div class="flow">
   <div class="row">
@@ -131,11 +132,13 @@
 <summary>Choices made in this prototype</summary>
 <div class="choices">
   <ul>
+    <li><strong>Direction — Split</strong>: each page is one wide panel (960&nbsp;px) split in two. The left pane, on a pale blue background, holds the Back link, a vertical stepper, the heading and the one-line pitch; the right pane holds the action (the fields, the button). The pitch stays in view while the visitor fills in the form. Below 720&nbsp;px the panes stack, context first, and the stepper shows the current step’s name only.</li>
+    <li>Focus order follows reading order: Back, then the fields, then the main button. The stepper is not focusable.</li>
     <li><strong>Visual base</strong>: the new screens reuse the tokens of the approved newsletter design in story 0e4e726a, as the structure decided. Two changes for WCAG 2.1 AA: the focus ring is dark blue (#1f3cae) instead of yellow, and input borders are darker (#8a93a3), so both reach 3:1.</li>
-    <li><strong>Desktop and mobile</strong>: every page has one layout that narrows to a phone below 480&nbsp;px. The thumbnails show each page at 1280×800 with its 390×844 phone view in front.</li>
+    <li><strong>Desktop and mobile</strong>: every page has one layout that adapts to a phone width. The thumbnails show each page at 1280×800 with its 390×844 phone view in front.</li>
     <li>On the <strong>site page</strong>, the only change is a new footer with a “Newsletter” link; the page’s content is centred and otherwise as it is today. The footer also links back to this journey, for review only.</li>
     <li>The Name field is capped at 80 characters (<code>maxlength</code>), as the structure decided; there is no “name too long” error.</li>
-    <li>A three-step progress bar (Welcome, Your details, Done) shows the visitor’s current step.</li>
+    <li>A three-step progress indicator (Welcome, Your details, Done) shows the visitor’s current step.</li>
     <li>The confirmation does not mention a confirmation email: this epic has no double opt-in. New and already-subscribed addresses see the same page.</li>
     <li>The design viewer runs no scripts, so “Submit” is a link straight to the confirmation. Each screen also has a “← Back” link to the previous one.</li>
     <li>The error, submitting and submission-failed states of the form are drawn in the next step.</li>
