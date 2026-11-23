@@ -1,0 +1,9 @@
+{
+  "storyId": "fd964fcb-4e73-419a-b71c-f48beadd9aeb",
+  "storyKey": "SCRUM-119",
+  "title": "Append-only key-value store with TTL, compaction and an HTTP API",
+  "decisionId": "d17af919-399e-4fac-a775-435621514343",
+  "actor": "Ophir Gal",
+  "approvedAt": "2026-11-23T17:57:05Z",
+  "planHeadSha": "96f0c058d0e1af092089b3cf62734402dfb84047"
+}
