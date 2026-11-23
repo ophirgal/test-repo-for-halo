@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Concept B · Split</title>
+<meta name="description" content="Split panel: context and stepper on the left, the action on the right">
+<style>
+  /* The pages' own palette (tokens.css): light grey page, blue lines and links, dark blue focus. */
+  :root { --bg:#f6f7f9; --ink:#1b1f27; --muted:#5a6270; --line:#2b4fd8; --link:#2b4fd8; --chip:#eef2ff; --border:#d5d9e0; --panel-bg:#ffffff; --focus:#1f3cae; --panel:340px;
+          --s:0.095; --aw:70px; --dw:1280px; --dh:800px; --pw:390px; --ph:844px;
+          --w:calc(var(--dw)*var(--s)*1.06); --h:calc(var(--dh)*var(--s)*1.25); --fh:calc(var(--dh)*var(--s)); }
+  /* Thumbnails grow with the frame the index renders in: the largest scale whose row of three (3·1357·s + 2·arrow + 112 px) fits beside the open panel (340 px). Under 700 px the panel moves below the flow. */
+  .wrap path[class] { display:none; }
+  @media (min-width:700px) { :root { --s:0.026; --aw:70px; } .wrap path[class] { display:none; } .wrap path.b26 { display:inline; } }
+  @media (min-width:900px) { :root { --s:0.065; --aw:90px; } .wrap path[class] { display:none; } .wrap path.b65 { display:inline; } }
+  @media (min-width:1100px) { :root { --s:0.112; --aw:96px; } .wrap path[class] { display:none; } .wrap path.b112 { display:inline; } }
+  @media (min-width:1300px) { :root { --s:0.161; --aw:96px; } .wrap path[class] { display:none; } .wrap path.b161 { display:inline; } }
+  @media (min-width:1500px) { :root { --s:0.21; --aw:96px; } .wrap path[class] { display:none; } .wrap path.b210 { display:inline; } }
+  @media (min-width:1700px) { :root { --s:0.257; --aw:96px; } .wrap path[class] { display:none; } .wrap path.b257 { display:inline; } }
+  @media (min-width:1900px) { :root { --s:0.307; --aw:96px; } .wrap path[class] { display:none; } .wrap path.b307 { display:inline; } }
+  @media (min-width:2100px) { :root { --s:0.356; --aw:96px; } .wrap path[class] { display:none; } .wrap path.b356 { display:inline; } }
+  @media (min-width:2400px) { :root { --s:0.43; --aw:96px; } .wrap path[class] { display:none; } .wrap path.b430 { display:inline; } }
+  @media (min-width:2800px) { :root { --s:0.528; --aw:96px; } .wrap path[class] { display:none; } .wrap path.b528 { display:inline; } }
+  @media (min-width:3200px) { :root { --s:0.626; --aw:96px; } .wrap path[class] { display:none; } .wrap path.b626 { display:inline; } }
+  @media (max-width:699.98px) { .wrap path.b95 { display:inline; } }
+  * { box-sizing:border-box; }
+  html, body { height:100%; }
+  body { margin:0; display:flex; background:var(--bg); color:var(--ink); font-family:system-ui,sans-serif;
+         }
+  main { flex:1; min-width:0; overflow:auto; }
+  header { padding:32px 16px 0; text-align:center; }
+  h1 { margin:0 0 6px; font-size:1.375rem; }
+  header p { margin:0; color:var(--muted); font-size:.9rem; }
+  .canvas { overflow-x:auto; padding:36px 24px 8px; }
+  /* At most three screens a row; a longer path continues on the next row, left to right again. */
+  .flow { position:relative; width:max-content; margin:0 auto; padding-left:64px; }
+  .row { display:flex; align-items:flex-start; }
+  .screen { display:flex; flex-direction:column; align-items:center; gap:10px; width:var(--w); }
+  .step { font-size:.75rem; font-weight:600; color:var(--muted); letter-spacing:.04em; text-transform:uppercase; white-space:nowrap; }
+  /* Desktop browser at 1280×800 with the phone (390×844) overlapping its lower-right corner, both at one scale --s (the story asks for desktop and mobile widths). */
+  .device { position:relative; display:block; width:var(--w); height:var(--h); }
+  .device > span { position:absolute; overflow:hidden; background:#fff; }
+  .desktop { left:0; top:0; width:calc(var(--dw)*var(--s)); height:var(--fh); border-radius:8px; border:1px solid var(--border); box-shadow:0 2px 10px rgba(27,31,39,.10); }
+  .phone { right:0; bottom:0; width:calc(var(--pw)*var(--s)); height:calc(var(--ph)*var(--s)); border-radius:12px; border:3px solid var(--ink); box-shadow:0 4px 14px rgba(27,31,39,.25); }
+  .device iframe { border:0; transform:scale(var(--s)); transform-origin:0 0; pointer-events:none; }
+  .desktop iframe { width:var(--dw); height:var(--dh); }
+  .phone iframe { width:var(--pw); height:var(--ph); }
+  .device:hover .desktop, .device:hover .phone { outline:3px solid var(--focus); outline-offset:2px; }
+  /* In a narrow frame the thumbnails are small: the step shows its number only and the arrow labels shrink to fit between the screens. */
+  @media (max-width:1099.98px) { .step .st { display:none; } .arrow .label { font-size:.7rem; padding:2px 6px; max-width:100%; } .name { font-size:.85rem; } }
+  .name { font-weight:600; color:var(--link); font-size:.95rem; text-decoration:underline; text-underline-offset:3px; text-align:center; max-width:100%; }
+  .name:focus-visible { outline:3px solid var(--focus); outline-offset:3px; }
+  .tag { font-size:.75rem; color:var(--muted); text-align:center; }
+  .label { font-size:.8rem; background:var(--chip); color:var(--ink); border:1px solid var(--border); border-radius:999px; padding:3px 10px; text-align:center; }
+  /* A step arrow: the label stacked above the line. */
+  .arrow { width:var(--aw); flex:none; height:80px; margin-top:calc(26px + var(--fh)/2 - 72px); display:flex; flex-direction:column; justify-content:flex-end; align-items:center; gap:6px; padding:0 6px; }
+  .arrow svg { width:100%; height:16px; overflow:visible; }
+  /* The wrap: ONE svg path from under the row's last screen, down, back left along the gap, and down into the next row's first screen.
+     The row width changes with --s, so the path is drawn once per scale step and only the current step's path is shown. */
+  .wrap { position:relative; height:84px; margin:4px 0 8px; margin-left:calc(var(--w)/2); width:calc(var(--span)*(var(--w) + var(--aw))); }
+  .wrap svg { position:absolute; left:0; top:0; width:100%; height:84px; overflow:visible; }
+  .wrap path[class] { fill:none; stroke:var(--line); stroke-width:2.5; stroke-linecap:round; }
+  .wrap .label { position:absolute; z-index:1; left:50%; top:10px; transform:translateX(-50%); white-space:nowrap; }
+  /* "Back to site": a dashed return along the left edge, from the last screen up to the first; its label sits beside the line, never on it. */
+  .loop { position:absolute; left:28px; width:30px; top:calc(26px + var(--fh)/2); bottom:calc(var(--h) - var(--fh)/2 + 58px); border:2px dashed var(--line); border-right:0; border-radius:14px 0 0 14px; }
+  .loop::before { content:""; position:absolute; right:-4px; top:-8px; border:7px solid transparent; border-left:10px solid var(--line); border-right:0; }
+  .loop span { position:absolute; left:-14px; top:50%; transform:translate(-50%,-50%) rotate(-90deg); font-size:.75rem; white-space:nowrap; color:var(--ink); }
+  .legend { text-align:center; color:var(--muted); font-size:.8rem; margin:8px 16px 32px; }
+  /* The choices: a collapsible panel on the right (no script: <details>). */
+  aside { flex:0 0 auto; height:100%; border-left:1px solid var(--border); background:var(--panel-bg); overflow:auto; }
+  aside details { width:var(--panel); }
+  aside details:not([open]) { width:44px; }
+  aside summary { list-style:none; cursor:pointer; display:flex; align-items:center; gap:8px; padding:14px 16px; font-weight:600; font-size:.9rem; border-bottom:1px solid var(--border); position:sticky; top:0; background:var(--panel-bg); }
+  aside summary::-webkit-details-marker { display:none; }
+  aside summary::before { content:"›"; font-size:1.2rem; line-height:1; color:var(--line); }
+  aside details:not([open]) summary { writing-mode:vertical-rl; padding:16px 12px; border-bottom:0; height:100vh; justify-content:flex-start; }
+  aside details:not([open]) summary::before { content:"‹"; writing-mode:horizontal-tb; }
+  aside summary:focus-visible { outline:3px solid var(--focus); outline-offset:-3px; }
+  .choices { padding:4px 16px 24px; color:var(--muted); font-size:.85rem; line-height:1.5; }
+  .choices ul { padding-left:18px; }
+  .choices li { margin-bottom:8px; }
+  .choices strong { color:var(--ink); }
+  .choices code { color:var(--ink); }
+  @media (max-width:699.98px) { body { display:block; height:auto; } aside { height:auto; border-left:0; border-top:1px solid var(--border); } aside details, aside details:not([open]) { width:auto; } aside details:not([open]) summary { writing-mode:horizontal-tb; height:auto; } }
+</style></head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<marker id="tip" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" refX="10" refY="7" orient="auto"><path d="M0 1L12 7L0 13z" fill="#2b4fd8"/></marker>
+<marker id="tip-h" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" refX="11" refY="7" orient="auto"><path d="M0 1L12 7L0 13z" fill="#2b4fd8"/></marker>
+</defs></svg>
+<main>
+<header>
+  <h1>Concept B · Split — newsletter signup journey (SCRUM-102)</h1>
+  <p>One wide split panel per page: where you are and what this is on the left, the action on the right. Main path, left to right and row by row; click a screen or its name to open it full size.</p>
+</header>
+<div class="canvas"><div class="flow">
+  <div class="row">
+    <div class="screen"><div class="step">1<span class="st"> · Existing page</span></div>
+      <a class="device" href="site-page-footer-link.html" tabindex="-1" aria-hidden="true">
+        <span class="desktop"><iframe src="site-page-footer-link.html" title="Site page — footer link"></iframe></span>
+        <span class="phone"><iframe src="site-page-footer-link.html" title="Site page — footer link — mobile"></iframe></span>
+      </a>
+      <a class="name" href="site-page-footer-link.html">Site page — footer link</a><span class="tag">Updated: new footer link</span></div>
+    <div class="arrow"><span class="label">Clicks “Newsletter”</span><svg aria-hidden="true"><line x1="2" y1="8" x2="100%" y2="8" stroke="#2b4fd8" stroke-width="2.5" marker-end="url(#tip-h)"/></svg></div>
+    <div class="screen"><div class="step">2<span class="st"> · Welcome</span></div>
+      <a class="device" href="welcome.html" tabindex="-1" aria-hidden="true">
+        <span class="desktop"><iframe src="welcome.html" title="Welcome"></iframe></span>
+        <span class="phone"><iframe src="welcome.html" title="Welcome — mobile"></iframe></span>
+      </a>
+      <a class="name" href="welcome.html">Welcome</a><span class="tag">New</span></div>
+    <div class="arrow"><span class="label">Clicks “Subscribe”</span><svg aria-hidden="true"><line x1="2" y1="8" x2="100%" y2="8" stroke="#2b4fd8" stroke-width="2.5" marker-end="url(#tip-h)"/></svg></div>
+    <div class="screen"><div class="step">3<span class="st"> · Your details</span></div>
+      <a class="device" href="signup-form.html" tabindex="-1" aria-hidden="true">
+        <span class="desktop"><iframe src="signup-form.html" title="Signup form"></iframe></span>
+        <span class="phone"><iframe src="signup-form.html" title="Signup form — mobile"></iframe></span>
+      </a>
+      <a class="name" href="signup-form.html">Signup form</a><span class="tag">New</span></div>
+  </div>
+  <div class="wrap" style="--span:2" aria-hidden="true"><span class="label">Enters name + email, clicks “Submit”</span><svg><path class="b95" d="M397.8 0V36Q397.8 50 383.8 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b26" d="M210.6 0V36Q210.6 50 196.6 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b65" d="M356.4 0V36Q356.4 50 342.4 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b112" d="M495.9 0V36Q495.9 50 481.9 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b161" d="M628.9 0V36Q628.9 50 614.9 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b210" d="M761.9 0V36Q761.9 50 747.9 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b257" d="M889.4 0V36Q889.4 50 875.4 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b307" d="M1025.1 0V36Q1025.1 50 1011.1 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b356" d="M1158 0V36Q1158 50 1144 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b430" d="M1358.8 0V36Q1358.8 50 1344.8 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b528" d="M1624.8 0V36Q1624.8 50 1610.8 50H14Q0 50 0 64V80" marker-end="url(#tip)"/><path class="b626" d="M1890.7 0V36Q1890.7 50 1876.7 50H14Q0 50 0 64V80" marker-end="url(#tip)"/></svg></div>
+  <div class="row">
+    <div class="screen"><div class="step">4<span class="st"> · Done</span></div>
+      <a class="device" href="confirmation.html" tabindex="-1" aria-hidden="true">
+        <span class="desktop"><iframe src="confirmation.html" title="Confirmation"></iframe></span>
+        <span class="phone"><iframe src="confirmation.html" title="Confirmation — mobile"></iframe></span>
+      </a>
+      <a class="name" href="confirmation.html">Confirmation</a><span class="tag">New · same page for already-subscribed</span></div>
+  </div>
+  <div class="loop" aria-hidden="true"><span>Clicks “Back to site”</span></div>
+</div></div>
+<p class="legend">Each screen is shown as a desktop browser at 1280×800 with its phone layout at 390×844 in front, because the story asks for desktop and mobile widths (R4, acceptance criterion 1).</p>
+</main>
+<aside>
+<details open>
+<summary>Choices made in this prototype</summary>
+<div class="choices">
+  <ul>
+    <li><strong>Direction — Split</strong>: each page is one wide panel (960&nbsp;px) split in two. The left pane, on a pale blue background, holds the Back link, a vertical stepper, the heading and the one-line pitch; the right pane holds the action (the fields, the button). The pitch stays in view while the visitor fills in the form. Below 720&nbsp;px the panes stack, context first, and the stepper shows the current step’s name only.</li>
+    <li>Focus order follows reading order: Back, then the fields, then the main button. The stepper is not focusable.</li>
+    <li><strong>Visual base</strong>: the new screens reuse the tokens of the approved newsletter design in story 0e4e726a, as the structure decided. Two changes for WCAG 2.1 AA: the focus ring is dark blue (#1f3cae) instead of yellow, and input borders are darker (#8a93a3), so both reach 3:1.</li>
+    <li><strong>Desktop and mobile</strong>: every page has one layout that adapts to a phone width. The thumbnails show each page at 1280×800 with its 390×844 phone view in front.</li>
+    <li>On the <strong>site page</strong>, the only change is a new footer with a “Newsletter” link; the page’s content is centred and otherwise as it is today. The footer also links back to this journey, for review only.</li>
+    <li>The Name field is capped at 80 characters (<code>maxlength</code>), as the structure decided; there is no “name too long” error.</li>
+    <li>A three-step progress indicator (Welcome, Your details, Done) shows the visitor’s current step.</li>
+    <li>The confirmation does not mention a confirmation email: this epic has no double opt-in. New and already-subscribed addresses see the same page.</li>
+    <li>The design viewer runs no scripts, so “Submit” is a link straight to the confirmation. Each screen also has a “← Back” link to the previous one.</li>
+    <li>The error, submitting and submission-failed states of the form are drawn in the next step.</li>
+  </ul>
+</div>
+</details>
+</aside>
+</body></html>
