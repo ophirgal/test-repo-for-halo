@@ -1,0 +1,14 @@
+{
+  "storyId": "26a9aac4-2ba9-4e89-b1cf-43ed24493115",
+  "storyKey": "SCRUM-113",
+  "title": "Design a Snake Game for Mobile",
+  "approvals": [
+    {
+      "step": "structure",
+      "decisionId": "d59cabbc-50b9-4699-8c03-94024ddad62a",
+      "actor": "Ophir Gal",
+      "approvedAt": "2026-11-23T08:05:37.402198Z",
+      "headSha": "c27334b8ece00cda33c7f711a268d91f7bd11bd6"
+    }
+  ]
+}
