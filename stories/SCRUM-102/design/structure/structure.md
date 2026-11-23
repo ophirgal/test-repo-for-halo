@@ -44,7 +44,7 @@ Several errors can show at once. For example, a name-empty and an email-malforme
 |---|---|---|---|---|
 | Site page — footer link | The entry point: the site footer links to the newsletter (R1, process step 1) | The existing page content plus a footer with a "Newsletter" link | default only. The page has no footer today, so this story adds one. | `test-repo-for-halo-7ad879b52d/docs/index.html` |
 | Welcome | Explains the newsletter and starts the signup (R1) | Heading, one-sentence explanation, primary "Subscribe" button, "Back to site" link | default. No loading, error or empty state (static content). | new |
-| Signup form | Collects the name and email address (R2) | Heading, Name field (1–80 characters), Email field, "Submit" button, "Back" link | default, plus the four states below | new |
+| Signup form | Collects the name and email address (R2) | Heading, Name field (1–80 characters, capped at 80 with `maxlength`), Email field, "Submit" button, "Back" link | default, plus the four states below | new |
 | Signup form — name empty | Tells the visitor the name is missing (R2, AC 2) | Inline error under Name, linked to the field (`aria-describedby`); focus moves to the first field in error | error | new |
 | Signup form — email empty | Tells the visitor the email is missing (R2, AC 2) | Inline error under Email, linked to the field; the name already typed is kept | error | new |
 | Signup form — email malformed | Tells the visitor the address is not valid (R2, AC 2) | Inline error under Email with the expected format; the typed value is kept | error | new |
@@ -54,6 +54,8 @@ Several errors can show at once. For example, a name-empty and an email-malforme
 
 ## Open branches
 
-1. **Submission-failed state.** The PRD covers only valid, invalid and already-subscribed submissions. It does not say what the visitor sees when the save fails (network or server error). I added "Signup form — submission failed", which keeps what the visitor typed. I recommend keeping it: without it, a failed save leaves the visitor with no feedback. Drop it only if you want the design limited strictly to the three error states in AC 2.
-2. **Name longer than 80 characters.** R2 limits the name to 1–80 characters, but AC 2 lists errors only for an empty name, an empty email and a malformed email. One option is to cap the field at 80 characters so a longer name can't be typed. The other is to add a "name too long" error. I recommend the cap: it keeps the three error states AC 2 asks for and makes the fourth one impossible. Choose the error instead if pasted names must never be cut off without a warning.
-3. **Footer and visual base.** `docs/index.html` has no footer today. Story `0e4e726a` holds an approved newsletter design with an email-only form and a consent checkbox. Its `tokens.css` could serve as the visual base for these screens. I recommend reusing those tokens but not that form: R2 asks for name and email with no consent box. Tell me if the new screens should have their own look, or if the consent checkbox should come back.
+None. You approved the three recommendations from the previous version, so they are now decisions:
+
+1. **Submission-failed state — kept.** "Signup form — submission failed" stays in the journey. It keeps what the visitor typed and lets them submit again.
+2. **Name longer than 80 characters — capped.** The Name field accepts at most 80 characters (`maxlength`). There is no "name too long" error, so the form keeps exactly the three error states AC 2 asks for.
+3. **Footer and visual base — reuse the tokens, not the form.** This story adds a footer with a "Newsletter" link to `docs/index.html`. The new screens start from the `tokens.css` of the approved newsletter design in story `0e4e726a`, but not from its email-only form or consent checkbox. R2 asks for a name and an email address with no consent box.
