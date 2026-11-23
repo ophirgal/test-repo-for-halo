@@ -3,16 +3,24 @@
 Every operation runs under one lock per store. Each mutation is validated,
 appended, flushed and fsynced before it returns. Time comes from an injected
 ``clock`` (default ``time.time``) so tests never sleep.
+
+Compaction rewrites the log to one ``set`` per live, unexpired key. It runs
+on ``compact()`` and automatically after a mutation once live keys are
+under half of the log's records.
 """
 
 import math
 import os
 import threading
 import time
+import warnings
 
+from . import compaction
 from .log import CorruptLogError, canonical_json, check_key, encode_record, replay
 
 MAX_VALUE_BYTES = 65536
+#: Compact automatically when live keys / log records falls strictly below this.
+AUTO_COMPACT_RATIO = 0.5
 
 
 def check_value(value):
@@ -54,6 +62,7 @@ class KVStore:
         self._fh = None
         self._refused = None
         self._closed = False
+        compaction.remove_stale_temp(self.path)
         try:
             result = replay(self.path)
         except CorruptLogError as err:
@@ -106,8 +115,32 @@ class KVStore:
         self._needs_newline = False
         self._records += 1
 
+    def _compact_locked(self):
+        now = self._clock()
+        live = {k: e for k, e in self._index.items() if e[1] is None or e[1] > now}
+        lines = [encode_record("set", k, v, exp) for k, (v, exp) in sorted(live.items())]
+        try:
+            compaction.write_and_swap(self.path, lines)
+        finally:
+            # Once the rename has happened, appends must go to the new file,
+            # even if a later step (the directory fsync) failed.
+            if os.fstat(self._fh.fileno()).st_ino != os.stat(self.path).st_ino:
+                self._fh.close()
+                self._fh = open(self.path, "ab")
+                self._index = live
+                self._records = len(lines)
+                self._needs_newline = False
+
     def _after_mutation(self):
-        """Hook run under the lock after each successful mutation."""
+        """Compact automatically once live keys are under half of the log's records."""
+        now = self._clock()
+        live = sum(1 for _, exp in self._index.values() if exp is None or exp > now)
+        if self._records and live / self._records < AUTO_COMPACT_RATIO:
+            try:
+                self._compact_locked()
+            except OSError as err:
+                # The mutation itself is already durable; report, don't fail it.
+                warnings.warn(f"automatic compaction of {self.path!r} failed: {err}", RuntimeWarning, stacklevel=3)
 
     # -- public API ------------------------------------------------------
 
@@ -150,3 +183,9 @@ class KVStore:
             self._check_usable()
             now = self._clock()
             return sorted(k for k in self._index if self._live(k, now) is not None)
+
+    def compact(self):
+        """Rewrite the log atomically to hold only live, unexpired records."""
+        with self._lock:
+            self._check_usable()
+            self._compact_locked()

@@ -86,9 +86,15 @@ class DictBehaviourTest(StoreTestCase):
     def test_records_written_in_log_format(self):
         store = self.open()
         store.set("a", 1, ttl=5)
-        store.delete("a")
+        store.set("b", "x")
+        store.set("c", None)
+        store.delete("a")  # 2 live of 4 records: not below half, no compaction
         lines = self.read().splitlines(keepends=True)
-        self.assertEqual(lines, [encode_record("set", "a", 1, 105.0), encode_record("del", "a")])
+        self.assertEqual(
+            lines,
+            [encode_record("set", "a", 1, 105.0), encode_record("set", "b", "x"),
+             encode_record("set", "c", None), encode_record("del", "a")],
+        )
 
 
 class ExpiryTest(StoreTestCase):
