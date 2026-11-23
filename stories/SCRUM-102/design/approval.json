@@ -1,0 +1,15 @@
+{
+  "storyId": "871b9111-1831-4ffb-ae4c-7168af1e46a4",
+  "storyKey": "SCRUM-102",
+  "epicKey": "SCRUM-101",
+  "title": "Design the newsletter signup journey",
+  "approvals": [
+    {
+      "step": "structure",
+      "decisionId": "5d5ba770-93ac-4df3-b872-14d3216925e4",
+      "actor": "Ophir Gal",
+      "approvedAt": "2026-11-23T07:21:30.741951Z",
+      "headSha": "04cc1a581b745b7c6de989319739a510b28a883f"
+    }
+  ]
+}
