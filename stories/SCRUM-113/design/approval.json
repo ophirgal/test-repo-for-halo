@@ -16,6 +16,13 @@
       "actor": "Ophir Gal",
       "approvedAt": "2026-11-23T17:52:09.79327Z",
       "headSha": "e7af46507a111f1b4b30905eb49ab9fe3bcf0163"
+    },
+    {
+      "step": "screens",
+      "decisionId": "c86ece9d-48f1-4c65-8201-dff587a20397",
+      "actor": "Ophir Gal",
+      "approvedAt": "2026-11-23T17:55:00.625419Z",
+      "headSha": "50f117e164ce25c611ae1cd9414b3bffaff3f128"
     }
   ]
 }
