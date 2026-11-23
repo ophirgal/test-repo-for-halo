@@ -1,6 +1,6 @@
-# דוח הוצאות חודשי מתוך פנקס CSV (SCRUM-118) — טיוטת קליטה
+# דוח הוצאות חודשי מתוך פנקס CSV (SCRUM-118) — מפרט
 
-> סטטוס: **NOT_READY** — טיוטה בתהליך. שאלה חוסמת אחת בסעיף 8 (Q1): תנאי הקדם של הסיפור לא מתקיים במאגר.
+> סטטוס: **READY_FOR_SPEC**. המפתח העביר את ההכרעות לצוות ("make your own decisions"). Q1 הוכרע באפשרות (א): הסיפור מוסיף קובץ `pyproject.toml` חדש. Q2–Q4 הוכרעו לפי הנחות העבודה (סעיף 8).
 
 ## 1. Feature Overview
 
@@ -13,7 +13,7 @@
 
 ### Story context
 
-The story adds a new, stdlib-only Python package `ledger` under `src/` (src layout, discovered by the repository's manifest) with its tests under `tests/`, in three dependent work items: the model and CSV parser (t1), the monthly report (t2) and the command line (t3). A ledger is a UTF-8 CSV file with a header row naming the columns `id`, `date`, `amount`, `currency`, `category` and `memo`, in any order. Amounts are decimal numbers with at most two decimal places, positive for income and negative for expense. Currencies are ILS, USD or EUR, converted at fixed rates expressed in ILS per unit (ILS 1, USD 3.70, EUR 4.00), never fetched. Money is `decimal.Decimal` end to end; figures are rounded once, after summing, with `ROUND_HALF_EVEN`. Out of scope: other file formats, live exchange rates, persistent configuration, charts, any third-party dependency, changes to any existing file of the repository.
+The story adds a new, stdlib-only Python package `ledger` under `src/` (src layout, discovered by the repository's manifest) with its tests under `tests/`, in three dependent work items: the model and CSV parser (t1), the monthly report (t2) and the command line (t3). A ledger is a UTF-8 CSV file with a header row naming the columns `id`, `date`, `amount`, `currency`, `category` and `memo`, in any order. Amounts are decimal numbers with at most two decimal places, positive for income and negative for expense. Currencies are ILS, USD or EUR, converted at fixed rates expressed in ILS per unit (ILS 1, USD 3.70, EUR 4.00), never fetched. Money is `decimal.Decimal` end to end; figures are rounded once, after summing, with `ROUND_HALF_EVEN`. Out of scope: other file formats, live exchange rates, persistent configuration, charts, any third-party dependency, changes to any existing file of the repository. Because the repository has no Python manifest yet, the story also adds one new `pyproject.toml` at the repository root that discovers packages under `src/` and sets pytest's `testpaths` to `tests/`, so that `pip install -e .` followed by `pytest` from the repository root installs the package and runs its tests; no existing file changes.
 
 ### Goals
 
@@ -22,6 +22,7 @@ The story adds a new, stdlib-only Python package `ledger` under `src/` (src layo
 - דוח חודשי שכולל הכנסות, הוצאות, נטו, מספר תנועות וסכומים לפי קטגוריה, ממוין לפי ערך מוחלט, עם אפשרות להגביל ל-N הקטגוריות המובילות (R3).
 - המרה למטבע בסיס לפי שערים קבועים, ועיגול אחד אחרי הסכימה, חצי לזוגי (R4).
 - `python -m ledger report FILE --month YYYY-MM [--base] [--top] [--json]` עם פלט טקסט או JSON מדויק, וקודי יציאה 0, 2 ו-3 (R5).
+- קובץ `pyproject.toml` חדש בשורש המאגר, שמאפשר `pip install -e .` ואחריו `pytest` משורש המאגר, בלי לשנות קובץ קיים (הכרעת Q1).
 - עדיפות Must, גודל M (כ-5 נקודות). עוקב אחר R1–R5 · שלבים 1–8 · סיכונים RK1, RK2.
 
 ### Non-Goals
@@ -42,7 +43,10 @@ The story adds a new, stdlib-only Python package `ledger` under `src/` (src layo
 - **FR5 — המרה ועיגול (t2):** כל סכום מומר לפי `amount × RATES[currency] ÷ RATES[base]` בדיוק מלא, הסכומים נסכמים, ורק אז כל נתון מעוגל לשתי ספרות לפי `ROUND_HALF_EVEN`, בנפרד משאר הנתונים. לכן הנתונים לא חייבים להסתכם זה לזה.
 - **FR6 — מיון ובחירה (t2):** קטגוריות ממוינות לפי ערך מוחלט יורד, ובשוויון לפי שם עולה. `top` מגביל רק את `categories`. רק תנועות של החודש המבוקש נספרות. חודש בלי תנועות מחזיר דוח של אפסים.
 - **FR7 — שגיאות קריאה (t2):** חודש שאינו `YYYY-MM` עם חודש בין 01 ל-12, `base` שלא מופיע ב-`rates`, או `top` קטן מ-1, מעלים `ValueError` ולעולם לא `LedgerError`.
-- **FR8 — שורת פקודה (t3):** `python -m ledger report FILE --month YYYY-MM [--base ILS|USD|EUR] [--top N] [--json]`. הפלט הוא טקסט של שלוש-עשרה שורות או JSON, כמו בתרחישים 19–21. קודי היציאה: 0 להצלחה, 2 לשימוש שגוי (כולל קובץ שאי אפשר לפתוח), 3 לשורה פגומה, עם השגיאה `error: {FILE}:{line}: {reason}`.
+- **FR8 — שורת פקודה (t3):** `python -m ledger report FILE --month YYYY-MM [--base ILS|USD|EUR] [--top N] [--json]`. הפלט הוא טקסט של שלוש-עשרה שורות או JSON, כמו בתרחישים 19–21. קודי היציאה: 0 להצלחה, 2 לשימוש שגוי (כולל קובץ שאי אפשר לפתוח או שאינו UTF-8 תקין), 3 לשורה פגומה, עם השגיאה `error: {FILE}:{line}: {reason}`.
+- **FR9 — צורת הסכום (t1):** סכום תקין הוא מספר עשרוני רגיל עם סימן אופציונלי (`+5`, `-2.50`, `.50` מתקבלים). כתיב מדעי (`1e3`), `NaN` ו-`Infinity` נדחים עם `amount '…' is not a number`.
+- **FR10 — מספר השדות (t1):** בהודעה `expected N fields, got M`, ‏N הוא מספר השדות בשורת הכותרת (כולל עמודות נוספות), ו-M הוא מספר השדות בשורה.
+- **FR11 — התקנה והרצת בדיקות:** קובץ `pyproject.toml` חדש מגלה את החבילה תחת `src/` ומגדיר את `testpaths` של pytest ל-`tests/`. ‏`pip install -e .` ואחריו `pytest` משורש המאגר מתקינים את החבילה ומריצים את בדיקותיה.
 
 ## 4. User Experience & Behavior
 
@@ -81,30 +85,26 @@ The story adds a new, stdlib-only Python package `ledger` under `src/` (src layo
 23. Scenario 23 — Error: data. When the FILE has a bad row (`tests/fixtures/ledger/bad_amount.csv`, whose third line carries the amount `-2.505`), Then the process exits 3, prints nothing on stdout and stderr is exactly `error: {FILE}:3: amount '-2.505' has more than 2 decimal places` followed by a newline, FILE being the path as given on the command line.
 24. Scenario 24 — Happy path: help. When `python -m ledger report --help` runs, Then it exits 0 and stdout documents `--month`.
 25. Scenario 25 — Edge: the tests run the real entry point. Given `tests/test_ledger_cli.py`, When it drives the command, Then it does so through `subprocess` with `[sys.executable, "-m", "ledger", ...]`, relying on the installed package and on no `sys.path` manipulation.
+26. Scenario 26 — Setup: the package installs and its tests run. Given a fresh checkout of the work branch, When `pip install -e .` and then `pytest` run from the repository root, Then the install succeeds using only the new root `pyproject.toml` (which discovers packages under `src/` and sets `testpaths = ["tests"]`), pytest collects the `tests/test_ledger_*.py` files and all of them pass, the package declares no runtime dependency, and no file that existed on `main` before the story is changed.
 
 ## 6. Dependencies & Constraints (product-level)
 
-- **תנאי קדם שלא מתקיים (חוסם — Q1):** הסיפור מניח שהמאגר כבר בנוי כמאגר Python עם תבנית src ועם pytest: יש בו קובץ הגדרות פרויקט (manifest) שמגלה חבילות תחת `src/`, ההגדרה `testpaths` של pytest מצביעה על `tests/`, ושער בדיקות מתקין את החבילה במצב עריכה לפני `pytest`. במאגר, בענף היעד `main` (בקומיט `51b3688`), אין אף אחד מאלה. אין `pyproject.toml`, `setup.cfg` או `setup.py`. אין `pytest.ini`, אין `src/` ואין `tests/`. אין תיקיית `.factory/` (ולכן אין `.factory/testing.md` ואין סקילים של שערים), ואין `.github/workflows`. בשורש המאגר יש רק `README.md`, `hello_world.sh`, `test_hello_world.sh`, `serve.py`, `smoke_test.py`, `hello_world.txt` ו-`docs/`. בדקתי גם את כל הענפים המרוחקים, ואף אחד מהם לא מוסיף קובץ הגדרות פרויקט, `src/` או `tests/`. בגלל שהסיפור מוציא מהתחום כל שינוי בקובץ קיים, והחבילה לא תותקן בלי הגדרות פרויקט, תרחיש 25 (מריץ את `python -m ledger` מתוך החבילה המותקנת, בלי `sys.path`) ותרחישים 19–24 לא יוכלו להתקיים כפי שהסיפור כתוב.
-- **ספרייה סטנדרטית בלבד:** אין לחבילה תלות צד שלישי בזמן ריצה. pytest הוא כלי הבדיקות שהסיפור מניח.
+- **תנאי הקדם הוחלף בהכרעה:** הסיפור הניח מאגר Python מוכן עם תבנית src ועם pytest. בענף היעד `main` (בקומיט `51b3688`) ובכל הענפים המרוחקים אין קובץ הגדרות פרויקט (`pyproject.toml`, `setup.cfg` או `setup.py`), אין הגדרת pytest, אין `src/` ואין `tests/`, אין תיקיית `.factory/` ואין `.github/workflows`. לכן הסיפור עצמו מוסיף קובץ `pyproject.toml` **חדש** בשורש המאגר (FR11, תרחיש 26). קובץ חדש אינו שינוי של קובץ קיים, ולכן גבול התחום "בלי לשנות קבצים קיימים" נשמר.
+- **ספרייה סטנדרטית בלבד:** אין לחבילה תלות צד שלישי בזמן ריצה. ‏backend הבנייה (למשל setuptools) ו-pytest הם כלי בנייה ובדיקה, לא תלויות של החבילה.
 - **שערים קבועים:** ILS 1, USD 3.70, EUR 4.00 (ב-ILS ליחידה). לא נשלפים מהרשת.
-- **בלי לשנות קבצים קיימים:** הסיפור רק מוסיף קבצים חדשים. ה-README לא מתעדכן.
+- **בלי לשנות קבצים קיימים:** הסיפור רק מוסיף קבצים חדשים (`pyproject.toml`, `src/ledger/`, `tests/`). ה-README לא מתעדכן.
+- **אין שער בדיקות במאגר:** אין `.factory/testing.md` ואין CI. הבדיקה המוסכמת של הסיפור היא `pip install -e .` ואחריה `pytest` משורש המאגר (תרחיש 26).
 
 ## 7. Technical Design (deferred to STRUCTURE)
 
-המבנה הפנימי של החבילה, חלוקת המודולים, אופן הפענוח וטיפול הפרסר בארגומנטים נקבעים בשלב STRUCTURE. המגבלות הטכניות שהמוצר מציב כבר מוגדרות בסיפור: `Decimal` לאורך כל הדרך, עיגול אחד לפי `ROUND_HALF_EVEN`, פתיחת הקובץ בקידוד `utf-8-sig` ועם `newline=""`, ובדיקות שורת הפקודה דרך `subprocess`. אם תתקבל אפשרות (א) ב-Q1, השלב הזה יקבע גם את תוכן קובץ הגדרות הפרויקט: backend הבנייה, גילוי החבילות תחת `src/` וההגדרה `testpaths`.
+המבנה הפנימי של החבילה, חלוקת המודולים, אופן הפענוח וטיפול הפרסר בארגומנטים נקבעים בשלב STRUCTURE, וכך גם תוכן `pyproject.toml`: בחירת backend הבנייה, גילוי החבילות תחת `src/` וההגדרה `testpaths`. המגבלות הטכניות שהמוצר מציב כבר מוגדרות בסיפור: `Decimal` לאורך כל הדרך, עיגול אחד לפי `ROUND_HALF_EVEN`, פתיחת הקובץ בקידוד `utf-8-sig` ועם `newline=""`, ובדיקות שורת הפקודה דרך `subprocess`. ‏STRUCTURE גם יחליט באיזה פריט עבודה (כנראה t1, הראשון) נכנס `pyproject.toml`.
 
 ## 8. Open Questions
 
-**חוסם (P0)**
+אין שאלות פתוחות. המפתח ביקש שהצוות יכריע בעצמו, וההכרעות הן:
 
-- **Q1 — המאגר עדיין לא מאגר Python עם src ו-pytest.** תנאי הקדם של הסיפור לא מתקיים: ב-`main` אין קובץ הגדרות פרויקט, אין `src/`, אין `tests/`, אין הגדרת pytest ואין שער בדיקות שמתקין את החבילה (פירוט בסעיף 6). איך להמשיך?
-  - (א) להרחיב את תחום הסיפור כך שיוסיף קובץ `pyproject.toml` **חדש**, שמגלה חבילות תחת `src/` ומגדיר `testpaths = ["tests"]`. הבדיקה המוסכמת תהיה `pip install -e .` ואחריה `pytest` משורש המאגר. אף קובץ קיים לא משתנה, ו-backend הבנייה (למשל setuptools) הוא כלי בנייה ולא תלות של החבילה.
-  - (ב) לעכב את הסיפור עד שסיפור אחר יקים את התשתית הזאת.
-  - (ג) לשנות את הסיפור כך שלא ידרוש חבילה מותקנת. זה פוגע בתרחיש 25.
-  - *המלצה:* (א). היא עומדת בכל 25 התרחישים בלי לשנות קובץ קיים, ואף ענף לא מקים את התשתית בינתיים. אם קיים סיפור אחר באפיק שמקים את התשתית, אמליץ על (ב).
-
-**נחמד לדעת (P2) — יוכרע ב-STRUCTURE אם לא יוכרע כאן**
-
-- **Q2 — צורות מספר גבוליות:** האם `+5`, `1e3` או `.50` מתקבלים כסכומים? *הנחת עבודה:* מספר עשרוני רגיל עם סימן אופציונלי. כתיב מדעי נדחה עם `amount '…' is not a number`.
-- **Q3 — קובץ שאינו UTF-8 תקין בשורת הפקודה:** *הנחת עבודה:* נחשב כקובץ שאי אפשר לקרוא, ולכן קוד יציאה 2 עם הודעה ב-stderr.
-- **Q4 — מספר השדות בהודעה `expected 6 fields, got 5`:** כשיש בכותרת עמודות נוספות (תרחיש 2), *הנחת עבודה:* המספר הצפוי הוא מספר השדות בכותרת.
+- **Q1 — תשתית Python חסרה:** הוכרע (א). הסיפור מוסיף `pyproject.toml` חדש (FR11, תרחיש 26). *סיכון:* אם סיפור אחר באפיק מתכנן להקים תשתית Python אחרת, ייתכן שיידרש איחוד בהמשך.
+- **Q2 — צורות מספר גבוליות:** מספר עשרוני רגיל עם סימן אופציונלי, כולל `+5` ו-`.50`. כתיב מדעי נדחה עם `amount '…' is not a number` (FR9).
+- **Q3 — קובץ שאינו UTF-8 תקין:** נחשב כקובץ שאי אפשר לקרוא, ולכן קוד יציאה 2, stdout ריק והודעה ב-stderr (FR8).
+- **Q4 — מספר השדות הצפוי:** N הוא מספר השדות בשורת הכותרת, כולל עמודות נוספות (FR10).
+- **מקורות האפיק:** מסמך הדרישות וצבר הסיפורים של האפיק לא היו זמינים, ולכן המזהים R1–R5 ו-RK1, RK2 מופיעים כפי שהסיפור מציין אותם, בלי הצלבה.
