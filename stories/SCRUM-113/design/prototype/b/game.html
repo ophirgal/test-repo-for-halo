@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Game</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);-webkit-font-smoothing:antialiased}
+.phone{max-width:430px;min-height:100vh;margin:0 auto;display:flex;flex-direction:column;position:relative;text-align:center}
+a{color:inherit}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+.food{transform-box:fill-box;transform-origin:center;animation:pulse 1.2s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){.food{animation:none}}
+
+.phone{padding:var(--sp-4)}
+.bar{display:flex;align-items:center;justify-content:center;min-height:48px;font-weight:700;font-size:var(--fs-md)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:var(--sp-4);box-shadow:0 6px 20px rgba(80,50,20,.08)}
+.dock{margin-top:auto;padding-top:var(--sp-5);display:flex;flex-direction:column;gap:var(--sp-3)}
+.btn{display:flex;align-items:center;justify-content:center;gap:var(--sp-2);min-height:60px;border-radius:16px;font-weight:700;font-size:var(--fs-md);text-decoration:none;width:100%}
+.btn-primary{background:var(--accent);color:var(--accent-fg)}
+.btn-secondary{background:var(--surface);color:var(--fg);border:1.5px solid var(--line)}
+.field{display:block;border-radius:12px;overflow:hidden;border:3px solid #8a6a46}
+.field-svg{display:block;width:100%;height:auto}
+.chips{display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--sp-3)}
+.chip{background:var(--surface-2);border-radius:var(--radius-pill);padding:var(--sp-2) var(--sp-4);font-weight:700;font-size:var(--fs-sm)}
+.chip b{color:var(--accent);font-size:var(--fs-md)}
+.hint{color:var(--muted);font-size:var(--fs-sm);display:flex;align-items:center;justify-content:center;gap:var(--sp-2);margin:var(--sp-3) 0 0}
+.proto{color:var(--muted);opacity:.75;font-size:var(--fs-xs);margin:var(--sp-2) 0 0}
+</style>
+</head>
+<body>
+<main class="phone">
+  <div class="bar">Snake</div>
+  <section class="card">
+    <div class="chips"><span class="chip">Score <b>14</b></span><span class="chip">Swipe to steer</span></div>
+    <a class="field" href="game-over.html" aria-label="Snake crashes (prototype)"><svg class="field-svg" viewBox="0 0 16 16" role="img" aria-label="Play field: an orange striped snake heading right toward a red berry">
+  <defs><pattern id="gc" width="2" height="2" patternUnits="userSpaceOnUse"><rect width="2" height="2" fill="#eef3d9"/><rect width="1" height="1" fill="#e3ebc6"/><rect x="1" y="1" width="1" height="1" fill="#e3ebc6"/></pattern></defs>
+  <rect width="16" height="16" fill="url(#gc)"/>
+  <rect x="2.08" y="13.08" width=".84" height=".84" rx=".3" fill="#fb923c"/><circle cx="2.5" cy="13.5" r=".14" fill="#fde68a"/><rect x="2.08" y="12.08" width=".84" height=".84" rx=".3" fill="#f97316"/><circle cx="2.5" cy="12.5" r=".14" fill="#fde68a"/><rect x="2.08" y="11.08" width=".84" height=".84" rx=".3" fill="#fb923c"/><circle cx="2.5" cy="11.5" r=".14" fill="#fde68a"/><rect x="2.08" y="10.08" width=".84" height=".84" rx=".3" fill="#f97316"/><circle cx="2.5" cy="10.5" r=".14" fill="#fde68a"/><rect x="3.08" y="10.08" width=".84" height=".84" rx=".3" fill="#fb923c"/><circle cx="3.5" cy="10.5" r=".14" fill="#fde68a"/><rect x="4.08" y="10.08" width=".84" height=".84" rx=".3" fill="#f97316"/><circle cx="4.5" cy="10.5" r=".14" fill="#fde68a"/><rect x="5.08" y="10.08" width=".84" height=".84" rx=".3" fill="#fb923c"/><circle cx="5.5" cy="10.5" r=".14" fill="#fde68a"/><rect x="6.08" y="10.08" width=".84" height=".84" rx=".3" fill="#f97316"/><circle cx="6.5" cy="10.5" r=".14" fill="#fde68a"/><rect x="6.08" y="9.08" width=".84" height=".84" rx=".3" fill="#fb923c"/><circle cx="6.5" cy="9.5" r=".14" fill="#fde68a"/><rect x="6.08" y="8.08" width=".84" height=".84" rx=".3" fill="#f97316"/><circle cx="6.5" cy="8.5" r=".14" fill="#fde68a"/><rect x="6.08" y="7.08" width=".84" height=".84" rx=".3" fill="#fb923c"/><circle cx="6.5" cy="7.5" r=".14" fill="#fde68a"/><rect x="7.08" y="7.08" width=".84" height=".84" rx=".3" fill="#f97316"/><circle cx="7.5" cy="7.5" r=".14" fill="#fde68a"/><rect x="8.08" y="7.08" width=".84" height=".84" rx=".3" fill="#fb923c"/><circle cx="8.5" cy="7.5" r=".14" fill="#fde68a"/><rect x="9.08" y="7.08" width=".84" height=".84" rx=".3" fill="#f97316"/><circle cx="9.5" cy="7.5" r=".14" fill="#fde68a"/>
+  <rect x="10" y="7" width="1.05" height="1" rx=".42" fill="#ea580c"/>
+  <circle cx="10.68" cy="7.28" r=".17" fill="#fff"/><circle cx="10.74" cy="7.28" r=".08" fill="#2b2118"/>
+  <circle cx="10.68" cy="7.72" r=".17" fill="#fff"/><circle cx="10.74" cy="7.72" r=".08" fill="#2b2118"/>
+  <circle cx="10.35" cy="7.5" r=".1" fill="#fca5a5"/>
+  <g class="food"><circle cx="13.5" cy="7.55" r=".36" fill="#dc2626"/><path d="M13.5 7.2q.05-.22.28-.28q-.05.22-.28.28z" fill="#16a34a"/></g>
+</svg></a>
+    <p class="hint"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M16 8l4 4-4 4M8 8l-4 4 4 4"/></svg> Swipe anywhere on the field</p>
+  </section>
+  <p class="proto">Prototype: tap the field to see the snake crash</p>
+  <div class="dock">
+    <a class="btn btn-secondary" href="game-paused.html"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><rect x="4" y="3" width="4" height="14" rx="1.5" fill="currentColor"/><rect x="12" y="3" width="4" height="14" rx="1.5" fill="currentColor"/></svg> Pause</a>
+  </div>
+</main>
+</body>
+</html>

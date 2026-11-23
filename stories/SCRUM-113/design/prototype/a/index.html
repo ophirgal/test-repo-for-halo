@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Concept A · Neon Arcade</title>
+<meta name="description" content="Immersive dark arcade, glowing neon snake, controls floating over the game, actions centred">
+<link rel="stylesheet" href="tokens.css">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--font)}
+:root{--s:.16;--tw:calc(390px * var(--s));--th:calc(844px * var(--s));--gap:120px;--step:24px}
+@media (min-width:560px){:root{--s:.24}}
+@media (min-width:700px){:root{--s:.13;--gap:104px}}
+@media (min-width:900px){:root{--s:.26;--gap:120px}}
+@media (min-width:1100px){:root{--s:.42}}
+@media (min-width:1400px){:root{--s:.6}}
+@media (min-width:1800px){:root{--s:.85}}
+@media (min-width:2400px){:root{--s:1}}
+.layout{display:flex;gap:24px;padding:24px;min-height:100vh;align-items:stretch}
+main{flex:1;min-width:0;overflow-x:auto}
+h1{margin:0 0 6px;font-size:22px}
+.intro{margin:0 0 24px;color:var(--muted);max-width:70ch;line-height:1.5}
+.flow{display:grid;grid-template-columns:var(--tw) var(--gap) var(--tw) var(--gap) var(--tw);grid-template-rows:auto 110px auto 72px;position:relative;margin-bottom:16px}
+.screen{text-align:center;position:relative;z-index:1}
+.step{height:var(--step);line-height:var(--step);font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.08em}
+.frame{display:block;width:var(--tw);height:var(--th);overflow:hidden;border-radius:calc(48px * var(--s));border:2px solid var(--line);background:var(--bg);position:relative}
+.frame iframe{width:390px;height:844px;border:0;transform:scale(var(--s));transform-origin:0 0;pointer-events:none;display:block}
+.name{display:block;margin-top:8px;font-weight:700;font-size:14px;color:var(--accent)}
+.note{font-size:12px;color:var(--muted);margin-top:2px}
+.hgap{margin-top:var(--step);height:var(--th);display:flex;flex-direction:column;justify-content:center;gap:22px;padding:0 6px}
+.lbl{font-size:12px;line-height:1.3;color:var(--fg);text-align:center;display:block;margin-bottom:3px}
+.lbl.ret{color:var(--muted)}
+.arrow{display:block;width:100%;height:14px;overflow:visible}
+.vconn{grid-column:3;grid-row:2;display:flex;justify-content:center;gap:18px;align-items:stretch;position:relative;z-index:1}
+.vconn > div{display:flex;align-items:center;gap:6px}
+.vconn .lbl{text-align:right;width:110px}
+.vconn .up .lbl{text-align:left}
+.v{width:14px;height:100%}
+.quit{grid-column:1 / 3;grid-row:2 / 4;align-self:start;margin-left:calc(var(--tw) / 2 + 10px);height:calc(110px + var(--step) + var(--th) / 2);border-left:2px dashed var(--muted);border-bottom:2px dashed var(--muted);border-bottom-left-radius:16px;position:relative}
+.home{grid-column:1 / 6;grid-row:2 / 5;margin-left:calc(var(--tw) / 2 - 12px);margin-right:calc(var(--tw) / 2 - 1px);margin-bottom:10px;border:2px dashed var(--muted);border-top:0;border-radius:0 0 18px 18px;position:relative}
+.head-up{position:absolute;top:-2px;left:-8px;width:14px;height:12px}
+.quit .lbl,.home .lbl{position:absolute;bottom:4px;margin:0;background:var(--bg);padding:0 6px}
+.quit .lbl{right:8px}
+.home .lbl{left:50%;transform:translateX(-50%);white-space:nowrap}
+.sizes{color:var(--muted);font-size:13px;margin:8px 0 0}
+aside{flex:0 0 auto;display:flex}
+details{width:340px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;height:100%;font-size:14px;line-height:1.5}
+details summary{font-weight:800;cursor:pointer;list-style-position:inside}
+details:not([open]){width:48px;padding:16px 10px}
+details:not([open]) summary{writing-mode:vertical-rl;list-style:none;white-space:nowrap}
+details ul{padding-left:18px;margin:8px 0}
+details li{margin-bottom:8px}
+details h2{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:16px 0 4px}
+@media (max-width:699px){.layout{flex-direction:column}details{width:auto;height:auto}details:not([open]){width:auto}details:not([open]) summary{writing-mode:horizontal-tb}}
+</style>
+</head>
+<body>
+<div class="layout">
+<main>
+  <h1>Concept A · Neon Arcade</h1>
+  <p class="intro">Welcome → Game → Game over as an immersive night-time arcade: a dark screen, a glowing neon snake, a small score and Pause floating above the field, and big centred actions.</p>
+  <div class="flow">
+    <div class="screen" style="grid-column:1;grid-row:1">
+      <div class="step">01</div>
+      <a class="frame" href="welcome.html"><iframe src="welcome.html" title="Welcome" loading="lazy" tabindex="-1"></iframe></a>
+      <a class="name" href="welcome.html">Welcome</a>
+      <div class="note">New screen</div>
+    </div>
+    <div class="hgap" style="grid-column:2;grid-row:1"><div><span class="lbl">Taps “Play”</span><svg class="arrow" viewBox="0 0 100 14" preserveAspectRatio="none" aria-hidden="true"><path d="M0 7H90" stroke="var(--accent)" stroke-width="2.5" vector-effect="non-scaling-stroke"/><path d="M88 1L100 7L88 13z" fill="var(--accent)"/></svg></div></div>
+    <div class="screen" style="grid-column:3;grid-row:1">
+      <div class="step">02</div>
+      <a class="frame" href="game.html"><iframe src="game.html" title="Game" loading="lazy" tabindex="-1"></iframe></a>
+      <a class="name" href="game.html">Game</a>
+      <div class="note">New screen</div>
+    </div>
+    <div class="hgap" style="grid-column:4;grid-row:1">
+      <div><span class="lbl">Snake hits a wall or its tail</span><svg class="arrow" viewBox="0 0 100 14" preserveAspectRatio="none" aria-hidden="true"><path d="M0 7H90" stroke="var(--accent)" stroke-width="2.5" vector-effect="non-scaling-stroke"/><path d="M88 1L100 7L88 13z" fill="var(--accent)"/></svg></div>
+      <div><span class="lbl ret">Taps “Play again”</span><svg class="arrow" viewBox="0 0 100 14" preserveAspectRatio="none" aria-hidden="true"><path d="M100 7H10" stroke="var(--muted)" stroke-width="2" stroke-dasharray="6 5" vector-effect="non-scaling-stroke"/><path d="M12 1L0 7L12 13z" fill="var(--muted)"/></svg></div>
+    </div>
+    <div class="screen" style="grid-column:5;grid-row:1">
+      <div class="step">03</div>
+      <a class="frame" href="game-over.html"><iframe src="game-over.html" title="Game over" loading="lazy" tabindex="-1"></iframe></a>
+      <a class="name" href="game-over.html">Game over</a>
+      <div class="note">New screen</div>
+    </div>
+    <div class="home"><span class="lbl ret">Taps “Home”</span><svg class="head-up" viewBox="0 0 14 12" aria-hidden="true"><path d="M0 12L7 0L14 12z" fill="var(--muted)"/></svg></div>
+    <div class="quit"><span class="lbl ret">Taps “Quit to start”</span><svg class="head-up" viewBox="0 0 14 12" aria-hidden="true"><path d="M0 12L7 0L14 12z" fill="var(--muted)"/></svg></div>
+    <div class="vconn">
+      <div class="down"><span class="lbl">Taps “Pause” or the app goes to the background</span><svg class="v" viewBox="0 0 14 100" preserveAspectRatio="none" aria-hidden="true"><path d="M7 0V88" stroke="var(--accent)" stroke-width="2.5" vector-effect="non-scaling-stroke"/><path d="M1 86L7 100L13 86z" fill="var(--accent)"/></svg></div>
+      <div class="up"><svg class="v" viewBox="0 0 14 100" preserveAspectRatio="none" aria-hidden="true"><path d="M7 100V12" stroke="var(--muted)" stroke-width="2" stroke-dasharray="6 5" vector-effect="non-scaling-stroke"/><path d="M1 14L7 0L13 14z" fill="var(--muted)"/></svg><span class="lbl ret">Taps “Resume”</span></div>
+    </div>
+    <div class="screen" style="grid-column:3;grid-row:3">
+      <div class="step">04</div>
+      <a class="frame" href="game-paused.html"><iframe src="game-paused.html" title="Game — paused" loading="lazy" tabindex="-1"></iframe></a>
+      <a class="name" href="game-paused.html">Game — paused</a>
+      <div class="note">New screen</div>
+    </div>
+  </div>
+  <p class="sizes">Screens shown at phone size, 390 × 844 portrait, as the story targets mobile phones. Solid arrows move forward; dashed arrows go back.</p>
+</main>
+<aside><details open><summary>Choices made in this prototype</summary>
+<h2>Direction</h2><ul><li>Dark, full-screen and immersive, kind to eyes in a car at night.</li><li>The snake glows (cyan to lime gradient, patterned back, eyes and tongue).</li><li>Pause is a small round button in the top corner; Paused is a centred overlay with one big Resume button.</li><li>Big type: the final score is the hero of Game over.</li></ul>
+<h2>From the approved structure</h2>
+<ul>
+<li><b>Steering:</b> swipe anywhere on the play field (structure default). No on-screen arrows.</li>
+<li><b>Walls:</b> hitting the edge or the snake’s own tail ends the game.</li>
+<li><b>Score:</b> one point per berry; Game over shows this run’s score only, no best score.</li>
+<li><b>Pause:</b> a paused state of the Game screen, also opened when the app goes to the background.</li>
+<li><b>Portrait only, no sound.</b></li>
+</ul>
+<h2>Prototype only</h2>
+<ul>
+<li>Pages are still frames, so the snake does not move. Tap the play field on Game to jump to the crash and see Game over.</li>
+<li>The berry pulses gently (stops when the phone asks for reduced motion).</li>
+<li>Sample run: score 14, snake 15 squares long.</li>
+<li>Game name used on screen: “Snake”.</li>
+</ul>
+<h2>Next step</h2>
+<ul><li>The chosen concept’s screens drawn in full; the three screens have no loading, empty or error states.</li></ul>
+
+</details></aside>
+</div>
+</body>
+</html>

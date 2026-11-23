@@ -1,0 +1,9 @@
+/* Concept A · Neon Arcade — shared tokens */
+:root{
+  --bg:#0b0f1a; --surface:#121a2b; --surface-2:#1a2438; --fg:#eef3ff; --muted:#8d9bb8;
+  --line:#26324a; --accent:#a3ff12; --accent-2:#22d3ee; --accent-fg:#0b0f1a; --food:#ff3d81;
+  --font:ui-rounded,"SF Pro Rounded",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --fs-xs:12px; --fs-sm:14px; --fs-md:17px; --fs-lg:22px; --fs-xl:34px; --fs-xxl:64px;
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px; --sp-6:32px; --sp-7:48px;
+  --radius:18px; --radius-pill:999px;
+}

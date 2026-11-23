@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Game over</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);-webkit-font-smoothing:antialiased}
+.phone{max-width:430px;min-height:100vh;margin:0 auto;display:flex;flex-direction:column;position:relative;text-align:center}
+a{color:inherit}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+.food{transform-box:fill-box;transform-origin:center;animation:pulse 1.2s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){.food{animation:none}}
+
+.phone{padding:var(--sp-4)}
+.bar{display:flex;align-items:center;justify-content:center;min-height:48px;font-weight:700;font-size:var(--fs-md)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:var(--sp-4);box-shadow:0 6px 20px rgba(80,50,20,.08)}
+.dock{margin-top:auto;padding-top:var(--sp-5);display:flex;flex-direction:column;gap:var(--sp-3)}
+.btn{display:flex;align-items:center;justify-content:center;gap:var(--sp-2);min-height:60px;border-radius:16px;font-weight:700;font-size:var(--fs-md);text-decoration:none;width:100%}
+.btn-primary{background:var(--accent);color:var(--accent-fg)}
+.btn-secondary{background:var(--surface);color:var(--fg);border:1.5px solid var(--line)}
+.field{display:block;border-radius:12px;overflow:hidden;border:3px solid #8a6a46}
+.field-svg{display:block;width:100%;height:auto}
+.chips{display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--sp-3)}
+.chip{background:var(--surface-2);border-radius:var(--radius-pill);padding:var(--sp-2) var(--sp-4);font-weight:700;font-size:var(--fs-sm)}
+.chip b{color:var(--accent);font-size:var(--fs-md)}
+.hint{color:var(--muted);font-size:var(--fs-sm);display:flex;align-items:center;justify-content:center;gap:var(--sp-2);margin:var(--sp-3) 0 0}
+.proto{color:var(--muted);opacity:.75;font-size:var(--fs-xs);margin:var(--sp-2) 0 0}
+
+.result{margin-top:var(--sp-6);padding:var(--sp-6) var(--sp-4)}
+.crash{width:180px;display:block;margin:0 auto var(--sp-4)}
+.result h1{margin:0;font-size:var(--fs-xl)}
+.sub{color:var(--muted);margin:var(--sp-2) 0 var(--sp-5)}
+.score{background:var(--surface-2);border-radius:16px;padding:var(--sp-4)}
+.score span{display:block;color:var(--muted);font-size:var(--fs-sm);font-weight:600}
+.score strong{display:block;font-size:var(--fs-xxl);color:var(--accent);line-height:1.1}
+</style>
+</head>
+<body>
+<main class="phone">
+  <div class="bar">Snake</div>
+  <section class="card result">
+    <svg class="crash" viewBox="0 0 120 50" role="img" aria-label="The snake, dizzy after bumping the wall">
+      <rect x="10" y="28" width="16" height="16" rx="5" fill="#fb923c"/><rect x="28" y="28" width="16" height="16" rx="5" fill="#f97316"/><rect x="46" y="28" width="16" height="16" rx="5" fill="#fb923c"/><rect x="64" y="28" width="16" height="16" rx="5" fill="#f97316"/>
+      <rect x="82" y="26" width="20" height="20" rx="7" fill="#ea580c"/>
+      <path d="M88 31l4 4M92 31l-4 4M88 38l4 4M92 38l-4 4" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>
+      <rect x="106" y="4" width="6" height="44" rx="2" fill="#8a6a46"/>
+      <path d="M96 14l3-5M102 16l5-3M99 20l6 0" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <h1>Game over</h1>
+    <p class="sub">Your snake bumped into the wall.</p>
+    <div class="score"><span>Final score</span><strong>14</strong></div>
+  </section>
+  <div class="dock">
+    <a class="btn btn-primary" href="game.html"><svg width="22" height="22" viewBox="0 0 20 20" aria-hidden="true"><path d="M6 3.5v13l11-6.5z" fill="currentColor"/></svg> Play again</a>
+    <a class="btn btn-secondary" href="welcome.html">Home</a>
+  </div>
+</main>
+</body>
+</html>
