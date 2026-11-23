@@ -53,6 +53,8 @@ DEFAULT_PORT = 8000
 DEFAULT_KV_PATH = "./kv.log"
 KV_PREFIX = "/kv/"
 KV_MAX_BODY = 65536
+# Marks a /kv/ answer with no body (204). A stored JSON null is a real value.
+NO_BODY = object()
 
 INDEX = Path(__file__).resolve().parent / "docs" / "index.html"
 JUNGLE = Path(__file__).resolve().parent / "docs" / "jungle.html"
@@ -119,10 +121,10 @@ class RootOnlyHandler(http.server.BaseHTTPRequestHandler):
             return None
         return path[len(KV_PREFIX):]
 
-    def _kv_send(self, status, payload=None, close=False):
+    def _kv_send(self, status, payload=NO_BODY, close=False):
         body = b""
         self.send_response(status)
-        if payload is not None:
+        if payload is not NO_BODY:
             body = json.dumps(payload, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
             self.send_header("Content-Type", "application/json")
             self.send_header("Content-Length", str(len(body)))
@@ -160,14 +162,14 @@ class RootOnlyHandler(http.server.BaseHTTPRequestHandler):
             return 200, store.get(key)
         if method == "DELETE":
             store.delete(key)
-            return 204, None
+            return 204, NO_BODY
         ttl = _parse_ttl(urllib.parse.urlsplit(self.path).query)
         try:
             value = json.loads(body.decode("utf-8"), parse_constant=_reject_constant)
         except ValueError as err:  # invalid UTF-8, BOM, bad JSON, NaN, huge ints
             raise KVRequestError(400, f"value JSON: request body is not valid JSON ({err})") from None
         store.set(key, value, ttl=ttl)
-        return 204, None
+        return 204, NO_BODY
 
     def _kv_dispatch(self, raw_key):
         """Answer a /kv/ request, mapping store errors to HTTP statuses."""
@@ -282,6 +284,9 @@ def main(argv):
         server.kv_open()  # a torn-tail warning shows on stderr now
     except CorruptLogError as err:
         print(f"kvstore unavailable, /kv/ will answer 503: {err}", file=sys.stderr, flush=True)
+    except OSError as err:
+        # The pages still serve; /kv/ retries the open and answers 500 meanwhile.
+        print(f"kvstore unavailable, /kv/ will answer 500: {err}", file=sys.stderr, flush=True)
     bound_host, bound_port = server.server_address[:2]
     print(f"serving Hello World on http://{bound_host}:{bound_port}/ (Ctrl-C to stop)", flush=True)
     try:

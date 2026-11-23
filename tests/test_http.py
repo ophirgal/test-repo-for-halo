@@ -103,6 +103,17 @@ class RoutesTest(ServerTestCase):
         self.assert_json_error(self.request("GET", "/kv/b"), 404)
         self.assertEqual(json.loads(self.request("GET", "/kv/")[2]), ["a"])
 
+    def test_null_value_round_trips_as_json(self):  # AC10
+        self.start()
+        self.assertEqual(self.put("/kv/n", None)[0], 204)
+        status, headers, body = self.request("GET", "/kv/n")
+        self.assertEqual((status, body), (200, b"null"))
+        self.assertEqual(headers["Content-Type"], "application/json")
+        status, headers, body = self.request("HEAD", "/kv/n")
+        self.assertEqual((status, body), (200, b""))
+        self.assertEqual(headers["Content-Type"], "application/json")
+        self.assertEqual(headers["Content-Length"], "4")
+
     def test_head_mirrors_get(self):
         self.start()
         self.put("/kv/a", "hello")
@@ -387,6 +398,25 @@ class RegressionTest(ServerTestCase):
             _, err = proc.communicate(timeout=10)
         self.assertIn("line 2", err)
         self.assertEqual(self.read_log(), data)
+
+    def test_main_starts_when_kv_path_cannot_be_opened(self):  # AC12
+        missing = os.path.join(self.tmp.name, "absent", "kv.log")
+        proc = subprocess.Popen(
+            [sys.executable, "serve.py", "0"], cwd=ROOT, env=dict(os.environ, KV_PATH=missing),
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+        )
+        try:
+            first = proc.stdout.readline()
+            self.assertIn("serving Hello World", first)
+            self.port = int(first.split(":")[2].split("/")[0])
+            self.assertEqual(self.request("GET", "/")[2], serve.INDEX.read_bytes())
+            self.assertEqual(self.request("GET", "/jungle")[0], 200)
+            self.assert_json_error(self.request("GET", "/kv/a"), 500)
+        finally:
+            proc.terminate()
+            _, err = proc.communicate(timeout=10)
+        self.assertIn("kvstore unavailable", err)
+        self.assertFalse(os.path.exists(missing))
 
     def test_docstring_documents_kv(self):
         doc = serve.__doc__
