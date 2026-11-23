@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Screens — Newsletter signup journey (SCRUM-102)</title><link rel="stylesheet" href="tokens.css">
+<style>
+  .gallery{max-width:960px;margin:0 auto;padding:var(--sp-6) var(--sp-4) var(--sp-7)}
+  .gallery > header{text-align:center;margin-bottom:var(--sp-6)}
+  .gallery > header p{color:var(--c-muted);margin:var(--sp-2) 0 0}
+  .group{background:var(--c-surface);border:1px solid var(--c-divider);border-radius:var(--radius);padding:var(--sp-5);margin-bottom:var(--sp-5)}
+  .group h2{margin:0 0 var(--sp-2);font-size:var(--fs-lg)}
+  .changed{font-size:var(--fs-sm);margin:0 0 var(--sp-4)}
+  .states{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:var(--sp-4)}
+  .state{border-top:1px solid var(--c-divider);padding-top:var(--sp-4);display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4);align-items:center}
+  .state-head{display:flex;flex-direction:column;gap:var(--sp-1);font-size:var(--fs-sm)}
+  .pair{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-3)}
+  .tile{display:flex;flex-direction:column;gap:2px;min-height:var(--tap);padding:var(--sp-3);border:1px solid var(--c-border);border-radius:var(--radius);text-decoration:none;background:var(--c-accent-bg)}
+  .tile:hover{border-color:var(--c-primary)}
+  .kind{font-weight:600}
+  .file{font-size:.75rem;color:var(--c-muted);word-break:break-all}
+  details.notes{background:var(--c-surface);border:1px solid var(--c-divider);border-radius:var(--radius);padding:var(--sp-4) var(--sp-5)}
+  details.notes summary{font-weight:600;cursor:pointer;min-height:32px}
+  details.notes li{margin-bottom:var(--sp-2);font-size:var(--fs-sm)}
+</style></head>
+<body>
+<main class="gallery">
+<header><h1>Newsletter signup — every screen and state</h1><p>Drawn from the approved concept B · Split. Each state has a desktop page (1280 px) and a separate mobile page (390 px) side by side.</p></header>
+<section class="group" aria-labelledby="g01"><h2 id="g01">01 Site page — footer link</h2><p class="changed">Changed from today (<code>docs/index.html</code>): a footer with a “Newsletter” link is added under the page, and the page content is centred; everything else is as it is now.</p><ul class="states"><li class="state"><div class="state-head"><strong>Default</strong><span class="muted">Today’s page with the new footer and its “Newsletter” link.</span></div>
+<div class="pair"><a class="tile" href="site-page-footer-link.default.html"><span class="kind">Desktop</span><span class="file">site-page-footer-link.default.html</span></a><a class="tile" href="site-page-footer-link.default.mobile.html"><span class="kind">Mobile</span><span class="file">site-page-footer-link.default.mobile.html</span></a></div></li></ul></section><section class="group" aria-labelledby="g02"><h2 id="g02">02 Welcome</h2><p class="changed muted">New screen.</p><ul class="states"><li class="state"><div class="state-head"><strong>Default</strong><span class="muted">One-line pitch and the Subscribe button. Static content, so there is no loading, error or empty state.</span></div>
+<div class="pair"><a class="tile" href="welcome.default.html"><span class="kind">Desktop</span><span class="file">welcome.default.html</span></a><a class="tile" href="welcome.default.mobile.html"><span class="kind">Mobile</span><span class="file">welcome.default.mobile.html</span></a></div></li></ul></section><section class="group" aria-labelledby="g03"><h2 id="g03">03 Signup form</h2><p class="changed muted">New screen.</p><ul class="states"><li class="state"><div class="state-head"><strong>Default</strong><span class="muted">Name and email filled in, ready to submit.</span></div>
+<div class="pair"><a class="tile" href="signup-form.default.html"><span class="kind">Desktop</span><span class="file">signup-form.default.html</span></a><a class="tile" href="signup-form.default.mobile.html"><span class="kind">Mobile</span><span class="file">signup-form.default.mobile.html</span></a></div></li><li class="state"><div class="state-head"><strong>Error · name empty</strong><span class="muted">Inline error under Name; focus lands on Name.</span></div>
+<div class="pair"><a class="tile" href="signup-form.name-empty.html"><span class="kind">Desktop</span><span class="file">signup-form.name-empty.html</span></a><a class="tile" href="signup-form.name-empty.mobile.html"><span class="kind">Mobile</span><span class="file">signup-form.name-empty.mobile.html</span></a></div></li><li class="state"><div class="state-head"><strong>Error · email empty</strong><span class="muted">Inline error under Email; the name already typed is kept; focus lands on Email.</span></div>
+<div class="pair"><a class="tile" href="signup-form.email-empty.html"><span class="kind">Desktop</span><span class="file">signup-form.email-empty.html</span></a><a class="tile" href="signup-form.email-empty.mobile.html"><span class="kind">Mobile</span><span class="file">signup-form.email-empty.mobile.html</span></a></div></li><li class="state"><div class="state-head"><strong>Error · email malformed</strong><span class="muted">Inline error under Email showing the expected format; the typed value is kept.</span></div>
+<div class="pair"><a class="tile" href="signup-form.email-malformed.html"><span class="kind">Desktop</span><span class="file">signup-form.email-malformed.html</span></a><a class="tile" href="signup-form.email-malformed.mobile.html"><span class="kind">Mobile</span><span class="file">signup-form.email-malformed.mobile.html</span></a></div></li><li class="state"><div class="state-head"><strong>Loading · submitting</strong><span class="muted">Submit disabled with a spinner and “Submitting…”; fields read-only.</span></div>
+<div class="pair"><a class="tile" href="signup-form.submitting.html"><span class="kind">Desktop</span><span class="file">signup-form.submitting.html</span></a><a class="tile" href="signup-form.submitting.mobile.html"><span class="kind">Mobile</span><span class="file">signup-form.submitting.mobile.html</span></a></div></li><li class="state"><div class="state-head"><strong>Error · submission failed</strong><span class="muted">Message above the form with the cause and the way out; values kept; Submit enabled again.</span></div>
+<div class="pair"><a class="tile" href="signup-form.submission-failed.html"><span class="kind">Desktop</span><span class="file">signup-form.submission-failed.html</span></a><a class="tile" href="signup-form.submission-failed.mobile.html"><span class="kind">Mobile</span><span class="file">signup-form.submission-failed.mobile.html</span></a></div></li></ul></section><section class="group" aria-labelledby="g04"><h2 id="g04">04 Confirmation</h2><p class="changed muted">New screen.</p><ul class="states"><li class="state"><div class="state-head"><strong>Default</strong><span class="muted">Shown for a new address and for one already on the list, with identical text.</span></div>
+<div class="pair"><a class="tile" href="confirmation.default.html"><span class="kind">Desktop</span><span class="file">confirmation.default.html</span></a><a class="tile" href="confirmation.default.mobile.html"><span class="kind">Mobile</span><span class="file">confirmation.default.mobile.html</span></a></div></li></ul></section>
+<details class="notes" open><summary>Choices made in this screen set</summary>
+<ul>
+<li><strong>Layout</strong>: concept B, unchanged. On desktop, the context pane (Back link, stepper, heading) is on the left and the action pane on the right. On mobile the panes stack with the context first, and the stepper names only the current step.</li>
+<li><strong>Errors are never shown by colour alone</strong>: each error has an icon, bold text, a 2&nbsp;px red border on the field and a hidden “Error:” prefix for screen readers. The error is tied to its field with <code>aria-describedby</code>, and the field is marked <code>aria-invalid</code>. Error red is #b3261e, which has a 6.5:1 contrast ratio on white.</li>
+<li><strong>Focus</strong>: the first field in error gets <code>autofocus</code>, and the page draws its focus ring so you can see where focus lands. Focus order is Back, Name, Email, then Submit, on every page.</li>
+<li><strong>Several errors at once</strong>: each message sits under its own field, as the structure describes. AC&nbsp;2 lists one error per state, so the gallery draws them one at a time.</li>
+<li><strong>Submitting</strong>: the button is grey, has <code>aria-disabled</code> and shows a spinner; the spinner stops when the visitor asks for reduced motion. The fields are read-only, the form has <code>aria-busy</code>, and a status line is announced to screen readers.</li>
+<li><strong>Submission failed</strong>: a <code>role="alert"</code> message above the form gives the cause and the way out (“select Submit again”). The values are kept.</li>
+<li><strong>No scripts</strong>: on every form page, “Submit” is a link to the confirmation, so you can keep clicking through the journey.</li>
+<li><strong>Site page footer</strong>: the prototype’s “User Journey” link was only there for reviewing the prototype, so it is dropped. The product footer has only “Newsletter”.</li>
+<li>Colours, type and spacing are in the shared <code>tokens.css</code>, copied from the prototype. Mobile pages use the same file, with <code>&lt;body class="mobile"&gt;</code> instead of media queries.</li>
+</ul></details>
+</main>
+</body></html>
