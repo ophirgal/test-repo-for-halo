@@ -1,0 +1,9 @@
+{
+  "storyId": "5c0dd8e4-3ee1-4eb4-aab2-a630df7bb3c0",
+  "storyKey": "SCRUM-120",
+  "title": "Offline link checker for the docs site with a JSON and Markdown report",
+  "decisionId": "591fe5f7-81cd-40ed-8f3c-b48c71759982",
+  "actor": "Ophir Gal",
+  "approvedAt": "2026-11-23T17:53:10Z",
+  "planHeadSha": "85bfeefcb5c513219d787b3716867a307372d287"
+}
