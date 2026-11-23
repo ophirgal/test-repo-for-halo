@@ -7,9 +7,11 @@ from .log import (
     encode_record,
     replay,
 )
+from .store import KVStore
 
 __all__ = [
     "CorruptLogError",
+    "KVStore",
     "TornTailWarning",
     "check_key",
     "encode_record",

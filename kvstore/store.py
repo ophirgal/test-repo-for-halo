@@ -1,0 +1,152 @@
+"""The public key-value store: dict-like API with per-key TTL.
+
+Every operation runs under one lock per store. Each mutation is validated,
+appended, flushed and fsynced before it returns. Time comes from an injected
+``clock`` (default ``time.time``) so tests never sleep.
+"""
+
+import math
+import os
+import threading
+import time
+
+from .log import CorruptLogError, canonical_json, check_key, encode_record, replay
+
+MAX_VALUE_BYTES = 65536
+
+
+def check_value(value):
+    """Raise ``ValueError`` naming the rule unless ``value`` is a storable JSON value."""
+    try:
+        size = len(canonical_json(value).encode("utf-8"))
+    except (TypeError, ValueError) as err:  # non-JSON types, NaN/Infinity, lone surrogates
+        raise ValueError(f"value JSON: value must be a JSON value ({err})") from None
+    if size > MAX_VALUE_BYTES:
+        raise ValueError(f"value size: serialized value is {size} bytes, at most {MAX_VALUE_BYTES} allowed")
+
+
+def check_ttl(ttl):
+    """Raise ``ValueError`` unless ``ttl`` is None or a finite number of seconds > 0."""
+    if ttl is None:
+        return
+    if isinstance(ttl, bool) or not isinstance(ttl, (int, float)):
+        raise ValueError(f"ttl: ttl must be a number of seconds, got {type(ttl).__name__}")
+    try:
+        finite = math.isfinite(ttl)
+    except OverflowError:
+        finite = False
+    if not finite or ttl <= 0:
+        raise ValueError(f"ttl: ttl must be finite and greater than 0, got {ttl!r}")
+
+
+class KVStore:
+    """A file-backed key-value store over one append-only log.
+
+    ``KVStore(path, clock=time.time)``. Opening over a log corrupt in the
+    middle raises :class:`CorruptLogError`; the refused instance is
+    ``err.store`` and raises ``CorruptLogError`` on every operation.
+    """
+
+    def __init__(self, path, *, clock=time.time):
+        self.path = os.fspath(path)
+        self._clock = clock
+        self._lock = threading.Lock()
+        self._fh = None
+        self._refused = None
+        self._closed = False
+        try:
+            result = replay(self.path)
+        except CorruptLogError as err:
+            err.store = self
+            self._refused = err
+            raise
+        self._index = result.index
+        self._records = result.records
+        self._needs_newline = result.missing_newline
+        self._fh = open(self.path, "ab")
+
+    # -- lifecycle -------------------------------------------------------
+
+    def close(self):
+        with self._lock:
+            self._closed = True
+            if self._fh is not None:
+                self._fh.close()
+                self._fh = None
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        self.close()
+
+    # -- internals (call with the lock held) -----------------------------
+
+    def _check_usable(self):
+        if self._refused is not None:
+            err = self._refused
+            raise CorruptLogError(err.path, err.lineno, store=self)
+        if self._closed:
+            raise ValueError("store is closed")
+
+    def _live(self, key, now):
+        entry = self._index.get(key)
+        if entry is None:
+            return None
+        if entry[1] is not None and entry[1] <= now:
+            return None
+        return entry
+
+    def _append(self, line):
+        if self._needs_newline:
+            line = b"\n" + line
+        self._fh.write(line)
+        self._fh.flush()
+        os.fsync(self._fh.fileno())
+        self._needs_newline = False
+        self._records += 1
+
+    def _after_mutation(self):
+        """Hook run under the lock after each successful mutation."""
+
+    # -- public API ------------------------------------------------------
+
+    def set(self, k, v, ttl=None):
+        """Store ``v`` under ``k``; with ``ttl`` it expires ``ttl`` seconds from now."""
+        with self._lock:
+            self._check_usable()
+            check_key(k)
+            check_value(v)
+            check_ttl(ttl)
+            exp = None if ttl is None else self._clock() + ttl
+            self._append(encode_record("set", k, v, exp))
+            self._index[k] = (v, exp)
+            self._after_mutation()
+
+    def get(self, k):
+        """Return the value of a live key; ``KeyError`` if missing or expired."""
+        with self._lock:
+            self._check_usable()
+            check_key(k)
+            entry = self._live(k, self._clock())
+            if entry is None:
+                raise KeyError(k)
+            return entry[0]
+
+    def delete(self, k):
+        """Delete a live key; ``KeyError`` (and nothing appended) if missing or expired."""
+        with self._lock:
+            self._check_usable()
+            check_key(k)
+            if self._live(k, self._clock()) is None:
+                raise KeyError(k)
+            self._append(encode_record("del", k))
+            del self._index[k]
+            self._after_mutation()
+
+    def keys(self):
+        """Return the live, unexpired keys sorted ascending."""
+        with self._lock:
+            self._check_usable()
+            now = self._clock()
+            return sorted(k for k in self._index if self._live(k, now) is not None)
