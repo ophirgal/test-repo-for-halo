@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Road Snake · all screens</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+body{height:auto}
+.gal{max-width:1240px;margin:0 auto;padding:32px 24px 60px}
+.gal>h1{margin:0 0 6px;font-size:28px;text-align:center}
+.gal>p.lead{color:var(--muted);text-align:center;margin:0 auto 28px;max-width:72ch}
+.group{border-top:1px solid var(--line);padding:24px 0}
+.group h2{margin:0;font-size:22px} .group h2 span{color:var(--accent);font-weight:900;margin-right:6px}
+.new{margin:2px 0 14px;color:var(--muted);font-size:13px}
+.states{display:flex;flex-wrap:wrap;gap:28px}
+.state h3{margin:0;font-size:13px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent)}
+.state>p{margin:4px 0 10px;font-size:14px;color:var(--muted);max-width:560px}
+.pair{display:flex;gap:14px;align-items:flex-end}
+.pg{display:flex;flex-direction:column;gap:6px;text-decoration:none}
+.tag{font-size:12px;color:var(--muted)}
+.pv{display:block;overflow:hidden;border:2px solid var(--line);border-radius:10px;background:var(--bg)}
+.desk .pv{width:384px;height:240px} .desk iframe{width:1280px;height:800px;transform:scale(.3)}
+.mob .pv{width:117px;height:253px;border-radius:16px} .mob iframe{width:390px;height:844px;transform:scale(.3)}
+.pv iframe{border:0;transform-origin:0 0;pointer-events:none;display:block}
+.links{font-size:12px;margin:8px 0 0} .links a{color:var(--accent)}
+.notes{border-top:1px solid var(--line);padding-top:20px;font-size:14px;line-height:1.5}
+.notes h2{font-size:18px} .notes ul{padding-left:18px;color:var(--text)}
+</style>
+</head>
+<body>
+<div class="gal">
+<h1>Road Snake — every screen, every state</h1>
+<p class="lead">SCRUM-113. Drawn from the approved concept A (Arcade). Each state is shown side by side: desktop (1280 × 800) on the left and phone (390 × 844) on the right. Open any one at full size. All four screens are new.</p>
+<section class="group"><h2><span>01</span> Welcome</h2><p class="new">New screen</p><div class="states"><div class="state"><h3>default</h3><p>Title, snake art, steering hint and Play.</p>
+<div class="pair"><a class="pg desk" href="welcome.default.html"><span class="tag">Desktop</span><span class="pv"><iframe src="welcome.default.html" title="Welcome — default (desktop)" loading="lazy"></iframe></span></a>
+<a class="pg mob" href="welcome.default.mobile.html"><span class="tag">Mobile</span><span class="pv"><iframe src="welcome.default.mobile.html" title="Welcome — default (mobile)" loading="lazy"></iframe></span></a></div>
+<p class="links"><a href="welcome.default.html">welcome.default.html</a> · <a href="welcome.default.mobile.html">welcome.default.mobile.html</a></p></div><div class="state"><h3>loading</h3><p>First open: title and art show, a progress bar fills and Play stays disabled until the assets are in.</p>
+<div class="pair"><a class="pg desk" href="welcome.loading.html"><span class="tag">Desktop</span><span class="pv"><iframe src="welcome.loading.html" title="Welcome — loading (desktop)" loading="lazy"></iframe></span></a>
+<a class="pg mob" href="welcome.loading.mobile.html"><span class="tag">Mobile</span><span class="pv"><iframe src="welcome.loading.mobile.html" title="Welcome — loading (mobile)" loading="lazy"></iframe></span></a></div>
+<p class="links"><a href="welcome.loading.html">welcome.loading.html</a> · <a href="welcome.loading.mobile.html">welcome.loading.mobile.html</a></p></div></div></section><section class="group"><h2><span>02</span> Game — playing</h2><p class="new">New screen</p><div class="states"><div class="state"><h3>default</h3><p>Mid-round: score 12, the snake heading right, food on the board.</p>
+<div class="pair"><a class="pg desk" href="game-playing.default.html"><span class="tag">Desktop</span><span class="pv"><iframe src="game-playing.default.html" title="Game — playing — default (desktop)" loading="lazy"></iframe></span></a>
+<a class="pg mob" href="game-playing.default.mobile.html"><span class="tag">Mobile</span><span class="pv"><iframe src="game-playing.default.mobile.html" title="Game — playing — default (mobile)" loading="lazy"></iframe></span></a></div>
+<p class="links"><a href="game-playing.default.html">game-playing.default.html</a> · <a href="game-playing.default.mobile.html">game-playing.default.mobile.html</a></p></div><div class="state"><h3>empty</h3><p>Start of a round: score 0, a short snake and one piece of food, plus a one-time steering hint.</p>
+<div class="pair"><a class="pg desk" href="game-playing.empty.html"><span class="tag">Desktop</span><span class="pv"><iframe src="game-playing.empty.html" title="Game — playing — empty (desktop)" loading="lazy"></iframe></span></a>
+<a class="pg mob" href="game-playing.empty.mobile.html"><span class="tag">Mobile</span><span class="pv"><iframe src="game-playing.empty.mobile.html" title="Game — playing — empty (mobile)" loading="lazy"></iframe></span></a></div>
+<p class="links"><a href="game-playing.empty.html">game-playing.empty.html</a> · <a href="game-playing.empty.mobile.html">game-playing.empty.mobile.html</a></p></div></div></section><section class="group"><h2><span>03</span> Game — paused</h2><p class="new">New screen</p><div class="states"><div class="state"><h3>default</h3><p>Frozen, dimmed board under the overlay: Resume or Quit to Welcome. Also opens on its own when the app leaves the screen.</p>
+<div class="pair"><a class="pg desk" href="game-paused.default.html"><span class="tag">Desktop</span><span class="pv"><iframe src="game-paused.default.html" title="Game — paused — default (desktop)" loading="lazy"></iframe></span></a>
+<a class="pg mob" href="game-paused.default.mobile.html"><span class="tag">Mobile</span><span class="pv"><iframe src="game-paused.default.mobile.html" title="Game — paused — default (mobile)" loading="lazy"></iframe></span></a></div>
+<p class="links"><a href="game-paused.default.html">game-paused.default.html</a> · <a href="game-paused.default.mobile.html">game-paused.default.mobile.html</a></p></div></div></section><section class="group"><h2><span>04</span> Game over</h2><p class="new">New screen</p><div class="states"><div class="state"><h3>default</h3><p>The crash stays visible above the final score 14, with Play again and Home.</p>
+<div class="pair"><a class="pg desk" href="game-over.default.html"><span class="tag">Desktop</span><span class="pv"><iframe src="game-over.default.html" title="Game over — default (desktop)" loading="lazy"></iframe></span></a>
+<a class="pg mob" href="game-over.default.mobile.html"><span class="tag">Mobile</span><span class="pv"><iframe src="game-over.default.mobile.html" title="Game over — default (mobile)" loading="lazy"></iframe></span></a></div>
+<p class="links"><a href="game-over.default.html">game-over.default.html</a> · <a href="game-over.default.mobile.html">game-over.default.mobile.html</a></p></div></div></section>
+<section class="notes"><h2>Choices made in this screen set</h2><ul>
+<li><b>States:</b> only the states the structure's inventory names. Welcome has default and loading, Game — playing has default and empty, and Game — paused and Game over each have default. The game makes no network calls, so no screen has an error state.</li>
+<li><b>Desktop layout:</b> the same single centred column as the phone. The board grows to fit the window (at most 600 px), and the title and art get bigger. Overlays still cover the board.</li>
+<li><b>Desktop steering:</b> the hint reads “Swipe or use the arrow keys to steer”, because a desktop browser has no swipe. The phone keeps “Swipe anywhere to steer” (open branch 1: swipe only, no arrow pad).</li>
+<li><b>Start of a round (empty):</b> a one-time “Swipe to start moving” hint above the board. The snake stays still until the first swipe, so a round doesn't start before the gamer is ready.</li>
+<li><b>Loading:</b> a progress bar under the art and a disabled “Loading” button with a spinner. It appears on first open only, because the game then runs offline.</li>
+<li><b>Flow:</b> Play and Play again open the start of a round (empty). Resume returns to the round in progress. Quit and Home go back to Welcome.</li>
+<li><b>Prototype-only links (no script):</b> tap the board to move the round forward (empty → playing → game over), and use the skip link on loading. The built game doesn't have these.</li>
+<li>No best score (open branch 2). Speed rises with the score (open branch 4) and can't be seen in a still page. The food pulse, tongue flick and spinner stop under reduced motion.</li>
+<li>“Road Snake” is a sample game name, as in the prototype.</li>
+</ul></section>
+</div>
+</body>
+</html>
