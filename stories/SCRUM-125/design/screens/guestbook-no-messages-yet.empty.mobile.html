@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guestbook — no messages yet (mobile)</title>
+<link rel="stylesheet" href="tokens.css">
+</head>
+<body class="m">
+<main>
+  <header class="page-head">
+    <h1>Guestbook</h1>
+  </header>
+  <form class="form" method="get" action="guestbook-message-sent.default.mobile.html">
+    <label for="message">Your message</label>
+    <div class="row">
+      <input type="text" id="message" name="message" placeholder="Write one line…" autocomplete="off" aria-describedby="message-hint">
+      <button class="button" type="submit">Send</button>
+    </div>
+    <p class="hint" id="message-hint">One line, up to 200 characters.</p>
+  </form>
+  <section aria-labelledby="latest">
+    <h2 class="list-head" id="latest">Latest messages</h2>
+    <p class="empty-line">No messages yet. Be the first to leave one.</p>
+  </section>
+</main>
+<p class="review-foot"><a href="index.html">← Back to all screens</a></p>
+</body>
+</html>
