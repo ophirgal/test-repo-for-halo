@@ -1,0 +1,9 @@
+{
+  "storyId": "8aa44f08-5868-4276-a8ab-950b04abfcca",
+  "storyKey": "SCRUM-122",
+  "title": "Add a /healthz endpoint to serve.py",
+  "decisionId": "b4cd35f3-388c-4ef3-a47a-5e01886133a9",
+  "actor": "Service",
+  "approvedAt": "2026-11-24T08:08:06Z",
+  "planHeadSha": "3813c1f1384ec7dca7b597382c0926807ddc7530"
+}
