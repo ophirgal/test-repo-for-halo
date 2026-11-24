@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page not found</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  /* Concept B · Signpost: a large 404 mark, centred in the window, the link as a big target. */
+  *, *::before, *::after { box-sizing: border-box; }
+  main {
+    min-height: 100vh; min-height: 100dvh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: var(--pad); text-align: center;
+  }
+  .mark { margin: 0; font-size: clamp(5rem, 18vw, 10rem); font-weight: 700; line-height: 1; color: var(--muted); letter-spacing: -.02em; }
+  h1 { margin: 1rem 0 .75rem; font-size: clamp(1.75rem, 5vw, 2.5rem); }
+  p.explain { margin: 0 0 2rem; max-width: 30rem; line-height: 1.5; font-size: 1.125rem; }
+  a.home {
+    display: inline-flex; align-items: center; gap: .5rem;
+    min-height: 3rem; padding: .75rem 1.5rem;
+    border: 2px solid var(--link); border-radius: 999px;
+    font-size: 1.125rem; font-weight: 600; text-decoration: none;
+  }
+  a.home:hover { background: var(--link); color: var(--bg); }
+  a.home:focus-visible { outline-offset: 4px; border-radius: 999px; }
+</style>
+</head>
+<body>
+<main>
+  <p class="mark" aria-hidden="true">404</p>
+  <h1>Page not found</h1>
+  <p class="explain">The link you followed may be broken, or the page may have moved.</p>
+  <a class="home" href="home.html"><span aria-hidden="true">&larr;</span> Go to the home page</a>
+</main>
+</body>
+</html>
