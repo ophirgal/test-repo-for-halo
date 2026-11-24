@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Screens · Friendly 404 page</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  body { background: #f6f6f6; }
+  main { max-width: 64rem; margin: 0 auto; padding: 1.5rem 1rem 3rem; line-height: 1.5; }
+  h1 { margin: 0 0 .25rem; font-size: 1.5rem; }
+  section { background: var(--bg); border: 1px solid var(--line); padding: 1rem 1.25rem; margin-top: 1.5rem; }
+  h2 { margin: 0 0 .25rem; font-size: 1.25rem; }
+  .changed { margin: 0 0 .75rem; color: var(--muted); }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { text-align: left; padding: .5rem .75rem .5rem 0; border-top: 1px solid var(--line); vertical-align: top; }
+  ul { padding-left: 1.1rem; }
+</style>
+</head>
+<body>
+<main>
+  <h1>SCRUM-123 · Friendly 404 page: all screens and states</h1>
+  <p>Drawn from the approved prototype concept A (Quiet). Every state has a desktop page and a phone page, side by side.</p>
+
+  <section>
+    <h2>01 Page not found</h2>
+    <p class="changed">New screen. It replaces the stock &ldquo;Error response / Error code: 404&rdquo; page that serve.py shows today.</p>
+    <table>
+      <tr><th>State</th><th>Desktop</th><th>Mobile</th></tr>
+      <tr><td>default</td><td><a href="page-not-found.default.html">page-not-found.default</a></td><td><a href="page-not-found.default.mobile.html">page-not-found.default.mobile</a></td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>02 Home</h2>
+    <p class="changed">Unchanged from today&rsquo;s docs/index.html. It is drawn only as the link&rsquo;s destination, and is centred here with a review-only link back.</p>
+    <table>
+      <tr><th>State</th><th>Desktop</th><th>Mobile</th></tr>
+      <tr><td>default</td><td><a href="home.default.html">home.default</a></td><td><a href="home.default.mobile.html">home.default.mobile</a></td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Choices made in this set</h2>
+    <ul>
+      <li>Only the <strong>default</strong> state is drawn for each screen. The inventory marks loading, error and empty as n/a: the page is static, and it is itself the error.</li>
+      <li>The desktop page keeps concept A as approved: a 36rem centred column at the top of the window, a small letter-spaced &ldquo;404&rdquo; (hidden from screen readers), the h1 at the browser&rsquo;s default size, and an underlined text link.</li>
+      <li>The phone page has the same content in one column, a 1.75rem heading so &ldquo;Page not found&rdquo; stays on one line at 320&nbsp;px, and a link at least 48&nbsp;px tall.</li>
+      <li>Colours are today&rsquo;s browser defaults: black text on white (21:1), blue link #0000ee (9.4:1), grey mark #595959 (7:1). The link has a 3&nbsp;px black focus outline.</li>
+      <li>In this set the link goes to the Home page of the same width. In the build it points to <code>/</code>. The broken URL is never shown on the page.</li>
+    </ul>
+  </section>
+</main>
+</body>
+</html>
