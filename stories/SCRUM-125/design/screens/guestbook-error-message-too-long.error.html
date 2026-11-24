@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guestbook — error: message too long</title>
+<link rel="stylesheet" href="tokens.css">
+</head>
+<body>
+<main>
+  <header class="page-head">
+    <h1>Guestbook</h1>
+  </header>
+  <form class="form" method="get" action="guestbook-message-sent.default.html">
+    <label for="message">Your message</label>
+    <div class="row">
+      <input type="text" id="message" name="message" placeholder="Write one line…" autocomplete="off" value="Just wanted to say this little site made my morning. A friend sent me the jungle page, I spent far too long looking at it, and now I am here writing what was meant to be a short note but clearly is not one anymore. Thanks!" aria-invalid="true" aria-describedby="message-error">
+      <button class="button" type="submit">Send</button>
+    </div>
+    <p class="error" id="message-error" role="alert"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="7.25" y="3.75" width="1.5" height="5.5" fill="currentColor"/><rect x="7.25" y="10.75" width="1.5" height="1.5" fill="currentColor"/></svg><span><strong>Message is too long — 200 characters at most.</strong> Yours has 222. Nothing was saved or cut; shorten it and press Send.</span></p>
+  </form>
+  <section aria-labelledby="latest">
+    <h2 class="list-head" id="latest">Latest messages</h2>
+    <ol class="list" reversed>
+      <li><span class="msg-text" dir="auto">Found this page by accident and stayed for the jungle. Hello from Lisbon!</span><time datetime="2026-11-24T07:52">2026-11-24 07:52</time></li>
+      <li><span class="msg-text" dir="auto">איזה אתר חמוד, תודה!</span><time datetime="2026-11-24T07:41">2026-11-24 07:41</time></li>
+      <li><span class="msg-text" dir="auto">hahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahaha</span><time datetime="2026-11-24T07:30">2026-11-24 07:30</time></li>
+      <li><span class="msg-text" dir="auto">&lt;b&gt;שלום&lt;/b&gt;&lt;script&gt;alert(1)&lt;/script&gt;</span><time datetime="2026-11-24T07:18">2026-11-24 07:18</time></li>
+      <li><span class="msg-text" dir="auto">First time here. The jungle page is my new desktop background.</span><time datetime="2026-11-24T06:55">2026-11-24 06:55</time></li>
+      <li><span class="msg-text" dir="auto">בוקר טוב מתל אביב ☕</span><time datetime="2026-11-24T06:40">2026-11-24 06:40</time></li>
+      <li><span class="msg-text" dir="auto">Testing, testing… is this thing on?</span><time datetime="2026-11-23T23:58">2026-11-23 23:58</time></li>
+      <li><span class="msg-text" dir="auto">Greetings from the night shift.</span><time datetime="2026-11-23T23:12">2026-11-23 23:12</time></li>
+      <li><span class="msg-text" dir="auto">ביקרתי כאן אתמול וחזרתי שוב 🙂</span><time datetime="2026-11-23T22:47">2026-11-23 22:47</time></li>
+      <li><span class="msg-text" dir="auto">Nice and simple. More sites should be like this.</span><time datetime="2026-11-23T21:30">2026-11-23 21:30</time></li>
+      <li><span class="msg-text" dir="auto">**bold?** _italic?_ nope, just text</span><time datetime="2026-11-23T20:05">2026-11-23 20:05</time></li>
+      <li><span class="msg-text" dir="auto">Hello from a phone on the train.</span><time datetime="2026-11-23T19:44">2026-11-23 19:44</time></li>
+      <li><span class="msg-text" dir="auto">מישהו יודע מי בנה את זה? כל הכבוד</span><time datetime="2026-11-23T18:20">2026-11-23 18:20</time></li>
+      <li><span class="msg-text" dir="auto">Leaving my mark before the weekend.</span><time datetime="2026-11-23T17:02">2026-11-23 17:02</time></li>
+      <li><span class="msg-text" dir="auto">Hi mom!</span><time datetime="2026-11-23T16:31">2026-11-23 16:31</time></li>
+      <li><span class="msg-text" dir="auto">שלום מחיפה</span><time datetime="2026-11-23T15:10">2026-11-23 15:10</time></li>
+      <li><span class="msg-text" dir="auto">Can confirm: the guestbook works.</span><time datetime="2026-11-23T14:48">2026-11-23 14:48</time></li>
+      <li><span class="msg-text" dir="auto">Quiet little corner of the internet. I like it.</span><time datetime="2026-11-23T13:05">2026-11-23 13:05</time></li>
+      <li><span class="msg-text" dir="auto">Hey, hey, hey</span><time datetime="2026-11-23T12:22">2026-11-23 12:22</time></li>
+      <li><span class="msg-text" dir="auto">Hello, world.</span><time datetime="2026-11-23T11:00">2026-11-23 11:00</time></li>
+    </ol>
+  </section>
+</main>
+<p class="review-foot"><a href="index.html">← Back to all screens</a></p>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guestbook — screen set</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  main { max-width: 960px; }
+  .lead { color: var(--muted); text-align: center; margin: 0 auto var(--space-4); max-width: 70ch; }
+  .group { border-top: 1px solid var(--line); padding: var(--space-3) 0; }
+  .group h2 { font-size: 1.125rem; margin: 0 0 var(--space-1); }
+  .note { margin: 0 0 var(--space-2); font-size: var(--text-sm); color: var(--muted); }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+  .card { display: block; border: 1px solid var(--line); border-radius: var(--radius); padding: var(--space-2) var(--space-3); text-decoration: none; }
+  .card:hover { border-color: var(--focus); background: #f4f8fd; }
+  .dev { display: block; font-weight: 600; color: var(--text); }
+  .file { display: block; font-size: var(--text-xs); color: var(--focus); overflow-wrap: anywhere; }
+  .choices { border-top: 2px solid var(--text); margin-top: var(--space-4); padding-top: var(--space-3); }
+  .choices h2 { font-size: 1.125rem; margin: 0 0 var(--space-2); }
+  .choices li { font-size: var(--text-sm); line-height: 1.5; margin-bottom: var(--space-1); }
+</style>
+</head>
+<body>
+<main>
+  <header class="page-head"><h1>Guestbook — screen set</h1></header>
+  <p class="lead">SCRUM-125 · every screen and state of <code>/guestbook</code>, drawn from the approved prototype concept A “Compact”. Each state has a desktop page and a 360 px phone page side by side.</p>
+  <section class="group">
+    <h2>01 Guestbook — default</h2>
+    <p class="note">New screen. <b>State: default.</b> 20 latest messages, newest first, time beside each. The list includes the edge content: a 200-character message with no spaces (wraps in its row) and a markup/script message shown as plain text.</p>
+    <div class="pair">
+      <a class="card" href="guestbook-default.default.html"><span class="dev">Desktop</span><span class="file">guestbook-default.default.html</span></a>
+      <a class="card" href="guestbook-default.default.mobile.html"><span class="dev">Mobile · 360 px</span><span class="file">guestbook-default.default.mobile.html</span></a>
+    </div>
+  </section>
+  <section class="group">
+    <h2>02 Guestbook — no messages yet</h2>
+    <p class="note">New screen. <b>State: empty.</b> Nothing saved yet: the same form, and one centred muted line in place of the list.</p>
+    <div class="pair">
+      <a class="card" href="guestbook-no-messages-yet.empty.html"><span class="dev">Desktop</span><span class="file">guestbook-no-messages-yet.empty.html</span></a>
+      <a class="card" href="guestbook-no-messages-yet.empty.mobile.html"><span class="dev">Mobile · 360 px</span><span class="file">guestbook-no-messages-yet.empty.mobile.html</span></a>
+    </div>
+  </section>
+  <section class="group">
+    <h2>03 Guestbook — message sent</h2>
+    <p class="note">New screen. <b>State: default.</b> After a successful send: field cleared, the visitor’s “שלום מכולם” first with its send time, then the next 19. No banner — the message on top is the confirmation.</p>
+    <div class="pair">
+      <a class="card" href="guestbook-message-sent.default.html"><span class="dev">Desktop</span><span class="file">guestbook-message-sent.default.html</span></a>
+      <a class="card" href="guestbook-message-sent.default.mobile.html"><span class="dev">Mobile · 360 px</span><span class="file">guestbook-message-sent.default.mobile.html</span></a>
+    </div>
+  </section>
+  <section class="group">
+    <h2>04 Guestbook — error: empty message</h2>
+    <p class="note">New screen. <b>State: error.</b> Visitor sent spaces only: the spaces stay in the field, the field is outlined red, the error replaces the hint, the list is unchanged.</p>
+    <div class="pair">
+      <a class="card" href="guestbook-error-empty-message.error.html"><span class="dev">Desktop</span><span class="file">guestbook-error-empty-message.error.html</span></a>
+      <a class="card" href="guestbook-error-empty-message.error.mobile.html"><span class="dev">Mobile · 360 px</span><span class="file">guestbook-error-empty-message.error.mobile.html</span></a>
+    </div>
+  </section>
+  <section class="group">
+    <h2>05 Guestbook — error: message too long</h2>
+    <p class="note">New screen. <b>State: error.</b> Visitor sent 222 characters: the full text stays in the field for shortening, the error names the 200 limit and the visitor’s count, the list is unchanged.</p>
+    <div class="pair">
+      <a class="card" href="guestbook-error-message-too-long.error.html"><span class="dev">Desktop</span><span class="file">guestbook-error-message-too-long.error.html</span></a>
+      <a class="card" href="guestbook-error-message-too-long.error.mobile.html"><span class="dev">Mobile · 360 px</span><span class="file">guestbook-error-message-too-long.error.mobile.html</span></a>
+    </div>
+  </section>
+  <section class="choices">
+    <h2>Choices made in this screen set</h2>
+    <ul>
+      <li>Look, layout and copy carry over unchanged from concept A: system font, white page, label + field + <b>Send</b> on one row (also at 360 px), ruled list with time on the right on desktop and above the text on a phone.</li>
+      <li><b>No loading state</b> is drawn: the inventory names none — the form posts and the server returns the full page (structure, open branch 4).</li>
+      <li>Errors: the hint line under the field is replaced by the error (red text on a pale red band with an icon), the field gets a 2 px red outline and <code>aria-invalid</code>, and the visitor’s text stays in the field (AC 3). The error is announced with <code>role="alert"</code>.</li>
+      <li>The two error screens are drawn over a full list. When a refused send happens on an empty guestbook, the same form and error sit above the “No messages yet” line of screen 02 — no separate page, as the inventory names it a variant only.</li>
+      <li>Every message is rendered as escaped text with <code>dir="auto"</code> and <code>overflow-wrap: anywhere</code>, so Hebrew reads right to left, markup shows literally, and a 200-character word wraps inside the 360 px column (AC 5, R7).</li>
+      <li>Build note for SCRUM-126: the form is <code>method="post" action="/guestbook"</code> in the real page; here it targets screen 03 so the set can be clicked. The “Back to all screens” footer is for review only and is not part of the built page.</li>
+      <li>Home and “jungle” are not drawn or changed, and they do not link to the guestbook (AC 6).</li>
+    </ul>
+  </section>
+</main>
+</body>
+</html>

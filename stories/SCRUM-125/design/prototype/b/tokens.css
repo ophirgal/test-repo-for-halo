@@ -1,0 +1,67 @@
+/* Concept B · tokens. Base taken from docs/index.html (the site's home page):
+   system-ui font, white page, black text, 1rem page padding, overflow-wrap: anywhere.
+   The site sets no colours of its own; the few added here stay neutral. */
+:root {
+  --font: system-ui, sans-serif;
+  --text: #111111;
+  --muted: #595959;
+  --line: #d0d0d0;
+  --panel: #f5f5f5;
+  --page: #ffffff;
+  --button: #111111;
+  --button-text: #ffffff;
+  --focus: #1a5fb4;
+  --error: #b3261e;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2rem;
+  --radius: 8px;
+  --col: 720px;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { font-family: var(--font); color: var(--text); background: var(--page); }
+main { padding: 1rem; max-width: var(--col); margin: 0 auto; }
+h1 { overflow-wrap: anywhere; }
+a { color: var(--focus); }
+.msg-text { overflow-wrap: anywhere; word-break: break-word; white-space: normal; }
+time { color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.button {
+  display: inline-flex; align-items: center; justify-content: center;
+  font: inherit; font-weight: 600; text-decoration: none;
+  background: var(--button); color: var(--button-text);
+  border: 0; border-radius: var(--radius); padding: 0 1.25rem; min-height: 44px;
+}
+.button:hover { background: #333; }
+.button:focus-visible, input:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+input[type=text] {
+  font: inherit; color: var(--text); background: var(--page);
+  border: 1px solid #767676; border-radius: var(--radius); min-height: 44px; padding: 0 0.75rem;
+  width: 100%; min-width: 0;
+}
+.proto-foot { text-align: center; padding: var(--space-4) 1rem var(--space-5); font-size: 0.875rem; color: var(--muted); }
+
+/* Concept B · Spacious: wider column, form in its own panel, each message a separate card, time above text. */
+.page-head { text-align: center; padding-top: var(--space-4); }
+.page-head h1 { margin: 0 0 var(--space-2); font-size: 2.25rem; }
+.page-head p { margin: 0; color: var(--muted); }
+.form { margin: var(--space-4) 0 var(--space-5); background: var(--panel); border: 1px solid var(--line);
+  border-radius: 12px; padding: var(--space-4); }
+.form label { display: block; font-weight: 600; font-size: 1.125rem; margin-bottom: var(--space-2); }
+.form input { min-height: 52px; font-size: 1.0625rem; }
+.form .foot { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); margin-top: var(--space-3); }
+.form .hint { margin: 0; font-size: 0.875rem; color: var(--muted); }
+.form .button { min-height: 48px; padding: 0 2rem; }
+.list-head { font-size: 1.25rem; text-align: center; margin: 0 0 var(--space-3); }
+.list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-3); }
+.list li { border: 1px solid var(--line); border-radius: 12px; padding: var(--space-3) var(--space-4); }
+.list time { display: block; font-size: 0.8125rem; margin-bottom: var(--space-1); }
+.list .msg-text { font-size: 1.0625rem; line-height: 1.5; }
+@media (max-width: 479px) {
+  .form { padding: var(--space-3); }
+  .form .foot { flex-direction: column; align-items: stretch; }
+  .form .button { width: 100%; }
+  .list li { padding: var(--space-3); }
+}
