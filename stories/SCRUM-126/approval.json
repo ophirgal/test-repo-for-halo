@@ -1,0 +1,10 @@
+{
+  "storyId": "9034fbf4-cbe2-4166-9e34-ed54f0278256",
+  "storyKey": "SCRUM-126",
+  "epicKey": "SCRUM-124",
+  "title": "מבקר משאיר הודעה בספר האורחים ורואה את ההודעות האחרונות",
+  "decisionId": "a6c46a43-26c7-453e-8088-61af7e1338a7",
+  "actor": "Service",
+  "approvedAt": "2026-11-24T08:33:20Z",
+  "planHeadSha": "5234a24f977bb4c31f27a2e3082dc58f6c09e3af"
+}
