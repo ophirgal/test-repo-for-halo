@@ -16,6 +16,13 @@
       "actor": "Service",
       "approvedAt": "2026-11-24T08:02:41.442336Z",
       "headSha": "a896410c8963cd5704beeb1b83ad99769d04150d"
+    },
+    {
+      "step": "screens",
+      "decisionId": "2fa1ed29-248d-4ef4-b821-bc098b90ad1a",
+      "actor": "Service",
+      "approvedAt": "2026-11-24T08:05:46.29334Z",
+      "headSha": "29383159d87f833b811a9d0cd0b4522343c83725"
     }
   ]
 }
