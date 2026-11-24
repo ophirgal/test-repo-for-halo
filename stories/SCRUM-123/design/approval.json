@@ -9,6 +9,13 @@
       "actor": "Service",
       "approvedAt": "2026-11-24T07:59:32.294312Z",
       "headSha": "82b9b5bd85212296fd9f1266d355fac660a37d66"
+    },
+    {
+      "step": "prototype",
+      "decisionId": "5a5b1033-17e6-4cc8-b9cc-06ccdadc9e4e",
+      "actor": "Service",
+      "approvedAt": "2026-11-24T08:02:41.442336Z",
+      "headSha": "a896410c8963cd5704beeb1b83ad99769d04150d"
     }
   ]
 }
