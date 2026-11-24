@@ -16,6 +16,27 @@ bash test_hello_world.sh
 # OK: 13 checks passed
 ```
 
+## Health check (`/healthz`)
+
+`serve.py` answers a fixed health check at `/healthz`, so a probe can tell the server is up:
+
+```bash
+python3 serve.py
+curl -i http://127.0.0.1:8000/healthz
+# HTTP/1.0 200 OK
+# Content-Type: application/json
+# ...
+# {"status": "ok"}
+
+curl -I http://127.0.0.1:8000/healthz   # HEAD: the same 200 and headers, no body
+```
+
+- **Answer:** `GET /healthz` answers `200` with `{"status": "ok"}` as `application/json`. `HEAD /healthz` works too, with the same headers and no body.
+- **Path:** matched exactly; a query string is ignored (`/healthz?x=1` answers the same). `/healthz/` and other look-alikes answer `404`.
+- **Store state:** it does not reflect the key-value store's state. It answers `200` even when `/kv/` answers `503` (corrupt log) or `500` (store I/O error), and it never creates the store file.
+- **Down:** when the server is not running there is no answer (connection refused or a timeout); there is no "unhealthy" answer.
+- **Authentication:** none, like the rest of `serve.py`. It binds to `127.0.0.1` by default and the answer carries nothing beyond "ok".
+
 ## Key-value store (`/kv/`)
 
 `kvstore` is a small key-value store that uses only the Python standard library. It keeps JSON values by key in one append-only log file, and each key can have its own expiry (TTL). `serve.py` serves it under `/kv/`, next to the Hello World pages:

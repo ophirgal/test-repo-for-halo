@@ -3,11 +3,18 @@
 
 Serves two fixed pages: ``docs/index.html`` at ``/`` and
 ``docs/jungle.html`` at ``/jungle``, matched exactly (a query string is
-ignored). The one exception is the key-value store under ``/kv/`` (SCRUM-119,
-see below). Every other path returns 404 — including ``/kv`` without the
+ignored). Two more routes answer: the health check ``/healthz`` (SCRUM-122)
+and the key-value store under ``/kv/`` (SCRUM-119), both described below.
+Every other path returns 404 — including ``/kv`` without the
 slash, ``/jungle/``, ``/jungle.html``, ``/index.html``, ``/docs/index.html``
 and the repository's own files — so there is no directory listing and no file
 is ever chosen from request input.
+
+Health check (SCRUM-122): ``GET /healthz`` answers 200,
+``Content-Type: application/json``, body ``{"status": "ok"}``; ``HEAD /healthz``
+sends the same headers with no body. The path is matched exactly (a query
+string is ignored; ``/healthz/`` is a 404). The answer never touches the store,
+so it is 200 whatever the store's state, and it has no authentication.
 
 Key-value store (``kvstore``), backed by the log file ``KV_PATH`` (default
 ``./kv.log``); keys never touch the filesystem:
@@ -62,6 +69,10 @@ JUNGLE = Path(__file__).resolve().parent / "docs" / "jungle.html"
 # Exact request path -> fixed file. The only files the server can ever send.
 ROUTES = {"/": INDEX, "/jungle": JUNGLE}
 
+# Health check (SCRUM-122): exact path and its fixed, store-independent answer.
+HEALTH_PATH = "/healthz"
+HEALTH_BODY = b'{"status": "ok"}'
+
 
 class KVRequestError(Exception):
     """An HTTP error answer for a ``/kv/`` request."""
@@ -92,8 +103,8 @@ def _parse_ttl(query):
 
 
 class RootOnlyHandler(http.server.BaseHTTPRequestHandler):
-    """Answer ``/`` and ``/jungle`` with their fixed pages and ``/kv/`` from
-    the store; everything else 404.
+    """Answer ``/`` and ``/jungle`` with their fixed pages, ``/healthz`` with
+    a fixed JSON answer and ``/kv/`` from the store; everything else 404.
 
     Deliberately not ``SimpleHTTPRequestHandler``: there are no directory
     semantics, no listings, and no path built from the request, so path
@@ -111,6 +122,21 @@ class RootOnlyHandler(http.server.BaseHTTPRequestHandler):
         self.send_header("Content-Type", "text/html; charset=utf-8")
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
+
+    def _health(self):
+        """Answer GET/HEAD ``/healthz`` and return True; otherwise False.
+
+        Never touches the store, so the answer is the same whatever its state.
+        """
+        if urllib.parse.urlsplit(self.path).path != HEALTH_PATH:
+            return False
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(HEALTH_BODY)))
+        self.end_headers()
+        if self.command != "HEAD":
+            self.wfile.write(HEALTH_BODY)
+        return True
 
     # -- /kv/ store routes (SCRUM-119) -----------------------------------
 
@@ -195,6 +221,8 @@ class RootOnlyHandler(http.server.BaseHTTPRequestHandler):
         if raw_key is not None:
             self._kv_dispatch(raw_key)
             return
+        if self._health():
+            return
         target = self._route()
         if target is None:
             self.send_error(404)
@@ -207,6 +235,8 @@ class RootOnlyHandler(http.server.BaseHTTPRequestHandler):
         raw_key = self._kv_key()
         if raw_key is not None:
             self._kv_dispatch(raw_key)
+            return
+        if self._health():
             return
         target = self._route()
         if target is None:
