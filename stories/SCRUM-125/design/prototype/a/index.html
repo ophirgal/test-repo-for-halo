@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Concept A · Compact</title>
+<meta name="description" content="Compact: one narrow column, inline message row, dense ruled list with the time beside each message">
+<link rel="stylesheet" href="tokens.css">
+<style>
+body { margin: 0; }
+.wf { display: flex; min-height: 100vh; }
+.flow { flex: 1; min-width: 0; padding: 1.5rem; }
+.flow h1 { margin: 0 0 0.25rem; font-size: 1.5rem; }
+.flow .intro { margin: 0 0 1.5rem; color: var(--muted); max-width: 70ch; }
+:root { --s: 0.09; }
+@media (min-width: 480px) { :root { --s: 0.12; } }
+@media (min-width: 560px) { :root { --s: 0.14; } }
+@media (min-width: 700px) { :root { --s: 0.09; } }
+@media (min-width: 900px) { :root { --s: 0.15; } }
+@media (min-width: 1100px) { :root { --s: 0.21; } }
+@media (min-width: 1300px) { :root { --s: 0.27; } }
+@media (min-width: 1600px) { :root { --s: 0.36; } }
+@media (min-width: 2000px) { :root { --s: 0.48; } }
+@media (min-width: 2400px) { :root { --s: 0.59; } }
+.row { display: grid; grid-template-columns: calc(1400px * var(--s)) calc(560px * var(--s)) calc(1400px * var(--s)); }
+.step { font-size: 0.8125rem; font-weight: 700; color: var(--muted); margin-bottom: 0.375rem; }
+.thumb { position: relative; width: calc(1400px * var(--s)); height: calc(1000px * var(--s)); }
+.frame { position: absolute; overflow: hidden; background: #fff; border: 1px solid #8a8a8a; display: block; }
+.frame iframe { border: 0; transform: scale(var(--s)); transform-origin: 0 0; pointer-events: none; display: block; }
+.desk { left: 0; top: 0; width: calc(1280px * var(--s) + 2px); height: calc(800px * var(--s) + 2px); border-radius: 4px; }
+.desk iframe { width: 1280px; height: 800px; }
+.phone { right: 0; bottom: 0; width: calc(360px * var(--s) + 2px); height: calc(800px * var(--s) + 2px); border-radius: 8px;
+  box-shadow: 0 4px 14px rgba(0,0,0,.25); border-color: #333; }
+.phone iframe { width: 360px; height: 800px; }
+.arrow { display: flex; flex-direction: column; justify-content: center; align-items: stretch; padding: 0 6px;
+  height: calc(800px * var(--s)); }
+.arrow .label { font-size: 0.75rem; line-height: 1.25; text-align: center; color: var(--text); background: var(--page); margin-bottom: 4px; }
+.arrow svg { width: 100%; height: 12px; display: block; }
+.name { margin-top: 0.5rem; font-size: 0.9375rem; font-weight: 600; }
+.name small { display: block; font-weight: 400; color: var(--muted); font-size: 0.8125rem; margin-top: 2px; }
+.ret { grid-column: 1 / 4; position: relative; margin-top: 1.5rem; }
+.ret svg { width: 100%; height: auto; display: block; overflow: visible; }
+.ret .label { position: absolute; left: 50%; transform: translateX(-50%); bottom: calc(60px * var(--s) + 6px);
+  font-size: 0.75rem; background: var(--page); color: var(--text); white-space: nowrap; padding: 0 4px; }
+.sizes { margin-top: 1.25rem; font-size: 0.8125rem; color: var(--muted); max-width: 80ch; }
+aside { flex: none; border-left: 1px solid var(--line); background: var(--panel); }
+aside details[open] { width: 340px; padding: 1rem 1.25rem; height: 100%; }
+aside details:not([open]) { width: 44px; height: 100%; }
+aside summary { cursor: pointer; font-weight: 700; font-size: 0.9375rem; }
+aside details:not([open]) summary { writing-mode: vertical-rl; padding: 1rem 0.75rem; list-style: none; }
+aside h3 { font-size: 0.875rem; margin: 1rem 0 0.25rem; }
+aside p, aside li { font-size: 0.8125rem; line-height: 1.45; }
+aside ul { padding-left: 1.1rem; margin: 0.25rem 0; }
+@media (max-width: 699px) {
+  .wf { flex-direction: column; }
+  aside { border-left: 0; border-top: 1px solid var(--line); }
+  aside details[open], aside details:not([open]) { width: auto; }
+  aside details:not([open]) summary { writing-mode: horizontal-tb; }
+}
+</style>
+</head>
+<body>
+<div class="wf">
+  <main class="flow" style="max-width:none;margin:0">
+    <h1>Concept A · Compact — the /guestbook main path</h1>
+    <p class="intro">A dense, plain page in the style of the site's home page: the message field and Send button share one row, and the 20 messages sit in a ruled list with the send time beside each one. A visitor opens the guestbook, writes one line and sends it; the page comes back with their message on top.</p>
+    <div class="row">
+      <div class="step">01</div><div></div><div class="step">02</div>
+      <div class="thumb">
+          <a class="frame desk" href="guestbook-default.html"><iframe src="guestbook-default.html" title="Guestbook — default — desktop 1280×800" loading="lazy" tabindex="-1"></iframe></a>
+          <a class="frame phone" href="guestbook-default.html"><iframe src="guestbook-default.html" title="Guestbook — default — phone 360×800" loading="lazy" tabindex="-1"></iframe></a>
+        </div>
+      <div class="arrow">
+        <div class="label">Types “שלום מכולם”, clicks “Send”</div>
+        <svg viewBox="0 0 100 12" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="6" x2="92" y2="6" stroke="var(--text)" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>
+        <svg viewBox="0 0 12 12" style="width:12px;height:12px;align-self:flex-end;margin-top:-12px" aria-hidden="true"><path d="M0 0 L12 6 L0 12 Z" fill="var(--text)"/></svg>
+      </div>
+      <div class="thumb">
+          <a class="frame desk" href="guestbook-message-sent.html"><iframe src="guestbook-message-sent.html" title="Guestbook — message sent — desktop 1280×800" loading="lazy" tabindex="-1"></iframe></a>
+          <a class="frame phone" href="guestbook-message-sent.html"><iframe src="guestbook-message-sent.html" title="Guestbook — message sent — phone 360×800" loading="lazy" tabindex="-1"></iframe></a>
+        </div>
+      <div class="name"><a href="guestbook-default.html">Guestbook — default</a><small>New screen · 20 latest messages, newest first</small></div>
+      <div></div>
+      <div class="name"><a href="guestbook-message-sent.html">Guestbook — message sent</a><small>New screen · field cleared, own message first</small></div>
+      <div class="ret">
+        <svg viewBox="0 0 3360 200" aria-hidden="true">
+          <path d="M2660 0 V110 Q2660 140 2630 140 H730 Q700 140 700 110 V30" fill="none" stroke="var(--muted)" stroke-width="2" stroke-dasharray="6 5" vector-effect="non-scaling-stroke"/>
+          <path d="M670 40 L700 0 L730 40 Z" fill="var(--muted)"/>
+        </svg>
+        <span class="label">Writes another message — same form, field empty</span>
+      </div>
+    </div>
+    <p class="sizes">Each screen is shown as a desktop browser (1280×800) with a phone overlapping its corner, both at the same scale. The phone is 360 px wide, not 390, because the story's acceptance criterion 2 asks for 360 px with no sideways scrolling and no zoom.</p>
+  </main>
+  <aside>
+    <details open>
+      <summary>Choices made in this prototype</summary>
+      <h3>This concept</h3>
+      <ul>
+        <li>Form: label, then the field and the <b>Send</b> button on one row (also at 360 px).</li>
+        <li>List: one ruled row per message; time on the right on desktop, above the text on a phone.</li>
+        <li>Density: ~20 messages fit in about two desktop screens.</li>
+      </ul>
+      <h3>Shared by both concepts</h3>
+      <ul>
+        <li>Look follows the site's home page (<code>docs/index.html</code>): system font, white page, black text, no logo or navigation. Home and “jungle” are not touched and do not link here.</li>
+        <li>English page text; each message uses its own direction, so Hebrew reads right to left (structure, open branch 1).</li>
+        <li>Single-line field, no character cap and no live counter, so the “too long” error can be reached (open branches 2–3).</li>
+        <li>No loading state: Send posts and the full page returns (open branch 4). Here <b>Send</b> is a link to page 02.</li>
+        <li>Time as <code>2026-11-24 08:15</code>, 24-hour, muted (open branch 5). No sender name.</li>
+        <li>No success banner: the visitor's message at the top is the confirmation.</li>
+        <li>The list already shows the edge content: a 200-character message with no spaces (wraps) and <code>&lt;b&gt;שלום&lt;/b&gt;&lt;script&gt;…</code> shown as plain text.</li>
+      </ul>
+      <h3>Next step draws</h3>
+      <p>From the chosen concept: “no messages yet”, “error: empty message” and “error: message too long”, each at desktop and 360 px.</p>
+    </details>
+  </aside>
+</div>
+</body>
+</html>
