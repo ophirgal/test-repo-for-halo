@@ -37,6 +37,24 @@ curl -I http://127.0.0.1:8000/healthz   # HEAD: the same 200 and headers, no bod
 - **Down:** when the server is not running there is no answer (connection refused or a timeout); there is no "unhealthy" answer.
 - **Authentication:** none, like the rest of `serve.py`. It binds to `127.0.0.1` by default and the answer carries nothing beyond "ok".
 
+## Guestbook (`/guestbook`)
+
+`serve.py` serves a guestbook page at `/guestbook`. A visitor, with no account and no sign-in, writes one line and presses Send; the page lists the latest messages, newest first, each with its send time:
+
+```bash
+python3 serve.py                                   # messages in ./guestbook.jsonl
+GUESTBOOK_PATH=/tmp/guestbook.jsonl python3 serve.py
+# open http://127.0.0.1:8000/guestbook in a browser
+```
+
+- **Messages:** one line of 1–200 characters (Unicode code points). Line breaks become a space and spaces at both ends are trimmed before the count. An empty message, or one over 200 characters, is not saved and never cut: the page answers `400`, keeps the text in the field and says why.
+- **List:** the latest 20 messages, newest first, each with its send time as `YYYY-MM-DD HH:MM` (24-hour, the server's local time). Every message is shown as plain text, exactly as written.
+- **Sending:** the form posts `message` (`application/x-www-form-urlencoded`) to `/guestbook`, which answers `303` back to the page, so a refresh does not send again. Other answers: `400` (bad `Content-Length` or not UTF-8), `413` (over 64 KiB, the body is not read), `415` (not a form) and `500` (the file cannot be read or written). `POST` to any other path answers `501` as before.
+- **Message file:** `GUESTBOOK_PATH` sets it. The default is `./guestbook.jsonl`, relative to the directory you start the server from; it is listed in `.gitignore`. It holds one JSON object per line, `{"t": "<UTC time>", "m": "<text>"}`, oldest first. Opening the page never creates the file, and its directory is never created. A line that is not a valid record is skipped with a warning on stderr naming its line number.
+- **Deleting a message:** remove its line from the file, then restart the server (the latest messages are read once, on first use).
+
+> **Warning:** the guestbook has no authentication and no content filter. The server binds to `127.0.0.1` by default. `HOST=0.0.0.0 python3 serve.py` lets your whole network write to the guestbook without signing in.
+
 ## Key-value store (`/kv/`)
 
 `kvstore` is a small key-value store that uses only the Python standard library. It keeps JSON values by key in one append-only log file, and each key can have its own expiry (TTL). `serve.py` serves it under `/kv/`, next to the Hello World pages:

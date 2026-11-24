@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Fixed-route HTTP server for the Hello World pages (KAN-8, HALO-93, SCRUM-119).
+"""Fixed-route HTTP server for the Hello World pages (KAN-8, HALO-93, SCRUM-119, SCRUM-126).
 
 Serves two fixed pages: ``docs/index.html`` at ``/`` and
 ``docs/jungle.html`` at ``/jungle``, matched exactly (a query string is
-ignored). Two more routes answer: the health check ``/healthz`` (SCRUM-122)
-and the key-value store under ``/kv/`` (SCRUM-119), both described below.
+ignored). Three more routes answer: the health check ``/healthz`` (SCRUM-122),
+the guestbook page ``/guestbook`` (SCRUM-126) and the key-value store under
+``/kv/`` (SCRUM-119), all described below.
 Every other path returns 404 — including ``/kv`` without the
 slash, ``/jungle/``, ``/jungle.html``, ``/index.html``, ``/docs/index.html``
 and the repository's own files — so there is no directory listing and no file
@@ -15,6 +16,20 @@ Health check (SCRUM-122): ``GET /healthz`` answers 200,
 sends the same headers with no body. The path is matched exactly (a query
 string is ignored; ``/healthz/`` is a 404). The answer never touches the store,
 so it is 200 whatever the store's state, and it has no authentication.
+
+Guestbook (SCRUM-126, package ``guestbook``), backed by the JSON Lines file
+``GUESTBOOK_PATH`` (default ``./guestbook.jsonl``):
+
+    GET|HEAD /guestbook   200, the page: a one-line form and the latest 20
+                          messages, newest first, each with its send time
+    POST     /guestbook   form field ``message`` (urlencoded); 303 to
+                          /guestbook when saved, 400 with the page in an error
+                          state when empty or over 200 characters (never cut)
+
+The path is matched exactly (a query string is ignored). A POST also answers
+400 (bad Content-Length or UTF-8), 413 (over 64 KiB, unread), 415 (not a
+form) and 500 (file unwritable; its directory is never created). ``POST`` to
+any other path, and ``PUT``/``DELETE /guestbook``, answer the standard 501.
 
 Key-value store (``kvstore``), backed by the log file ``KV_PATH`` (default
 ``./kv.log``); keys never touch the filesystem:
@@ -33,8 +48,9 @@ Usage
     python3 serve.py                 # http://127.0.0.1:8000/
     python3 serve.py 9000            # port from the positional argument
     PORT=9000 python3 serve.py       # port from the environment
-    HOST=0.0.0.0 python3 serve.py    # bind all interfaces (opt-in; /kv/ has no auth)
+    HOST=0.0.0.0 python3 serve.py    # bind all interfaces (opt-in; /kv/ and /guestbook have no auth)
     KV_PATH=/tmp/kv.log python3 serve.py  # store file (default ./kv.log)
+    GUESTBOOK_PATH=/tmp/gb.jsonl python3 serve.py  # guestbook file (default ./guestbook.jsonl)
     python3 smoke_test.py            # run the HTTP checks
 
 The positional argument wins over ``PORT``; ``PORT`` wins over the default
@@ -53,6 +69,7 @@ import threading
 import urllib.parse
 from pathlib import Path
 
+import guestbook
 from kvstore import CorruptLogError, KVStore, check_key
 
 DEFAULT_HOST = "127.0.0.1"
@@ -72,6 +89,15 @@ ROUTES = {"/": INDEX, "/jungle": JUNGLE}
 # Health check (SCRUM-122): exact path and its fixed, store-independent answer.
 HEALTH_PATH = "/healthz"
 HEALTH_BODY = b'{"status": "ok"}'
+
+# Guestbook (SCRUM-126): exact path, its message file and its page headers.
+GUESTBOOK_ROUTE = "/guestbook"
+DEFAULT_GUESTBOOK_PATH = "./guestbook.jsonl"
+FORM_TYPE = "application/x-www-form-urlencoded"
+GUESTBOOK_CSP = (
+    "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; "
+    "base-uri 'none'; frame-ancestors 'none'"
+)
 
 
 class KVRequestError(Exception):
@@ -137,6 +163,67 @@ class RootOnlyHandler(http.server.BaseHTTPRequestHandler):
         if self.command != "HEAD":
             self.wfile.write(HEALTH_BODY)
         return True
+
+    # -- /guestbook (SCRUM-126) -------------------------------------------
+
+    def _guestbook(self):
+        """Answer GET/HEAD/POST ``/guestbook`` and return True; otherwise False."""
+        if urllib.parse.urlsplit(self.path).path != GUESTBOOK_ROUTE:
+            return False
+        if self.command == "POST":
+            self._guestbook_post()
+            return True
+        try:
+            records = self.server.guestbook_store().latest()
+        except OSError:
+            self.send_error(500, "guestbook file cannot be read")
+            return True
+        self._guestbook_page(200, guestbook.render(records))
+        return True
+
+    def _guestbook_page(self, status, body):
+        self.send_response(status)
+        self.send_header("Content-Type", "text/html; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.send_header("X-Content-Type-Options", "nosniff")
+        self.send_header("Content-Security-Policy", GUESTBOOK_CSP)
+        self.end_headers()
+        if self.command != "HEAD":
+            self.wfile.write(body)
+
+    def _guestbook_post(self):
+        try:
+            body = self._kv_body()  # the same Content-Length rules as /kv/
+        except KVRequestError as err:
+            self.send_error(err.status, str(err))  # send_error closes the connection
+            return
+        content_type = (self.headers.get("Content-Type") or "").split(";")[0].strip().lower()
+        if content_type != FORM_TYPE:
+            self.send_error(415, f"expected {FORM_TYPE}")
+            return
+        try:
+            fields = urllib.parse.parse_qs(
+                body.decode("utf-8"), keep_blank_values=True, encoding="utf-8", errors="strict"
+            )
+        except (UnicodeDecodeError, ValueError):
+            self.send_error(400, "form body is not valid UTF-8")
+            return
+        raw = (fields.get("message") or [""])[0]
+        text, error, length = guestbook.check(raw)
+        store = self.server.guestbook_store()
+        try:
+            if error is not None:
+                page = guestbook.render(store.latest(), error=error, value=raw, length=length)
+                self._guestbook_page(400, page)
+                return
+            store.append(text)
+        except OSError:
+            self.send_error(500, "guestbook file cannot be read or written")
+            return
+        self.send_response(303)
+        self.send_header("Location", GUESTBOOK_ROUTE)
+        self.send_header("Content-Length", "0")
+        self.end_headers()
 
     # -- /kv/ store routes (SCRUM-119) -----------------------------------
 
@@ -221,7 +308,7 @@ class RootOnlyHandler(http.server.BaseHTTPRequestHandler):
         if raw_key is not None:
             self._kv_dispatch(raw_key)
             return
-        if self._health():
+        if self._health() or self._guestbook():
             return
         target = self._route()
         if target is None:
@@ -236,7 +323,7 @@ class RootOnlyHandler(http.server.BaseHTTPRequestHandler):
         if raw_key is not None:
             self._kv_dispatch(raw_key)
             return
-        if self._health():
+        if self._health() or self._guestbook():
             return
         target = self._route()
         if target is None:
@@ -255,6 +342,11 @@ class RootOnlyHandler(http.server.BaseHTTPRequestHandler):
     do_PUT = _kv_only
     do_DELETE = _kv_only
 
+    def do_POST(self):
+        """POST: served at /guestbook only; elsewhere the standard 501."""
+        if not self._guestbook():
+            self.send_error(501, "Unsupported method (%r)" % self.command)
+
 
 class KVHTTPServer(http.server.ThreadingHTTPServer):
     """The threading server, holding the one store shared by every request."""
@@ -264,6 +356,8 @@ class KVHTTPServer(http.server.ThreadingHTTPServer):
         self.kv_store = None
         self.kv_error = None
         self._kv_lock = threading.Lock()
+        self._guestbook = None
+        self._guestbook_lock = threading.Lock()
 
     def kv_open(self):
         """Return the shared store, opening ``KV_PATH`` on first use.
@@ -281,6 +375,17 @@ class KVHTTPServer(http.server.ThreadingHTTPServer):
             if self.kv_error is not None:
                 raise CorruptLogError(self.kv_error.path, self.kv_error.lineno)
             return self.kv_store
+
+    def guestbook_store(self):
+        """Return the shared guestbook store for ``GUESTBOOK_PATH``.
+
+        Built on first use; it reads its file lazily and never creates it.
+        """
+        with self._guestbook_lock:
+            if self._guestbook is None:
+                path = os.environ.get("GUESTBOOK_PATH") or DEFAULT_GUESTBOOK_PATH
+                self._guestbook = guestbook.GuestbookStore(path)
+            return self._guestbook
 
     def server_close(self):
         super().server_close()
