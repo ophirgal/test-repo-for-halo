@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Concept A · Quiet</title>
+<meta name="description" content="Same skeleton as the Home page: top-aligned column, small 404 mark, plain underlined link">
+<link rel="stylesheet" href="tokens.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root { --s: .14; }
+  @media (min-width: 900px)  { :root { --s: .12; } }
+  @media (min-width: 1100px) { :root { --s: .19; } }
+  @media (min-width: 1400px) { :root { --s: .27; } }
+  @media (min-width: 1800px) { :root { --s: .36; } }
+  @media (min-width: 2400px) { :root { --s: .5; } }
+  body { background: #f6f6f6; }
+  .layout { display: flex; align-items: stretch; min-height: 100vh; }
+  .flow { flex: 1; min-width: 0; padding: 1.5rem 2rem 2rem; }
+  .flow h1 { margin: 0 0 .25rem; font-size: 1.5rem; }
+  .flow > p { margin: 0 0 2rem; max-width: 60rem; line-height: 1.5; }
+  .row { display: flex; align-items: flex-start; gap: 0; flex-wrap: wrap; }
+  .step { display: flex; flex-direction: column; align-items: flex-start; }
+  .num { font-size: .8125rem; font-weight: 700; color: var(--muted); margin-bottom: .4rem; }
+  .thumb { position: relative; width: calc(1280px * var(--s) + 156px * var(--s)); height: calc(800px * var(--s) + 380px * var(--s)); }
+  .frame { position: absolute; overflow: hidden; background: #fff; border: 1px solid var(--line); box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+  .frame iframe { border: 0; transform: scale(var(--s)); transform-origin: 0 0; pointer-events: none; display: block; }
+  .desk { left: 0; top: 0; width: calc(1280px * var(--s)); height: calc(800px * var(--s)); }
+  .desk iframe { width: 1280px; height: 800px; }
+  .phone { left: calc(1280px * var(--s) - 234px * var(--s)); top: calc(800px * var(--s) - 464px * var(--s)); width: calc(390px * var(--s)); height: calc(844px * var(--s)); border-radius: 6px; border: 2px solid #333; }
+  .phone iframe { width: 390px; height: 844px; }
+  .name { margin-top: .6rem; font-weight: 600; }
+  .changed { margin: .2rem 0 0; font-size: .875rem; color: var(--muted); max-width: calc(1280px * var(--s)); line-height: 1.4; }
+  .arrow { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 9rem; padding: 0 .5rem; margin-top: calc(1.4rem + 300px * var(--s)); }
+  .arrow span { font-size: .8125rem; text-align: center; line-height: 1.3; margin-bottom: .25rem; background: #f6f6f6; }
+  .arrow svg { display: block; width: 100%; height: 14px; }
+  .sizes { margin-top: 2rem; font-size: .875rem; color: var(--muted); }
+  aside { flex: 0 0 auto; border-left: 1px solid var(--line); background: #fff; }
+  aside details { height: 100%; }
+  aside details[open] { width: 340px; padding: 1.25rem 1.25rem 2rem; }
+  aside summary { cursor: pointer; font-weight: 700; }
+  aside details:not([open]) { width: 2.5rem; }
+  aside details:not([open]) summary { writing-mode: vertical-rl; padding: 1rem .6rem; }
+  aside ul { padding-left: 1.1rem; line-height: 1.5; font-size: .9375rem; }
+  aside li { margin-bottom: .6rem; }
+  @media (max-width: 700px) {
+    .layout { flex-direction: column; }
+    aside { border-left: 0; border-top: 1px solid var(--line); }
+    aside details[open], aside details:not([open]) { width: auto; }
+    aside details:not([open]) summary { writing-mode: horizontal-tb; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+<main class="flow">
+  <h1>Concept A · Quiet: friendly 404 page</h1>
+  <p>A visitor who follows a broken link sees a page that looks like the rest of the site. It has a small &ldquo;404&rdquo;, a headline, one sentence and a plain link that takes them to Home.</p>
+  <div class="row">
+    <div class="step">
+      <div class="num">01</div>
+      <a class="thumb" href="page-not-found.html" aria-label="Open Page not found">
+        <span class="frame desk"><iframe src="page-not-found.html" title="Page not found" tabindex="-1"></iframe></span>
+        <span class="frame phone"><iframe src="page-not-found.html" title="Page not found (phone)" tabindex="-1"></iframe></span>
+      </a>
+      <a class="name" href="page-not-found.html">Page not found</a>
+      <p class="changed">New screen. It replaces the stock &ldquo;Error code: 404&rdquo; page.</p>
+    </div>
+    <div class="arrow" aria-hidden="true">
+      <span>Clicks &ldquo;Go to the home page&rdquo;</span>
+      <svg viewBox="0 0 120 14" preserveAspectRatio="none"><path d="M2 7 H110" stroke="var(--link)" stroke-width="2" fill="none"/><path d="M108 1 L118 7 L108 13 Z" fill="var(--link)"/></svg>
+    </div>
+    <div class="step">
+      <div class="num">02</div>
+      <a class="thumb" href="home.html" aria-label="Open Home">
+        <span class="frame desk"><iframe src="home.html" title="Home" tabindex="-1"></iframe></span>
+        <span class="frame phone"><iframe src="home.html" title="Home (phone)" tabindex="-1"></iframe></span>
+      </a>
+      <a class="name" href="home.html">Home</a>
+      <p class="changed">Unchanged: today&rsquo;s &ldquo;Hello World&rdquo; page (centred here only for the prototype).</p>
+    </div>
+  </div>
+  <p class="sizes">Each screen is shown as a desktop browser at 1280&times;800 with a phone at 390&times;844 over its corner, at the same scale, because the story asks for desktop and mobile widths.</p>
+</main>
+<aside>
+<details open>
+<summary>Choices made in this prototype</summary>
+<ul>
+<li><strong>Quiet:</strong> the page sits at the top like Home does, in a narrow centred column. It has a small, letter-spaced &ldquo;404&rdquo;, the heading at Home&rsquo;s default size, and an underlined text link with a tall padded tap area.</li>
+<li>Copy as decided in the structure: headline &ldquo;Page not found&rdquo;, the sentence &ldquo;The link you followed may be broken, or the page may have moved.&rdquo;, and one link, &ldquo;Go to the home page&rdquo;.</li>
+<li>The broken URL is not shown back to the visitor (structure, open branch 1). There is no search or analytics, and no link to /jungle.</li>
+<li>The &ldquo;404&rdquo; mark is plain text in the page font. It is hidden from screen readers, so the headline is the first thing they announce.</li>
+<li>Look taken from docs/index.html: white background, system-ui, 1rem padding, the browser&rsquo;s default black text and blue link (9.4:1 contrast). The link has a 3&nbsp;px black focus outline for keyboard users.</li>
+<li>In the prototype the link goes to home.html, which stands in for <code>/</code>. Home keeps today&rsquo;s content. It is centred and has a small prototype-only link back to step 01, so you are never stuck there.</li>
+<li>&ldquo;Browser Back&rdquo; from the structure leads off the site, so it is not drawn. The page has no states other than the default, so the next step draws this screen at both widths.</li>
+</ul>
+</details>
+</aside>
+</div>
+</body>
+</html>

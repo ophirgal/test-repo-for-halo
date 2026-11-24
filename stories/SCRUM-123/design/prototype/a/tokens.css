@@ -1,0 +1,19 @@
+/* Tokens copied from docs/index.html (the site as it is today): plain white
+   page, system-ui, 1rem padding, browser-default text and link colours. */
+:root {
+  --bg: #ffffff;
+  --text: #000000;          /* browser default text, 21:1 on white */
+  --muted: #595959;         /* 7:1 on white, used for the decorative mark */
+  --link: #0000ee;          /* browser default link, 9.4:1 on white */
+  --focus: #000000;
+  --line: #d0d0d0;
+  --font: system-ui, sans-serif;
+  --pad: 1rem;
+}
+html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); }
+body { font-family: var(--font); }
+h1 { overflow-wrap: anywhere; }
+a { color: var(--link); }
+a:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 2px; }
+.proto-note { font-size: .8125rem; color: var(--muted); margin-top: 3rem; }
+.proto-note a { color: var(--muted); }

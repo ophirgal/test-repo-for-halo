@@ -1,0 +1,28 @@
+{
+  "storyId": "7fecbc17-c016-4e00-9cfb-a102fdb76ce2",
+  "storyKey": "SCRUM-123",
+  "title": "Design a friendly 404 page for the serve.py site",
+  "approvals": [
+    {
+      "step": "structure",
+      "decisionId": "b00b82ff-6684-4c8d-a0c2-4ae8a0e69874",
+      "actor": "Service",
+      "approvedAt": "2026-11-24T07:59:32.294312Z",
+      "headSha": "82b9b5bd85212296fd9f1266d355fac660a37d66"
+    },
+    {
+      "step": "prototype",
+      "decisionId": "5a5b1033-17e6-4cc8-b9cc-06ccdadc9e4e",
+      "actor": "Service",
+      "approvedAt": "2026-11-24T08:02:41.442336Z",
+      "headSha": "a896410c8963cd5704beeb1b83ad99769d04150d"
+    },
+    {
+      "step": "screens",
+      "decisionId": "2fa1ed29-248d-4ef4-b821-bc098b90ad1a",
+      "actor": "Service",
+      "approvedAt": "2026-11-24T08:05:46.29334Z",
+      "headSha": "29383159d87f833b811a9d0cd0b4522343c83725"
+    }
+  ]
+}
