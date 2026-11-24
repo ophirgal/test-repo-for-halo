@@ -1,0 +1,15 @@
+{
+  "storyId": "cd099376-919c-4b49-ac5e-59d68d70be02",
+  "storyKey": "SCRUM-125",
+  "epicKey": "SCRUM-124",
+  "title": "עיצוב עמוד ספר האורחים במחשב ובטלפון נייד",
+  "approvals": [
+    {
+      "step": "structure",
+      "decisionId": "65c06b4b-8a34-4204-8b12-81eb577b2758",
+      "actor": "Service",
+      "approvedAt": "2026-11-24T08:11:18.956157Z",
+      "headSha": "ad942faeb23172df8365cc1ca0890e72a0bdf88d"
+    }
+  ]
+}
