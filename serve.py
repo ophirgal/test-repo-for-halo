@@ -320,7 +320,8 @@ class RootOnlyHandler(http.server.BaseHTTPRequestHandler):
             return
         try:
             self.server.newsletter_store().add(name, email)
-        except OSError:
+        except OSError as err:
+            self.log_error("newsletter store unavailable: %s", err)  # errno and path, never the signup
             self._newsletter_send(500, newsletter.render_form(values, failed=True))
             return
         # The same answer whether the address was new or already subscribed.

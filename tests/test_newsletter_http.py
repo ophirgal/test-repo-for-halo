@@ -331,6 +331,10 @@ class RoutesTest(NewsletterHTTPTestCase):
 
     def test_store_failure_500_failed_state(self):
         self.use_env(NEWSLETTER_PATH=os.path.join(self.tmp.name, "absent", "newsletter.jsonl"))
+        logged = []
+        patcher = mock.patch.object(QuietHandler, "log_message", lambda _self, fmt, *args: logged.append(fmt % args))
+        patcher.start()
+        self.addCleanup(patcher.stop)
         server = serve.make_server("127.0.0.1", 0, QuietHandler)
         thread = threading.Thread(target=server.serve_forever, daemon=True)
         thread.start()
@@ -350,6 +354,10 @@ class RoutesTest(NewsletterHTTPTestCase):
         self.assertIn('value="maya@example.com"', input_tag(page, "email"))
         self.assertNotIn("You’re subscribed", page)
         self.assertFalse(os.path.exists(os.path.join(self.tmp.name, "absent")))
+        errors = [line for line in logged if line.startswith("newsletter store unavailable:")]
+        self.assertEqual(len(errors), 1, logged)
+        self.assertIn("No such file or directory", errors[0])
+        self.assertNotIn("maya@example.com", errors[0])
 
     def test_post_body_errors(self):
         self.assertEqual(self.post(headers={"Content-Type": "text/plain"})[0], 415)
