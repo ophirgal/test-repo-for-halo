@@ -31,6 +31,28 @@ The path is matched exactly (a query string is ignored). A POST also answers
 form) and 500 (file unwritable; its directory is never created). ``POST`` to
 any other path, and ``PUT``/``DELETE /guestbook``, answer the standard 501.
 
+Newsletter signup (SCRUM-103, package ``newsletter``), backed by the JSON
+Lines file ``NEWSLETTER_PATH`` (default ``./newsletter.jsonl``):
+
+    GET|HEAD /newsletter          200, Welcome
+    GET|HEAD /newsletter/signup   200, the signup form (name and email)
+    POST     /newsletter/signup   fields ``name`` and ``email`` (urlencoded);
+                                  303 to /newsletter/thanks when valid, for a
+                                  new and an already-subscribed address alike;
+                                  400 with the form and inline errors when a
+                                  field is empty or malformed; 500 with the
+                                  form in its "submission failed" state when
+                                  the file cannot be written
+    GET|HEAD /newsletter/thanks   200, Confirmation (the same for everyone)
+    GET|HEAD /newsletter/form.js  200, the form's fixed script
+
+Paths match exactly (a query string is ignored); ``/newsletter/`` and every
+other look-alike is a 404. A POST also answers 400 (bad Content-Length or
+UTF-8), 413 (over 64 KiB, unread) and 415 (not a form). No route returns the
+signups: they are exported only by ``python3 -m newsletter export`` on the
+host. With ``HOST=0.0.0.0`` anyone on the network can submit signups, but no
+route can read them.
+
 Key-value store (``kvstore``), backed by the log file ``KV_PATH`` (default
 ``./kv.log``); keys never touch the filesystem:
 
@@ -51,6 +73,7 @@ Usage
     HOST=0.0.0.0 python3 serve.py    # bind all interfaces (opt-in; /kv/ and /guestbook have no auth)
     KV_PATH=/tmp/kv.log python3 serve.py  # store file (default ./kv.log)
     GUESTBOOK_PATH=/tmp/gb.jsonl python3 serve.py  # guestbook file (default ./guestbook.jsonl)
+    NEWSLETTER_PATH=/tmp/nl.jsonl python3 serve.py # signup file (default ./newsletter.jsonl)
     python3 smoke_test.py            # run the HTTP checks
 
 The positional argument wins over ``PORT``; ``PORT`` wins over the default
@@ -70,6 +93,7 @@ import urllib.parse
 from pathlib import Path
 
 import guestbook
+import newsletter
 from kvstore import CorruptLogError, KVStore, check_key
 
 DEFAULT_HOST = "127.0.0.1"
@@ -96,6 +120,17 @@ DEFAULT_GUESTBOOK_PATH = "./guestbook.jsonl"
 FORM_TYPE = "application/x-www-form-urlencoded"
 GUESTBOOK_CSP = (
     "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; "
+    "base-uri 'none'; frame-ancestors 'none'"
+)
+
+# Newsletter signup (SCRUM-103): exact paths, the signup file and page headers.
+NEWSLETTER_ROUTE = newsletter.pages.WELCOME_PATH
+NEWSLETTER_SIGNUP = newsletter.pages.SIGNUP_PATH
+NEWSLETTER_THANKS = newsletter.pages.THANKS_PATH
+NEWSLETTER_JS = newsletter.pages.SCRIPT_PATH
+DEFAULT_NEWSLETTER_PATH = "./newsletter.jsonl"
+NEWSLETTER_CSP = (
+    "default-src 'none'; style-src 'unsafe-inline'; script-src 'self'; form-action 'self'; "
     "base-uri 'none'; frame-ancestors 'none'"
 )
 
@@ -225,6 +260,76 @@ class RootOnlyHandler(http.server.BaseHTTPRequestHandler):
         self.send_header("Content-Length", "0")
         self.end_headers()
 
+    # -- /newsletter (SCRUM-103) -------------------------------------------
+
+    def _newsletter(self):
+        """Answer the exact newsletter paths and return True; otherwise False.
+
+        POST is answered at ``/newsletter/signup`` only, so a POST anywhere
+        else keeps the standard 501.
+        """
+        path = urllib.parse.urlsplit(self.path).path
+        if self.command == "POST":
+            if path != NEWSLETTER_SIGNUP:
+                return False
+            self._newsletter_post()
+            return True
+        if path == NEWSLETTER_ROUTE:
+            self._newsletter_send(200, newsletter.render_welcome())
+        elif path == NEWSLETTER_SIGNUP:
+            self._newsletter_send(200, newsletter.render_form())
+        elif path == NEWSLETTER_THANKS:
+            self._newsletter_send(200, newsletter.render_thanks())
+        elif path == NEWSLETTER_JS:
+            self._newsletter_send(200, newsletter.FORM_JS, "text/javascript; charset=utf-8")
+        else:
+            return False
+        return True
+
+    def _newsletter_send(self, status, body, content_type="text/html; charset=utf-8"):
+        self.send_response(status)
+        self.send_header("Content-Type", content_type)
+        self.send_header("Content-Length", str(len(body)))
+        self.send_header("X-Content-Type-Options", "nosniff")
+        self.send_header("Content-Security-Policy", NEWSLETTER_CSP)
+        self.end_headers()
+        if self.command != "HEAD":
+            self.wfile.write(body)
+
+    def _newsletter_post(self):
+        try:
+            body = self._kv_body()  # the same Content-Length rules as /kv/
+        except KVRequestError as err:
+            self.send_error(err.status, str(err))  # send_error closes the connection
+            return
+        content_type = (self.headers.get("Content-Type") or "").split(";")[0].strip().lower()
+        if content_type != FORM_TYPE:
+            self.send_error(415, f"expected {FORM_TYPE}")
+            return
+        try:
+            fields = urllib.parse.parse_qs(
+                body.decode("utf-8"), keep_blank_values=True, encoding="utf-8", errors="strict"
+            )
+        except (UnicodeDecodeError, ValueError):
+            self.send_error(400, "form body is not valid UTF-8")
+            return
+        values = {f: (fields.get(f) or [""])[0] for f in ("name", "email")}
+        name, email, errors = newsletter.check(values["name"], values["email"])
+        if errors:
+            self._newsletter_send(400, newsletter.render_form(values, errors))
+            return
+        try:
+            self.server.newsletter_store().add(name, email)
+        except OSError as err:
+            self.log_error("newsletter store unavailable: %s", err)  # errno and path, never the signup
+            self._newsletter_send(500, newsletter.render_form(values, failed=True))
+            return
+        # The same answer whether the address was new or already subscribed.
+        self.send_response(303)
+        self.send_header("Location", NEWSLETTER_THANKS)
+        self.send_header("Content-Length", "0")
+        self.end_headers()
+
     # -- /kv/ store routes (SCRUM-119) -----------------------------------
 
     def _kv_key(self):
@@ -308,7 +413,7 @@ class RootOnlyHandler(http.server.BaseHTTPRequestHandler):
         if raw_key is not None:
             self._kv_dispatch(raw_key)
             return
-        if self._health() or self._guestbook():
+        if self._health() or self._guestbook() or self._newsletter():
             return
         target = self._route()
         if target is None:
@@ -323,7 +428,7 @@ class RootOnlyHandler(http.server.BaseHTTPRequestHandler):
         if raw_key is not None:
             self._kv_dispatch(raw_key)
             return
-        if self._health() or self._guestbook():
+        if self._health() or self._guestbook() or self._newsletter():
             return
         target = self._route()
         if target is None:
@@ -343,8 +448,8 @@ class RootOnlyHandler(http.server.BaseHTTPRequestHandler):
     do_DELETE = _kv_only
 
     def do_POST(self):
-        """POST: served at /guestbook only; elsewhere the standard 501."""
-        if not self._guestbook():
+        """POST: served at /guestbook and /newsletter/signup only; elsewhere the standard 501."""
+        if not (self._guestbook() or self._newsletter()):
             self.send_error(501, "Unsupported method (%r)" % self.command)
 
 
@@ -358,6 +463,8 @@ class KVHTTPServer(http.server.ThreadingHTTPServer):
         self._kv_lock = threading.Lock()
         self._guestbook = None
         self._guestbook_lock = threading.Lock()
+        self._newsletter = None
+        self._newsletter_lock = threading.Lock()
 
     def kv_open(self):
         """Return the shared store, opening ``KV_PATH`` on first use.
@@ -386,6 +493,17 @@ class KVHTTPServer(http.server.ThreadingHTTPServer):
                 path = os.environ.get("GUESTBOOK_PATH") or DEFAULT_GUESTBOOK_PATH
                 self._guestbook = guestbook.GuestbookStore(path)
             return self._guestbook
+
+    def newsletter_store(self):
+        """Return the shared signup store for ``NEWSLETTER_PATH``.
+
+        Built on first use; it reads its file lazily and never creates it.
+        """
+        with self._newsletter_lock:
+            if self._newsletter is None:
+                path = os.environ.get("NEWSLETTER_PATH") or DEFAULT_NEWSLETTER_PATH
+                self._newsletter = newsletter.SignupStore(path)
+            return self._newsletter
 
     def server_close(self):
         super().server_close()

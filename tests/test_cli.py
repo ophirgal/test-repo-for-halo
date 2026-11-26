@@ -286,11 +286,12 @@ class RealSiteTest(unittest.TestCase):
     def test_repo_docs_exit_0(self):
         with tempfile.TemporaryDirectory() as tmp:
             out = os.path.join(tmp, "r.json")
-            proc = run_linkcheck("docs/", "--json", out)
+            # /newsletter is a serve.py route (SCRUM-103), not a file under docs/.
+            proc = run_linkcheck("docs/", "--json", out, "--ignore", "/newsletter")
             self.assertEqual((proc.returncode, proc.stdout), (0, ""))
             with open(out, encoding="utf-8") as fh:
                 doc = json.load(fh)
-        self.assertEqual((doc["pages"], doc["links"], doc["findings"]), (2, 0, []))
+        self.assertEqual((doc["pages"], doc["links"], doc["ignored"], doc["findings"]), (2, 0, 1, []))
 
     def test_readme_documents_command(self):
         with open(os.path.join(REPO_ROOT, "README.md"), encoding="utf-8") as fh:

@@ -55,6 +55,50 @@ GUESTBOOK_PATH=/tmp/guestbook.jsonl python3 serve.py
 
 > **Warning:** the guestbook has no authentication and no content filter. The server binds to `127.0.0.1` by default. `HOST=0.0.0.0 python3 serve.py` lets your whole network write to the guestbook without signing in.
 
+## Newsletter signup (`/newsletter`)
+
+`serve.py` serves the newsletter signup journey. Visitors reach it from the "Newsletter" link in the footer of the home page:
+
+```bash
+python3 serve.py                                      # signups in ./newsletter.jsonl
+NEWSLETTER_PATH=/tmp/newsletter.jsonl python3 serve.py
+# open http://127.0.0.1:8000/newsletter in a browser
+```
+
+| Route | Answer |
+|---|---|
+| `GET /newsletter` | Welcome: the newsletter in one sentence, "Subscribe" and "Back to site" |
+| `GET /newsletter/signup` | the signup form: Name (1–80 characters) and Email address |
+| `POST /newsletter/signup` | fields `name` and `email` (`application/x-www-form-urlencoded`): `303` to `/newsletter/thanks` when valid; `400` with the form and an error under each field that is empty or malformed (nothing is stored); `500` with the form in its "Your signup didn’t go through" state when the file cannot be written |
+| `GET /newsletter/thanks` | Confirmation, "You’re subscribed" |
+| `GET /newsletter/form.js` | the form's script: shows "Submitting…" and disables Submit while sending. The form works without it |
+
+- **Repeated address:** an address already on the list (ignoring letter case and surrounding spaces) gets the same `303` and the same Confirmation as a new one, and nothing new is stored, so the answer never tells whether an address was subscribed.
+- **Signup file:** `NEWSLETTER_PATH`, default `./newsletter.jsonl`; see "Newsletter export" below for its format and the export command.
+- **Paths:** matched exactly; a query string is ignored. `/newsletter/` and other look-alikes answer `404`. A `POST` also answers `400` (bad `Content-Length` or not UTF-8), `413` (over 64 KiB, the body is not read) or `415` (not a form). `PUT`/`DELETE`, and `POST` to any other path, answer `501`.
+- **No network export:** no route returns the signups; there is no download address. The list leaves the host only through `python3 -m newsletter export`.
+
+> **Warning:** the signup form has no authentication and no bot challenge. The server binds to `127.0.0.1` by default. `HOST=0.0.0.0 python3 serve.py` lets your whole network submit signups, while still no route can read them.
+
+## Newsletter export
+
+Newsletter signups are kept in one file on the machine that runs `serve.py`. The marketing team exports them as CSV with a command run on that same machine. No web address returns the list.
+
+```bash
+python3 -m newsletter export                      # CSV to stdout
+python3 -m newsletter export -o subscribers.csv   # CSV to a file (overwritten)
+NEWSLETTER_PATH=/srv/newsletter.jsonl python3 -m newsletter export -o subscribers.csv
+```
+
+- **Signup file:** `NEWSLETTER_PATH` sets it. The default is `./newsletter.jsonl`, relative to the directory you run the command or the server from; it is listed in `.gitignore`. It holds one JSON object per line, `{"t": "<UTC time>", "n": "<name>", "e": "<email>"}`, oldest first. Each address is stored once: a repeat (ignoring letter case and surrounding spaces) keeps the first name and time. A line that is not a valid record is skipped with a warning on stderr naming its line number. Reading never creates the file.
+- **Columns:** a header row `name,email,signed_up_at`, then one row per signup, oldest first. `signed_up_at` is ISO 8601 in UTC, to the second (`2026-11-26T09:03:07Z`), so signups can be counted per hour. An empty or missing file exports the header only.
+- **Format:** UTF-8 without a BOM, standard CSV quoting (names with commas or quotes stay whole) and `\r\n` line endings. In Excel, import the file as UTF-8 so non-ASCII names show correctly.
+- **Formula guard:** a cell that starts with `=`, `+`, `-`, `@`, a tab or a carriage return is written with a leading `'`, so a spreadsheet does not run it as a formula. Such a value differs from the stored one by that one character.
+- **Exit codes:** `0` success; `1` the signup file cannot be read or the `-o` file cannot be written (one line on stderr, and no partial file is left); `2` a usage error, such as an unknown subcommand.
+- **One server process:** run only one server process, `serve.py`, per signup file. Two processes on the same file could store one address twice.
+
+> **Personal data:** the signup file and every export hold names and email addresses. Keep them off shared folders and out of version control, and delete old exports when they are no longer needed.
+
 ## Key-value store (`/kv/`)
 
 `kvstore` is a small key-value store that uses only the Python standard library. It keeps JSON values by key in one append-only log file, and each key can have its own expiry (TTL). `serve.py` serves it under `/kv/`, next to the Hello World pages:
