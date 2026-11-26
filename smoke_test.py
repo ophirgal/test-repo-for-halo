@@ -10,6 +10,7 @@ path, and ``/`` still answering 200 afterwards.
 Standard library only; no framework, no network access beyond localhost.
 """
 
+import os
 import re
 import sys
 import threading
@@ -248,6 +249,44 @@ def run_jungle_checks(base, checks):
     checks.check("serve.py docstring updated", not stale, "no 'Root-only'/'exactly one document'", stale)
 
 
+def run_newsletter_checks(base, checks):
+    """SCRUM-103: the newsletter journey answers; nothing here stores a signup."""
+    for path in ("/newsletter", "/newsletter/signup", "/newsletter/thanks"):
+        status, headers, body = get(base, path)
+        checks.check(f"GET {path} status", status == 200, "200", status)
+        content_type = headers.get("Content-Type", "")
+        checks.check(f"GET {path} Content-Type", content_type == "text/html; charset=utf-8",
+                     "text/html; charset=utf-8", content_type)
+        checks.check(f"GET {path} viewport", 'name="viewport"' in body, "a viewport meta", body[:120])
+        checks.check(f"HEAD {path} status", head(base, path) == 200, "200", head(base, path))
+    status, headers, _ = get(base, "/newsletter/form.js")
+    checks.check("GET /newsletter/form.js status", status == 200, "200", status)
+    _, _, root = get(base, "/")
+    checks.check("footer links to the newsletter", '<a href="/newsletter">Newsletter</a>' in root,
+                 'a footer link to /newsletter', root[-200:])
+    for path in ("/newsletter/", "/newsletter/export.csv"):
+        status, _, _ = get(base, path)
+        checks.check(f"GET {path} status", status == 404, "404", status)
+
+    store = os.environ.get("NEWSLETTER_PATH") or serve.DEFAULT_NEWSLETTER_PATH
+    before = os.path.getsize(store) if os.path.exists(store) else None
+    request = urllib.request.Request(
+        base + "/newsletter/signup", data=b"name=&email=", method="POST",
+        headers={"Content-Type": "application/x-www-form-urlencoded"},
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=10) as response:
+            status, body = response.status, response.read().decode("utf-8", "replace")
+    except urllib.error.HTTPError as err:
+        status, body = err.code, err.read().decode("utf-8", "replace")
+    checks.check("POST /newsletter/signup with empty fields status", status == 400, "400", status)
+    checks.check("empty-field POST shows the inline errors",
+                 "Enter your name." in body and "Enter your email address." in body,
+                 "both inline errors", body[:120])
+    after = os.path.getsize(store) if os.path.exists(store) else None
+    checks.check("empty-field POST stores nothing", before == after, before, after)
+
+
 def run_checks(base):
     checks = Checks()
 
@@ -375,6 +414,7 @@ def run_checks(base):
     )
 
     run_jungle_checks(base, checks)
+    run_newsletter_checks(base, checks)
 
     return checks
 

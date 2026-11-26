@@ -55,6 +55,31 @@ GUESTBOOK_PATH=/tmp/guestbook.jsonl python3 serve.py
 
 > **Warning:** the guestbook has no authentication and no content filter. The server binds to `127.0.0.1` by default. `HOST=0.0.0.0 python3 serve.py` lets your whole network write to the guestbook without signing in.
 
+## Newsletter signup (`/newsletter`)
+
+`serve.py` serves the newsletter signup journey. Visitors reach it from the "Newsletter" link in the footer of the home page:
+
+```bash
+python3 serve.py                                      # signups in ./newsletter.jsonl
+NEWSLETTER_PATH=/tmp/newsletter.jsonl python3 serve.py
+# open http://127.0.0.1:8000/newsletter in a browser
+```
+
+| Route | Answer |
+|---|---|
+| `GET /newsletter` | Welcome: the newsletter in one sentence, "Subscribe" and "Back to site" |
+| `GET /newsletter/signup` | the signup form: Name (1–80 characters) and Email address |
+| `POST /newsletter/signup` | fields `name` and `email` (`application/x-www-form-urlencoded`): `303` to `/newsletter/thanks` when valid; `400` with the form and an error under each field that is empty or malformed (nothing is stored); `500` with the form in its "Your signup didn’t go through" state when the file cannot be written |
+| `GET /newsletter/thanks` | Confirmation, "You’re subscribed" |
+| `GET /newsletter/form.js` | the form's script: shows "Submitting…" and disables Submit while sending. The form works without it |
+
+- **Repeated address:** an address already on the list (ignoring letter case and surrounding spaces) gets the same `303` and the same Confirmation as a new one, and nothing new is stored, so the answer never tells whether an address was subscribed.
+- **Signup file:** `NEWSLETTER_PATH`, default `./newsletter.jsonl`; see "Newsletter export" below for its format and the export command.
+- **Paths:** matched exactly; a query string is ignored. `/newsletter/` and other look-alikes answer `404`. A `POST` also answers `400` (bad `Content-Length` or not UTF-8), `413` (over 64 KiB, the body is not read) or `415` (not a form). `PUT`/`DELETE`, and `POST` to any other path, answer `501`.
+- **No network export:** no route returns the signups; there is no download address. The list leaves the host only through `python3 -m newsletter export`.
+
+> **Warning:** the signup form has no authentication and no bot challenge. The server binds to `127.0.0.1` by default. `HOST=0.0.0.0 python3 serve.py` lets your whole network submit signups, while still no route can read them.
+
 ## Newsletter export
 
 Newsletter signups are kept in one file on the machine that runs `serve.py`. The marketing team exports them as CSV with a command run on that same machine. No web address returns the list.
